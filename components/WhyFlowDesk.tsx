@@ -1,33 +1,34 @@
 'use client';
 
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { Check, X } from 'lucide-react';
+import Reveal from './animations/Reveal';
+import Highlight from './animations/Highlight';
 
 export default function WhyFlowDesk({ dict }: { dict: any }) {
-  const [ref, isIntersecting] = useIntersectionObserver();
 
   return (
     <section id="why" className="py-24 sm:py-32 bg-[var(--color-bg)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div 
-          ref={ref}
-          className={`max-w-3xl mx-auto text-center mb-16 transition-all duration-700 ease-out transform ${
-            isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <h2 className="text-3xl sm:text-4xl font-[700] tracking-[-0.01em] text-[var(--color-text-primary)] mb-6">
-            {dict.title}
-          </h2>
-          <p className="text-[18px] leading-[1.7] text-[var(--color-text-secondary)]">
-            {dict.subtitle}
-          </p>
-        </div>
+        {/* Header */}
+        <Reveal>
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-[700] tracking-[-0.01em] text-[var(--color-text-primary)] mb-6">
+              <Highlight color="rgba(124, 58, 237, 0.4)">
+                {dict.title}
+              </Highlight>
+            </h2>
+            <p className="text-[18px] leading-[1.7] text-[var(--color-text-secondary)]">
+              {dict.subtitle}
+            </p>
+          </div>
+        </Reveal>
 
         {/* Comparison Table */}
-        <div className="max-w-4xl mx-auto -mx-4 px-4 sm:mx-auto sm:px-0 overflow-x-auto pb-4">
-          <table className="w-full text-left border-collapse min-w-[600px]">
+        <Reveal delay={0.2}>
+          <div className="max-w-4xl mx-auto -mx-4 px-4 sm:mx-auto sm:px-0 overflow-x-auto pb-4">
+            <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr>
                 <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-muted)] font-medium w-[40%]"></th>
@@ -68,7 +69,8 @@ export default function WhyFlowDesk({ dict }: { dict: any }) {
               </tr>
             </tbody>
           </table>
-        </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
