@@ -1,0 +1,129 @@
+{
+  "navbar": {
+    "features": "Fitur",
+    "download": "Unduh",
+    "changelog": "Log Perubahan"
+  },
+  "hero": {
+    "title": "Tempat produktivitas luring Anda yang bersih.",
+    "subtitle": "Kelola proyek, tugas, dokumen, dan file — sepenuhnya di komputer Anda. Tanpa cloud. Tanpa langganan.",
+    "downloadMac": "Unduh untuk macOS",
+    "viewGithub": "Lihat di GitHub",
+    "stars": "bintang di GitHub"
+  },
+  "socialProof": [
+    "Privat & Aman",
+    "Lokal-Pertama",
+    "Tanpa Cloud",
+    "Dibuat dengan .NET 10 & Avalonia UI",
+    "Lintas-Platform"
+  ],
+  "appPreview": {
+    "title": "Dibuat untuk pekerjaan nyata.",
+    "subtitle": "Mode gelap dan terang. Antarmuka yang ringkas dan fokus. Ruang kerja Anda, cara Anda.",
+    "screenshot": "Tangkapan Layar Aplikasi",
+    "darkMode": "Mode Gelap",
+    "lightMode": "Mode Terang"
+  },
+  "features": {
+    "title": "Semua yang Anda butuhkan. Tidak lebih.",
+    "items": [
+      {
+        "title": "Ruang Kerja Privat & Lokal",
+        "description": "Bekerja sendiri di Ruang Kerja Privat atau buka ruang kerja Anda ke jaringan lokal (LAN)."
+      },
+      {
+        "title": "Penemuan Jaringan Otomatis",
+        "description": "Temukan Ruang Kerja Lokal yang aktif di Wi-Fi atau LAN Anda secara otomatis via UDP Broadcast tanpa perlu membagikan alamat IP."
+      },
+      {
+        "title": "Kolaborasi Real-Time",
+        "description": "Perubahan pada proyek, tugas, dan dokumen tersinkronisasi seketika ke seluruh anggota tim yang terhubung via SignalR."
+      },
+      {
+        "title": "Proyek & Tugas",
+        "description": "Atur pekerjaan Anda ke dalam berbagai proyek, lacak status, prioritas, dan tautkan tugas."
+      },
+      {
+        "title": "Dokumen",
+        "description": "Editor dokumen yang bersih untuk membuat catatan dan merancang ide."
+      },
+      {
+        "title": "Berkas (Files)",
+        "description": "Impor dan atur berkas referensi secara aman dan lokal di dalam ruang kerja Anda."
+      },
+      {
+        "title": "Manajemen Anggota",
+        "description": "Terima atau tolak permintaan bergabung langsung dari aplikasi. Pantau siapa saja yang sedang daring."
+      },
+      {
+        "title": "Mode Gelap/Terang",
+        "description": "Dukungan penuh untuk tema gelap dan terang yang terintegrasi dengan sistem."
+      },
+      {
+        "title": "Arsitektur Lokal-Pertama",
+        "description": "Data Anda tidak pernah meninggalkan komputer Anda. Semuanya disimpan secara lokal via SQLite."
+      },
+      {
+        "title": "Pencadangan Otomatis",
+        "description": "Pencadangan basis data harian otomatis untuk memastikan keamanan data."
+      }
+    ]
+  },
+  "whyFlowDesk": {
+    "title": "Mengapa FlowDesk daripada Notion atau Linear?",
+    "subtitle": "Kebanyakan alat mengirim data Anda ke server mereka. FlowDesk menyimpan semuanya di mesin Anda — dan tetap memberikan fitur yang benar-benar Anda gunakan.",
+    "table": {
+      "offline": "Lokal-pertama (Offline)",
+      "noSub": "Tanpa langganan",
+      "lan": "Kolaborasi jaringan lokal",
+      "selfHost": "Dapat di-host sendiri"
+    }
+  },
+  "download": {
+    "title": "Tersedia untuk macOS dan Windows.",
+    "subtitle": "Membutuhkan .NET 10.0 SDK.",
+    "macOS": "macOS",
+    "windows": "Windows",
+    "linux": "Linux",
+    "comingSoon": "Segera hadir",
+    "downloadAction": "Unduh",
+    "dmg": ".dmg (Universal)",
+    "exe": ".exe (Pemasang)"
+  },
+  "changelogStrip": {
+    "title": "Pembaruan Terkini",
+    "viewAll": "Lihat semua pembaruan"
+  },
+  "cta": {
+    "title": "Siap mengambil kembali data Anda?",
+    "subtitle": "Unduh FlowDesk hari ini dan rasakan produktivitas lokal-pertama yang sesungguhnya.",
+    "downloadMac": "Unduh untuk macOS",
+    "viewGithub": "Lihat di GitHub"
+  },
+  "footer": {
+    "tagline": "Tempat produktivitas luring Anda yang bersih.",
+    "features": "Fitur",
+    "download": "Unduh",
+    "changelog": "Log Perubahan",
+    "license": "Lisensi",
+    "builtWith": "Dibuat dengan Avalonia UI & .NET 10",
+    "copyright": "Kharis Destian Maulana (Riray). Lisensi Proprietary FlowDesk."
+  },
+  "licensePage": {
+    "title": "Lisensi & Hak Cipta",
+    "subtitle": "Lisensi Proprietary FlowDesk oleh Kharis Destian Maulana"
+  },
+  "changelogPage": {
+    "title": "Log Perubahan",
+    "subtitle": "Semua perubahan dan pembaruan penting pada FlowDesk.",
+    "tabs": {
+      "releases": "Rilis",
+      "commits": "Komit"
+    },
+    "emptyReleases": "Tidak ada rilis ditemukan.",
+    "emptyCommits": "Tidak ada komit ditemukan.",
+    "readMore": "Baca selengkapnya di GitHub",
+    "viewCommit": "Lihat komit di GitHub"
+  }
+}

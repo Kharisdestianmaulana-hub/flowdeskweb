@@ -1,0 +1,129 @@
+{
+  "navbar": {
+    "features": "Features",
+    "download": "Download",
+    "changelog": "Changelog"
+  },
+  "hero": {
+    "title": "Your clean, offline productivity haven.",
+    "subtitle": "Manage projects, tasks, docs, and files — entirely on your machine. No cloud. No subscription.",
+    "downloadMac": "Download for macOS",
+    "viewGithub": "View on GitHub",
+    "stars": "stars on GitHub"
+  },
+  "socialProof": [
+    "Private & Secure",
+    "Local-First",
+    "No Cloud Required",
+    "Built with .NET 10 & Avalonia UI",
+    "Cross-Platform"
+  ],
+  "appPreview": {
+    "title": "Built for real work.",
+    "subtitle": "Dark and light mode. Compact, focused interface. Your workspace, your way.",
+    "screenshot": "App Screenshot",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  },
+  "features": {
+    "title": "Everything you need. Nothing you don't.",
+    "items": [
+      {
+        "title": "Private & Local Workspaces",
+        "description": "Work solo in a Private Workspace or open your workspace to your local network (LAN)."
+      },
+      {
+        "title": "Network Auto-Discovery",
+        "description": "Automatically discover active Local Workspaces on your Wi-Fi or LAN via UDP Broadcast without needing to share IP addresses."
+      },
+      {
+        "title": "Real-Time Collaboration",
+        "description": "Changes to projects, tasks, and documents sync instantly to all connected team members via SignalR."
+      },
+      {
+        "title": "Projects & Tasks",
+        "description": "Organize your work into distinct projects, track status, priority, and link tasks."
+      },
+      {
+        "title": "Docs",
+        "description": "A clean document editor to take notes and draft ideas."
+      },
+      {
+        "title": "Files",
+        "description": "Securely import and organize reference files locally within your workspace."
+      },
+      {
+        "title": "Member Management",
+        "description": "Accept or reject join requests directly from the app. Monitor who is online."
+      },
+      {
+        "title": "Dark/Light Mode",
+        "description": "Full support for system-integrated dark and light themes."
+      },
+      {
+        "title": "Local-First Architecture",
+        "description": "Your data never leaves your machine. Everything is stored locally via SQLite."
+      },
+      {
+        "title": "Automatic Backups",
+        "description": "Daily automatic backups of your database to ensure data safety."
+      }
+    ]
+  },
+  "whyFlowDesk": {
+    "title": "Why FlowDesk over Notion or Linear?",
+    "subtitle": "Most tools send your data to their servers. FlowDesk keeps everything on your machine — and still gives you the features you actually use.",
+    "table": {
+      "offline": "Offline-first",
+      "noSub": "No subscription",
+      "lan": "LAN collaboration",
+      "selfHost": "Self-hostable"
+    }
+  },
+  "download": {
+    "title": "Available for macOS and Windows.",
+    "subtitle": "Requires .NET 10.0 SDK.",
+    "macOS": "macOS",
+    "windows": "Windows",
+    "linux": "Linux",
+    "comingSoon": "Coming soon",
+    "downloadAction": "Download",
+    "dmg": ".dmg (Universal)",
+    "exe": ".exe (Installer)"
+  },
+  "changelogStrip": {
+    "title": "Recent Updates",
+    "viewAll": "View full changelog"
+  },
+  "cta": {
+    "title": "Ready to take back your data?",
+    "subtitle": "Download FlowDesk today and experience true local-first productivity.",
+    "downloadMac": "Download for macOS",
+    "viewGithub": "View on GitHub"
+  },
+  "footer": {
+    "tagline": "Your clean, offline productivity haven.",
+    "features": "Features",
+    "download": "Download",
+    "changelog": "Changelog",
+    "license": "License",
+    "builtWith": "Built with Avalonia UI & .NET 10",
+    "copyright": "Kharis Destian Maulana (Riray). FlowDesk Proprietary License."
+  },
+  "licensePage": {
+    "title": "License & Copyright",
+    "subtitle": "FlowDesk Proprietary License by Kharis Destian Maulana"
+  },
+  "changelogPage": {
+    "title": "Changelog",
+    "subtitle": "All notable changes and updates to FlowDesk.",
+    "tabs": {
+      "releases": "Releases",
+      "commits": "Commits"
+    },
+    "emptyReleases": "No releases found.",
+    "emptyCommits": "No commits found.",
+    "readMore": "Read more on GitHub",
+    "viewCommit": "View commit on GitHub"
+  }
+}

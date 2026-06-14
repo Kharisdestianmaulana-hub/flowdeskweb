@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FlowDesk Website
 
-## Getting Started
+This is the official landing page for **FlowDesk**, a local-first, offline-capable desktop workspace application built with .NET 10 and Avalonia UI. The website serves to showcase FlowDesk's capabilities and provide direct downloads straight from GitHub releases.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Icons**: `lucide-react`
+- **Data Source**: GitHub REST API v3
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup Instructions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Kharisdestianmaulana-hub/flowdesk.git
+   cd flowdesk
+   ```
+   *(Note: Adjust the repo name or path if the web code is separated)*
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. **Configure Environment Variables:**
+   Copy the example environment variables file:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+   *Note: Adding a `GITHUB_TOKEN` is highly recommended to increase API rate limits.*
 
-To learn more about Next.js, take a look at the following resources:
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `GITHUB_TOKEN` | A personal access token to prevent rate limits. | No, but recommended |
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploy to **Vercel** with zero configuration. 
+Don't forget to add your `GITHUB_TOKEN` as an environment variable in the Vercel dashboard to ensure you don't hit the standard 60 requests/hour limit for unauthenticated GitHub API calls.
