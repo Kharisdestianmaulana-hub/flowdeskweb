@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import UseCases from '@/components/UseCases';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
+import Newsletter from '@/components/Newsletter';
 
 import { getRepoInfo, getLatestRelease, getRecentCommits } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
@@ -60,6 +61,10 @@ export default async function Home({ params }: { params: Promise<{ lang: 'en' | 
 
       <CTASection assets={latestRelease.assets} dict={dict.cta} />
       
+      <div className="pb-24 px-4 sm:px-6 lg:px-8">
+        <Newsletter dict={dict.newsletter} />
+      </div>
+
       <Footer repoUrl={repoInfo.html_url} dict={dict.footer} currentLang={lang} />
     </main>
   );

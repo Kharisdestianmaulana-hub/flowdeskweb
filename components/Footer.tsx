@@ -42,6 +42,9 @@ export default function Footer({ repoUrl, dict, currentLang }: FooterProps) {
             <Link href={`/${currentLang}/sponsor`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
               {dict.sponsor}
             </Link>
+            <Link href={`/${currentLang}/compare/notion`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+              FlowDesk vs Notion
+            </Link>
             <Link href={`/${currentLang}/contact`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
               {dict.contact}
             </Link>

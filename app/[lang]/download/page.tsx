@@ -1,6 +1,7 @@
 import { getRepoInfo, getAllReleases } from '@/lib/github';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Newsletter from '@/components/Newsletter';
 import { getDictionary } from '@/lib/dictionary';
 import { Apple, Monitor, Terminal, Code } from 'lucide-react';
 
@@ -153,6 +154,11 @@ export default async function DownloadPage({ params }: { params: Promise<{ lang:
               No releases found on GitHub.
             </div>
           )}
+        </div>
+        
+        {/* Newsletter / Waitlist Section */}
+        <div className="mt-8">
+          <Newsletter dict={dict.newsletter} />
         </div>
       </div>
 

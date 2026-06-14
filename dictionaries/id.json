@@ -33,44 +33,44 @@
     "title": "Semua yang Anda butuhkan. Tidak lebih.",
     "items": [
       {
-        "title": "Ruang Kerja Privat & Lokal",
-        "description": "Bekerja sendiri di Ruang Kerja Privat atau buka ruang kerja Anda ke jaringan lokal (LAN)."
+        "title": "Workspace Privat & Lokal",
+        "description": "Bekerja sendiri di Private Workspace atau buka workspace Anda ke jaringan lokal (LAN)."
       },
       {
-        "title": "Penemuan Jaringan Otomatis",
-        "description": "Temukan Ruang Kerja Lokal yang aktif di Wi-Fi atau LAN Anda secara otomatis via UDP Broadcast tanpa perlu membagikan alamat IP."
+        "title": "The Omnibar",
+        "description": "Navigasi secepat kilat. Tekan Ctrl+K untuk mencari proyek, dokumen, atau tugas secara instan tanpa menyentuh mouse."
+      },
+      {
+        "title": "Papan Kanban",
+        "description": "Visualisasikan pekerjaan Anda dengan Papan Kanban bawaan. Pindahkan tugas dari To-Do ke Done dalam hitungan milidetik."
+      },
+      {
+        "title": "Editor Tanpa Gangguan",
+        "description": "Tulis catatan dan dokumentasi dengan fokus penuh. Editor minimalis kami memastikan tidak ada gangguan saat Anda mengetik."
+      },
+      {
+        "title": "Penemuan Otomatis Jaringan",
+        "description": "Temukan workspace lokal yang aktif secara otomatis di Wi-Fi atau LAN Anda via UDP Broadcast tanpa perlu saling berbagi IP."
       },
       {
         "title": "Kolaborasi Real-Time",
-        "description": "Perubahan pada proyek, tugas, dan dokumen tersinkronisasi seketika ke seluruh anggota tim yang terhubung via SignalR."
+        "description": "Perubahan pada proyek, tugas, dan dokumen disinkronkan secara instan ke semua anggota tim yang terhubung via SignalR."
       },
       {
-        "title": "Proyek & Tugas",
-        "description": "Atur pekerjaan Anda ke dalam berbagai proyek, lacak status, prioritas, dan tautkan tugas."
-      },
-      {
-        "title": "Dokumen",
-        "description": "Editor dokumen yang bersih untuk membuat catatan dan merancang ide."
-      },
-      {
-        "title": "Berkas (Files)",
-        "description": "Impor dan atur berkas referensi secara aman dan lokal di dalam ruang kerja Anda."
+        "title": "Penyimpanan File Aman",
+        "description": "Impor dan kelola file referensi secara aman dan 100% lokal di dalam workspace Anda."
       },
       {
         "title": "Manajemen Anggota",
-        "description": "Terima atau tolak permintaan bergabung langsung dari aplikasi. Pantau siapa saja yang sedang daring."
+        "description": "Terima atau tolak permintaan bergabung langsung dari aplikasi. Pantau siapa saja yang sedang online."
       },
       {
-        "title": "Mode Gelap/Terang",
-        "description": "Dukungan penuh untuk tema gelap dan terang yang terintegrasi dengan sistem."
+        "title": "Arsitektur Local-First",
+        "description": "Data Anda tidak pernah meninggalkan perangkat Anda. Semuanya disimpan secara lokal menggunakan SQLite."
       },
       {
-        "title": "Arsitektur Lokal-Pertama",
-        "description": "Data Anda tidak pernah meninggalkan komputer Anda. Semuanya disimpan secara lokal via SQLite."
-      },
-      {
-        "title": "Pencadangan Otomatis",
-        "description": "Pencadangan basis data harian otomatis untuk memastikan keamanan data."
+        "title": "Cadangan Otomatis",
+        "description": "Backup otomatis setiap hari untuk database Anda guna memastikan keamanan data dari kehilangan."
       }
     ]
   },
@@ -277,8 +277,36 @@
       },
       "email": {
         "title": "Dukungan Email",
-        "desc": "Untuk pertanyaan bisnis, laporan keamanan, atau urusan pribadi, jangan ragu untuk mengirim email kepada saya."
+        "desc": "Untuk pertanyaan bisnis, laporan keamanan, atau urusan pribadi, jangan ragu untuk mengirim email."
       }
+    }
+  },
+  "newsletter": {
+    "title": "Bergabung ke Daftar Tunggu",
+    "subtitle": "Dapatkan pemberitahuan tepat saat versi Linux dan FlowDesk v2.0 (Self-Hosted Server) siap diunduh.",
+    "placeholder": "Masukkan alamat email Anda...",
+    "button": "Berlangganan",
+    "success": "Luar biasa! Anda sudah terdaftar.",
+    "error": "Ups! Terjadi kesalahan. Silakan coba lagi."
+  },
+  "comparePage": {
+    "notion": {
+      "title": "FlowDesk vs Notion",
+      "subtitle": "Mengapa FlowDesk adalah alternatif Local-First terbaik untuk Notion bagi individu dan tim yang mengutamakan privasi.",
+      "tableHeaders": {
+        "feature": "Fitur",
+        "flowdesk": "FlowDesk",
+        "notion": "Notion"
+      },
+      "features": [
+        { "name": "Penyimpanan Data", "fd": "100% Lokal (SQLite)", "nt": "Cloud Server (AWS)" },
+        { "name": "Harga", "fd": "100% Gratis", "nt": "Berlangganan Bulanan" },
+        { "name": "Mode Offline", "fd": "Berfungsi Penuh", "nt": "Sangat Terbatas" },
+        { "name": "Kecepatan / Jeda", "fd": "Instan (Nol Latensi)", "nt": "Tergantung Koneksi Internet" },
+        { "name": "Kolaborasi Jaringan Lokal", "fd": "Ya (LAN / UDP)", "nt": "Tidak (Wajib Internet)" },
+        { "name": "Kode Sumber Terbuka", "fd": "Ya (GitHub)", "nt": "Tidak (Sumber Tertutup)" }
+      ],
+      "conclusion": "Jika Anda lelah dengan biaya langganan bulanan dan menginginkan kontrol mutlak atas data privasi Anda dengan kecepatan aplikasi desktop asli, FlowDesk dibuat khusus untuk Anda."
     }
   }
 }

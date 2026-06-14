@@ -37,6 +37,18 @@
         "description": "Work solo in a Private Workspace or open your workspace to your local network (LAN)."
       },
       {
+        "title": "The Omnibar",
+        "description": "Lightning-fast navigation. Press Ctrl+K to instantly search projects, documents, or tasks without touching your mouse."
+      },
+      {
+        "title": "Kanban Boards",
+        "description": "Visualize your work with built-in Kanban boards. Move tasks from To-Do to Done in milliseconds since everything runs locally."
+      },
+      {
+        "title": "Distraction-Free Editor",
+        "description": "Write notes and docs with complete focus. Our minimalist editor features a clean dual-pane reading and writing mode."
+      },
+      {
         "title": "Network Auto-Discovery",
         "description": "Automatically discover active Local Workspaces on your Wi-Fi or LAN via UDP Broadcast without needing to share IP addresses."
       },
@@ -45,24 +57,12 @@
         "description": "Changes to projects, tasks, and documents sync instantly to all connected team members via SignalR."
       },
       {
-        "title": "Projects & Tasks",
-        "description": "Organize your work into distinct projects, track status, priority, and link tasks."
-      },
-      {
-        "title": "Docs",
-        "description": "A clean document editor to take notes and draft ideas."
-      },
-      {
-        "title": "Files",
+        "title": "Secure Files",
         "description": "Securely import and organize reference files locally within your workspace."
       },
       {
         "title": "Member Management",
         "description": "Accept or reject join requests directly from the app. Monitor who is online."
-      },
-      {
-        "title": "Dark/Light Mode",
-        "description": "Full support for system-integrated dark and light themes."
       },
       {
         "title": "Local-First Architecture",
@@ -279,6 +279,34 @@
         "title": "Email Support",
         "desc": "For business inquiries, security reports, or private matters, feel free to email me."
       }
+    }
+  },
+  "newsletter": {
+    "title": "Join the Waitlist",
+    "subtitle": "Get notified the moment the Linux version and FlowDesk v2.0 (Self-Hosted Server) are ready for download.",
+    "placeholder": "Enter your email address...",
+    "button": "Subscribe",
+    "success": "Awesome! You're on the list.",
+    "error": "Oops! Something went wrong. Please try again."
+  },
+  "comparePage": {
+    "notion": {
+      "title": "FlowDesk vs Notion",
+      "subtitle": "Why FlowDesk is the ultimate Local-First alternative to Notion for privacy-conscious individuals and teams.",
+      "tableHeaders": {
+        "feature": "Feature",
+        "flowdesk": "FlowDesk",
+        "notion": "Notion"
+      },
+      "features": [
+        { "name": "Data Storage", "fd": "100% Local (SQLite)", "nt": "Cloud (AWS)" },
+        { "name": "Pricing", "fd": "100% Free", "nt": "Subscription" },
+        { "name": "Offline Mode", "fd": "Fully Functional", "nt": "Extremely Limited" },
+        { "name": "Speed / Latency", "fd": "Instant (Zero Latency)", "nt": "Depends on Internet" },
+        { "name": "Local Network Collab", "fd": "Yes (LAN / UDP)", "nt": "No (Requires Internet)" },
+        { "name": "Open Source Code", "fd": "Yes (GitHub)", "nt": "No (Closed Source)" }
+      ],
+      "conclusion": "If you are tired of monthly subscriptions and want absolute control over your private data with the speed of a native desktop app, FlowDesk is built specifically for you."
     }
   }
 }

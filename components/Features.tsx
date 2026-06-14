@@ -1,20 +1,20 @@
 'use client';
 
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
-import { Lock, Search, Users, FolderKanban, FileText, Folder, UserCheck, Moon, Database, ShieldCheck } from 'lucide-react';
+import { Lock, Command, FolderKanban, FileText, Wifi, Users, Folder, UserCheck, Database, ShieldCheck } from 'lucide-react';
 
 export default function Features({ dict }: { dict: any }) {
   const [ref, isIntersecting] = useIntersectionObserver();
 
   const featureIcons = [
     Lock,
-    Search,
-    Users,
+    Command,
     FolderKanban,
     FileText,
+    Wifi,
+    Users,
     Folder,
     UserCheck,
-    Moon,
     Database,
     ShieldCheck
   ];
