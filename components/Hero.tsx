@@ -15,6 +15,9 @@ interface HeroProps {
 }
 
 export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProps) {
+  // Find macOS DMG asset for primary download button
+  const macAsset = assets?.find(a => a.name.includes('.dmg'));
+
   return (
     <section className="relative min-h-[calc(100vh-64px)] flex flex-col justify-center items-center overflow-hidden bg-[var(--color-bg)] py-24 px-4 sm:px-6 lg:px-8">
       {/* Animated Glow Blobs */}
