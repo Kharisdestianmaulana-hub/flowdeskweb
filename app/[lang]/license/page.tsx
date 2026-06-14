@@ -3,8 +3,9 @@ import Footer from '@/components/Footer';
 import { getRepoInfo } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
 
-export default async function LicensePage({ params }: { params: Promise<{ lang: 'en' | 'id' }> }) {
-  const { lang } = await params;
+export default async function LicensePage({ params }: { params: Promise<{ lang: string }> }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
 

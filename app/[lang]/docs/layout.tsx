@@ -5,8 +5,9 @@ import { getRepoInfo } from '@/lib/github';
 import { getDocsList } from '@/lib/docs';
 import Link from 'next/link';
 
-export default async function DocsLayout({ children, params }: { children: React.ReactNode, params: Promise<{ lang: 'en' | 'id' }> }) {
-  const { lang } = await params;
+export default async function DocsLayout({ children, params }: { children: React.ReactNode, params: Promise<{ lang: string }> }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
   const docsList = getDocsList(lang);

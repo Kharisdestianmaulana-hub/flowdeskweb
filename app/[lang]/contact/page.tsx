@@ -11,8 +11,9 @@ const Github = (props: any) => (
   </svg>
 );
 
-export default async function ContactPage({ params }: { params: Promise<{ lang: 'en' | 'id' }> }) {
-  const { lang } = await params;
+export default async function ContactPage({ params }: { params: Promise<{ lang: string }> }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
 

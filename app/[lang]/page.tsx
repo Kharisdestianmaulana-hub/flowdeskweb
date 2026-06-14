@@ -17,8 +17,9 @@ import Contributors from '@/components/Contributors';
 import { getRepoInfo, getLatestRelease, getRecentCommits, getContributors } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
 
-export default async function Home({ params }: { params: Promise<{ lang: 'en' | 'id' }> }) {
-  const { lang } = await params;
+export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const [repoInfo, latestRelease, commits, contributors] = await Promise.all([
     getRepoInfo(),

@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { getDocsList } from '@/lib/docs';
 
-export default async function DocsRootPage({ params }: { params: Promise<{ lang: 'en' | 'id' }> }) {
-  const { lang } = await params;
+export default async function DocsRootPage({ params }: { params: Promise<{ lang: string }> }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as 'en' | 'id';
   const docsList = getDocsList(lang);
   
   if (docsList.length > 0) {

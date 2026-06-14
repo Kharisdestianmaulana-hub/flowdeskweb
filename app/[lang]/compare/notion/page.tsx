@@ -6,8 +6,9 @@ import { Check, X } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default async function CompareNotionPage({ params }: { params: Promise<{ lang: 'en' | 'id' }> }) {
-  const { lang } = await params;
+export default async function CompareNotionPage({ params }: { params: Promise<{ lang: string }> }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
 

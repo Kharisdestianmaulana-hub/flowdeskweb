@@ -3,8 +3,9 @@ import Footer from '@/components/Footer';
 import { getDictionary } from '@/lib/dictionary';
 import { getRepoInfo } from '@/lib/github';
 
-export default async function PhilosophyPage({ params }: { params: Promise<{ lang: 'en' | 'id' }> }) {
-  const { lang } = await params;
+export default async function PhilosophyPage({ params }: { params: Promise<{ lang: string }> }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
 
