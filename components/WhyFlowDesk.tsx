@@ -26,7 +26,7 @@ export default function WhyFlowDesk({ dict }: { dict: any }) {
         </div>
 
         {/* Comparison Table */}
-        <div className="max-w-4xl mx-auto overflow-x-auto">
+        <div className="max-w-4xl mx-auto -mx-4 px-4 sm:mx-auto sm:px-0 overflow-x-auto pb-4">
           <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
               <tr>

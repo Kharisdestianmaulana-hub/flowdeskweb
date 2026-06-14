@@ -41,7 +41,7 @@ export default function AppPreview({ dict }: { dict: any }) {
           </div>
 
           {/* Theme Toggles (Visual) */}
-          <div className="mt-8 flex justify-center gap-4">
+          <div className="mt-8 flex flex-wrap justify-center gap-3 sm:gap-4">
             <button 
               onClick={() => setIsDark(true)}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${isDark ? 'bg-[var(--color-primary)] border border-transparent text-white shadow-[var(--shadow-btn)]' : 'bg-transparent border border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-border-hover)]'}`}

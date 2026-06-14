@@ -37,7 +37,7 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
         </div>
 
         {/* Headline */}
-        <h1 className="text-5xl sm:text-6xl md:text-[64px] font-[800] leading-[1.05] tracking-[-0.03em] mb-6 text-transparent bg-clip-text bg-[image:var(--gradient-hero)]">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-[800] leading-[1.1] tracking-[-0.03em] mb-6 text-transparent bg-clip-text bg-[image:var(--gradient-hero)]">
           {dict.title}
         </h1>
 

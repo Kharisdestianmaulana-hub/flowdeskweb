@@ -12,7 +12,7 @@ export default function CTASection({ assets, dict }: CTASectionProps) {
   return (
     <section className="bg-[image:var(--gradient-cta)] py-24 sm:py-32">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl sm:text-5xl font-[800] tracking-[-0.01em] text-[var(--color-text-primary)] mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-[800] tracking-[-0.01em] text-[var(--color-text-primary)] mb-6">
             {dict.title}
           </h2>
           <p className="text-[18px] text-[var(--color-text-secondary)] mb-10 max-w-2xl mx-auto">
