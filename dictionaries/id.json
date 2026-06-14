@@ -1,6 +1,10 @@
 {
   "navbar": {
     "features": "Fitur",
+    "docs": "Panduan",
+    "philosophy": "Filosofi",
+    "sponsor": "Sponsor",
+    "contact": "Kontak",
     "download": "Unduh",
     "changelog": "Log Perubahan"
   },
@@ -82,7 +86,7 @@
   },
   "download": {
     "title": "Tersedia untuk macOS dan Windows.",
-    "subtitle": "Membutuhkan .NET 10.0 SDK.",
+    "subtitle": "Aplikasi mandiri. Tanpa dependensi tambahan.",
     "macOS": "macOS",
     "windows": "Windows",
     "linux": "Linux",
@@ -104,11 +108,15 @@
   "footer": {
     "tagline": "Tempat produktivitas luring Anda yang bersih.",
     "features": "Fitur",
+    "docs": "Dokumentasi",
+    "philosophy": "Filosofi Kami",
+    "sponsor": "Dukung Kami",
+    "contact": "Kontak & Komunitas",
     "download": "Unduh",
-    "changelog": "Log Perubahan",
+    "changelog": "Riwayat Pembaruan",
     "license": "Lisensi",
-    "builtWith": "Dibuat dengan Avalonia UI & .NET 10",
-    "copyright": "Kharis Destian Maulana (Riray). Lisensi Proprietary FlowDesk."
+    "builtWith": "Dibangun dengan",
+    "copyright": "Kharis Destian Maulana (Riray). Hak Cipta Dilindungi."
   },
   "licensePage": {
     "title": "Lisensi & Hak Cipta",
@@ -125,5 +133,152 @@
     "emptyCommits": "Tidak ada komit ditemukan.",
     "readMore": "Baca selengkapnya di GitHub",
     "viewCommit": "Lihat komit di GitHub"
+  },
+  "useCases": {
+    "title": "Dibuat untuk setiap alur kerja.",
+    "subtitle": "Baik Anda bekerja sendiri atau mengelola tim, FlowDesk beradaptasi dengan kebutuhan Anda.",
+    "solo": {
+      "title": "Kreator Solo",
+      "description": "Fokus mendalam tanpa gangguan. Simpan proyek, catatan, dan tugas pribadi Anda sepenuhnya di mesin Anda sendiri."
+    },
+    "teams": {
+      "title": "Tim Lokal",
+      "description": "Berkolaborasi secara real-time via Wi-Fi atau LAN. Sempurna untuk kantor, ruang kelas, atau hackathon tanpa internet."
+    },
+    "privacy": {
+      "title": "Pendukung Privasi",
+      "description": "Tanpa pelacakan. Tanpa sinkronisasi awan. Data Anda adalah milik Anda. FlowDesk menjamin kedaulatan data 100%."
+    }
+  },
+  "howItWorks": {
+    "title": "Kolaborasi lokal, disederhanakan.",
+    "subtitle": "Tidak perlu mengatur server. Tidak perlu membuat akun. Cukup terhubung dan mulai bekerja.",
+    "step1": {
+      "title": "1. Aktifkan Local Workspace",
+      "description": "Host masuk ke workspace, buka Pengaturan, dan nyalakan fitur 'Local Workspace'. Aplikasi otomatis disiarkan ke jaringan."
+    },
+    "step2": {
+      "title": "2. Pencarian Otomatis & Gabung",
+      "description": "Anggota lain memilih 'Join'. Sistem otomatis mencari workspace yang terbuka di jaringan. Cukup masukkan nama dan klik Join."
+    },
+    "step3": {
+      "title": "3. Persetujuan Host",
+      "description": "Host menerima permintaan bergabung dan berhak menyetujui atau menolaknya. Jika diterima, anggota langsung masuk untuk berkolaborasi."
+    }
+  },
+  "faq": {
+    "title": "Pertanyaan yang Sering Diajukan",
+    "subtitle": "Segala hal yang perlu Anda ketahui tentang pendekatan lokal-pertama.",
+    "questions": [
+      {
+        "q": "Apakah FlowDesk benar-benar gratis?",
+        "a": "Ya. FlowDesk sepenuhnya gratis digunakan tanpa biaya langganan tersembunyi. Anda memiliki data Anda selamanya."
+      },
+      {
+        "q": "Apakah saya butuh internet untuk menggunakannya?",
+        "a": "Jika Anda menggunakan 'Private Workspace', Anda sama sekali tidak butuh koneksi (100% luring). Namun, untuk 'Local Workspace', Anda wajib terhubung ke jaringan Wi-Fi atau LAN yang sama."
+      },
+      {
+        "q": "Bagaimana cara kerja kolaborasi LAN?",
+        "a": "Aplikasi menggunakan siaran UDP untuk menemukan rekan di Wi-Fi lokal Anda, dan SignalR untuk sinkronisasi seketika. Selama Anda berada di router yang sama, semuanya akan terhubung otomatis."
+      },
+      {
+        "q": "Apa yang terjadi jika Host menutup aplikasi?",
+        "a": "Jika Host terputus, semua anggota yang terhubung akan dikeluarkan secara otomatis dan aman kembali ke layar Selamat Datang, memastikan tidak ada kerusakan data."
+      },
+      {
+        "q": "Apakah akan ada opsi sinkronisasi cloud nantinya?",
+        "a": "Saat ini, FlowDesk murni lokal. Namun, peta jalan (roadmap) kami untuk v2.0 mencakup backend ASP.NET Core yang dapat Anda host sendiri (self-host) bagi mereka yang menginginkan server privat."
+      }
+    ]
+  },
+  "downloadPage": {
+    "title": "Unduh FlowDesk",
+    "subtitle": "Pilih versi yang sesuai dengan kebutuhan Anda. Kami merekomendasikan untuk selalu menggunakan rilis stabil terbaru.",
+    "releasedOn": "Dirilis pada",
+    "latestBadge": "Rilis Terbaru",
+    "downloadFor": "Unduh {version} untuk",
+    "macOS": "macOS",
+    "windows": "Windows",
+    "linux": "Linux",
+    "sourceCode": "Kode Sumber"
+  },
+  "docsPage": {
+    "title": "Dokumentasi",
+    "subtitle": "Pelajari cara menggunakan FlowDesk, mengelola ruang kerja lokal Anda, dan memastikan data Anda aman.",
+    "menu": {
+      "gettingStarted": "Mulai Menggunakan",
+      "localWorkspace": "Panduan Local Workspace",
+      "dataBackups": "Data & Pencadangan"
+    },
+    "content": {
+      "gettingStarted": {
+        "title": "Mulai Menggunakan",
+        "body": "Selamat datang di FlowDesk! Instalasinya sangat mudah. Cukup unduh `.exe` (untuk Windows) atau `.dmg` (untuk macOS) dari halaman Unduhan kami. Setelah terinstal, buka aplikasinya. Anda tidak perlu membuat akun atau koneksi internet untuk mulai membuat proyek, tugas, dan dokumen."
+      },
+      "localWorkspace": {
+        "title": "Panduan Local Workspace",
+        "body": "FlowDesk v1.5.0 memperkenalkan 'Local Workspace' – cara ajaib untuk berkolaborasi tanpa awan (cloud). Untuk menjadi Host, masuk ke ruang kerja Anda, buka Pengaturan, dan nyalakan opsi 'Local Workspace'. FlowDesk akan menyiarkan sinyal UDP ke jaringan lokal Anda (Wi-Fi atau LAN). Anggota tim hanya perlu berada di jaringan yang sama, mengeklik 'Join' di aplikasi mereka, memasukkan nama, dan menunggu persetujuan Anda. Sinkronisasi terjadi secara langsung dan real-time antar komputer menggunakan SignalR."
+      },
+      "dataBackups": {
+        "title": "Data & Pencadangan",
+        "body": "Karena FlowDesk berkonsep Lokal-Pertama, data Anda tidak pernah meninggalkan komputer Anda. Semuanya disimpan secara lokal dalam file database SQLite. Secara default, FlowDesk secara otomatis membuat cadangan harian database Anda untuk mencegah kehilangan data. Kami menyarankan Anda sesekali menyalin file cadangan ini ke hard disk eksternal atau penyimpanan pribadi Anda untuk keamanan ekstra."
+      }
+    }
+  },
+  "philosophyPage": {
+    "title": "Manifesto Lokal-Pertama",
+    "subtitle": "Mengapa kami membangun alat produktivitas yang menolak menggunakan awan (cloud).",
+    "content": [
+      {
+        "heading": "Jebakan SaaS",
+        "body": "Dunia perangkat lunak produktivitas saat ini didominasi oleh SaaS (Software-as-a-Service) berbasis awan. Meski praktis, ada harga tersembunyi yang mahal: Anda tidak memiliki data Anda. Saat Anda menaruh hasil kerja keras Anda di aplikasi cloud, Anda sebetulnya hanya sedang menyewa akses ke pikiran Anda sendiri. Jika perusahaan itu bangkrut, menaikkan harga langganan sepihak, atau diretas, Anda yang rugi. Kami percaya konsep ini pada dasarnya keliru."
+      },
+      {
+        "heading": "Kedaulatan Data",
+        "body": "FlowDesk dibangun di atas prinsip Kedaulatan Data. 100% data Anda menetap di hard drive lokal Anda dalam format database SQLite terbuka. Tidak ada telemetri, tidak ada sinkronisasi awan paksa, dan tidak ada pelacakan. Catatan pribadi Anda akan tetap menjadi privasi Anda seutuhnya."
+      },
+      {
+        "heading": "Kecepatan dan Keandalan",
+        "body": "Karena tidak ada permintaan jaringan ke server di ujung dunia, segala hal di FlowDesk terjadi dalam hitungan milidetik. Tidak ada animasi loading yang berputar saat Anda berpindah proyek. Dan yang terpenting, Anda bisa melakukan pekerjaan terbaik Anda di pesawat, di pegunungan, atau saat internet sedang mati total."
+      },
+      {
+        "heading": "Kolaborasi Tanpa Kompromi",
+        "body": "Kami percaya Anda tidak seharusnya mengorbankan privasi data hanya demi bisa berkolaborasi. Itulah mengapa kami merekayasa teknologi Local Workspace peer-to-peer kami. Anda bisa berkolaborasi dengan tim Anda di ruangan yang sama, dengan kecepatan tinggi khas Wi-Fi lokal, tanpa satu byte pun data yang menyentuh internet publik."
+      }
+    ]
+  },
+  "sponsorPage": {
+    "title": "Dukung FlowDesk",
+    "subtitle": "FlowDesk 100% gratis dan terbuka. Tanpa langganan. Tanpa iklan. Tanpa pelacakan. Jika alat ini bermanfaat bagi Anda, pertimbangkan untuk mentraktir saya kopi agar pengembangan terus berlanjut.",
+    "methods": [
+      {
+        "name": "Saweria",
+        "description": "Dukung pengembangan menggunakan metode pembayaran lokal (Gopay, OVO, DANA, ShopeePay)."
+      },
+      {
+        "name": "Ko-fi",
+        "description": "Berikan tip kepada kreator melalui Ko-fi (PayPal / Kartu Kredit)."
+      }
+    ],
+    "thankYou": "Terima kasih banyak atas dukungan Anda!"
+  },
+  "contactPage": {
+    "title": "Kontak & Komunitas",
+    "subtitle": "Butuh bantuan, ingin melaporkan bug, atau sekadar ingin menyapa? Di sinilah Anda bisa menemukan kami.",
+    "cards": {
+      "discord": {
+        "title": "Komunitas Discord",
+        "desc": "Bergabunglah dengan server kami untuk mengobrol dengan pengguna FlowDesk lain, bertanya, dan berbagi alur kerja Anda."
+      },
+      "github": {
+        "title": "GitHub Issues",
+        "desc": "Menemukan bug atau punya ide fitur baru? Buka Issue di repositori publik kami."
+      },
+      "email": {
+        "title": "Dukungan Email",
+        "desc": "Untuk pertanyaan bisnis, laporan keamanan, atau urusan pribadi, jangan ragu untuk mengirim email kepada saya."
+      }
+    }
   }
 }

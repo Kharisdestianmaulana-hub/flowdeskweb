@@ -1,6 +1,10 @@
 {
   "navbar": {
     "features": "Features",
+    "docs": "Docs",
+    "philosophy": "Philosophy",
+    "sponsor": "Sponsor",
+    "contact": "Contact",
     "download": "Download",
     "changelog": "Changelog"
   },
@@ -82,7 +86,7 @@
   },
   "download": {
     "title": "Available for macOS and Windows.",
-    "subtitle": "Requires .NET 10.0 SDK.",
+    "subtitle": "Standalone executable. No extra dependencies required.",
     "macOS": "macOS",
     "windows": "Windows",
     "linux": "Linux",
@@ -102,13 +106,17 @@
     "viewGithub": "View on GitHub"
   },
   "footer": {
-    "tagline": "Your clean, offline productivity haven.",
+    "tagline": "The clean, offline productivity haven.",
     "features": "Features",
+    "docs": "Documentation",
+    "philosophy": "Our Philosophy",
+    "sponsor": "Support Us",
+    "contact": "Contact & Community",
     "download": "Download",
     "changelog": "Changelog",
     "license": "License",
-    "builtWith": "Built with Avalonia UI & .NET 10",
-    "copyright": "Kharis Destian Maulana (Riray). FlowDesk Proprietary License."
+    "builtWith": "Built with",
+    "copyright": "Kharis Destian Maulana (Riray). All rights reserved."
   },
   "licensePage": {
     "title": "License & Copyright",
@@ -125,5 +133,152 @@
     "emptyCommits": "No commits found.",
     "readMore": "Read more on GitHub",
     "viewCommit": "View commit on GitHub"
+  },
+  "useCases": {
+    "title": "Built for every workflow.",
+    "subtitle": "Whether you're flying solo or managing a team, FlowDesk adapts to your needs.",
+    "solo": {
+      "title": "Solo Creators",
+      "description": "Deep work without distractions. Keep your personal projects, notes, and tasks entirely private on your own machine."
+    },
+    "teams": {
+      "title": "Local Teams",
+      "description": "Collaborate in real-time over Wi-Fi or LAN. Perfect for offices, classrooms, or hackathons without internet."
+    },
+    "privacy": {
+      "title": "Privacy Advocates",
+      "description": "Zero telemetry. Zero cloud syncing. Your data is yours. FlowDesk guarantees 100% data sovereignty."
+    }
+  },
+  "howItWorks": {
+    "title": "Local collaboration, simplified.",
+    "subtitle": "No servers to configure. No accounts to create. Just connect and go.",
+    "step1": {
+      "title": "1. Enable Local Workspace",
+      "description": "The Host enters a workspace, opens Settings, and toggles on 'Local Workspace'. The app instantly broadcasts to your network."
+    },
+    "step2": {
+      "title": "2. Auto-Discovery & Join",
+      "description": "Teammates select 'Join' on their app. FlowDesk automatically finds active workspaces on the network. Just enter your name and click Join."
+    },
+    "step3": {
+      "title": "3. Host Approval",
+      "description": "The Host receives a join request and can accept or reject it. Once approved, the teammate enters and collaborates in real-time."
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about the local-first approach.",
+    "questions": [
+      {
+        "q": "Is FlowDesk really free?",
+        "a": "Yes. FlowDesk is completely free to use without any hidden subscription fees. You own your data forever."
+      },
+      {
+        "q": "Do I need an internet connection to use it?",
+        "a": "For 'Private Workspace', you don't need any connection at all—it runs 100% offline. However, to use 'Local Workspace' with your team, you must be connected to the same local network (Wi-Fi or LAN)."
+      },
+      {
+        "q": "How does LAN collaboration work?",
+        "a": "It uses UDP broadcasting to discover peers on your local Wi-Fi, and SignalR for real-time syncing. As long as you are on the same router, it just works."
+      },
+      {
+        "q": "What happens if the Host closes the app?",
+        "a": "If the Host disconnects, all connected members will be safely auto-kicked to the Welcome screen, ensuring no data corruption occurs."
+      },
+      {
+        "q": "Will there be a cloud sync option later?",
+        "a": "Currently, FlowDesk is strictly local. However, our roadmap for v2.0 includes an optional self-hosted ASP.NET Core backend for those who want their own private server."
+      }
+    ]
+  },
+  "downloadPage": {
+    "title": "Download FlowDesk",
+    "subtitle": "Choose the version that fits your needs. We recommend always using the latest stable release.",
+    "releasedOn": "Released on",
+    "latestBadge": "Latest Release",
+    "downloadFor": "Download {version} for",
+    "macOS": "macOS",
+    "windows": "Windows",
+    "linux": "Linux",
+    "sourceCode": "Source code"
+  },
+  "docsPage": {
+    "title": "Documentation",
+    "subtitle": "Learn how to use FlowDesk, manage your local workspaces, and ensure your data is backed up.",
+    "menu": {
+      "gettingStarted": "Getting Started",
+      "localWorkspace": "Local Workspace Guide",
+      "dataBackups": "Data & Backups"
+    },
+    "content": {
+      "gettingStarted": {
+        "title": "Getting Started",
+        "body": "Welcome to FlowDesk! Installation is straightforward. Simply download the `.exe` (for Windows) or `.dmg` (for macOS) from our Download page. Once installed, launch the application. You do not need an account or internet connection to start creating projects, tasks, and documents."
+      },
+      "localWorkspace": {
+        "title": "Local Workspace Guide",
+        "body": "FlowDesk v1.5.0 introduces 'Local Workspace' – a magical way to collaborate without the cloud. To host a session, enter your workspace, go to Settings, and toggle 'Local Workspace' on. FlowDesk will use UDP broadcasting to advertise your session on your local network (Wi-Fi or LAN). For teammates to join, they just need to be on the same router, select 'Join' on their app, enter their name, and wait for your approval. All syncs happen in real-time via SignalR directly between your computers."
+      },
+      "dataBackups": {
+        "title": "Data & Backups",
+        "body": "Because FlowDesk is Local-First, your data never leaves your computer. Everything is stored locally in an SQLite database file. By default, FlowDesk automatically creates daily backups of your database to prevent data loss. You can find these backup files in your application data directory. We recommend occasionally copying these backups to an external hard drive or your own private cloud storage for extra safety."
+      }
+    }
+  },
+  "philosophyPage": {
+    "title": "The Local-First Manifesto",
+    "subtitle": "Why we built a productivity tool that refuses to use the cloud.",
+    "content": [
+      {
+        "heading": "The SaaS Trap",
+        "body": "Today's productivity landscape is dominated by Cloud Software-as-a-Service (SaaS). While convenient, it comes with a steep hidden cost: you don't own your data. When you put your life's work into a cloud app, you are renting access to your own thoughts. If the company goes bankrupt, changes its pricing, or gets hacked, you lose. We believe this is fundamentally broken."
+      },
+      {
+        "heading": "Data Sovereignty",
+        "body": "FlowDesk was built on the principle of Data Sovereignty. 100% of your data lives on your local hard drive in an open SQLite database format. There is no telemetry, no forced cloud sync, and no tracking. Your private notes stay private."
+      },
+      {
+        "heading": "Speed and Reliability",
+        "body": "Because there are no network requests to a server in Virginia, everything in FlowDesk happens instantly. There are no loading spinners when you switch projects. And best of all, you can do your best work on an airplane, in a cabin, or during an internet outage."
+      },
+      {
+        "heading": "Collaboration without Compromise",
+        "body": "We believe you shouldn't have to sacrifice collaboration just to keep your data local. That's why we engineered our peer-to-peer Local Workspace technology. You can collaborate with your team in the same room, at the speed of your local Wi-Fi, without a single byte ever touching the public internet."
+      }
+    ]
+  },
+  "sponsorPage": {
+    "title": "Support FlowDesk",
+    "subtitle": "FlowDesk is 100% free and open. No subscriptions. No ads. No tracking. If this tool brings you value, consider buying me a coffee to keep development alive.",
+    "methods": [
+      {
+        "name": "Saweria",
+        "description": "Support the development using local Indonesian payment methods (Gopay, OVO, DANA, ShopeePay)."
+      },
+      {
+        "name": "Ko-fi",
+        "description": "Support the creator on Ko-fi via PayPal or Credit Card."
+      }
+    ],
+    "thankYou": "Thank you for your support!"
+  },
+  "contactPage": {
+    "title": "Contact & Community",
+    "subtitle": "Need help, want to report a bug, or just want to say hi? Here's where you can find us.",
+    "cards": {
+      "discord": {
+        "title": "Discord Community",
+        "desc": "Join our server to chat with other FlowDesk users, ask questions, and share your workflow."
+      },
+      "github": {
+        "title": "GitHub Issues",
+        "desc": "Found a bug or have a feature request? Open an issue on our public repository."
+      },
+      "email": {
+        "title": "Email Support",
+        "desc": "For business inquiries, security reports, or private matters, feel free to email me."
+      }
+    }
   }
 }

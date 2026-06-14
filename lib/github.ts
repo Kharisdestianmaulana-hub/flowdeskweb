@@ -8,6 +8,7 @@ function getHeaders(): HeadersInit {
   const headers: HeadersInit = {
     'Accept': 'application/vnd.github+json',
     'X-GitHub-Api-Version': '2022-11-28',
+    'User-Agent': 'FlowDesk-Website',
   };
   
   if (process.env.GITHUB_TOKEN) {
@@ -21,14 +22,22 @@ export async function getRepoInfo(): Promise<RepoInfo> {
   try {
     const res = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}`, {
       headers: getHeaders(),
-      next: { revalidate: 300 },
+      next: { revalidate: 60 },
     });
     
-    if (!res.ok) throw new Error('Failed to fetch repo info');
+    if (!res.ok) {
+      console.warn('GitHub API rate limit exceeded or repo not found. Using fallback data.');
+      return {
+        stargazers_count: 0,
+        description: 'FlowDesk - A local-first desktop workspace.',
+        topics: [],
+        html_url: `https://github.com/${REPO_OWNER}/${REPO_NAME}`
+      };
+    }
     
     return res.json();
   } catch (error) {
-    console.error('getRepoInfo error:', error);
+    console.warn('getRepoInfo error:', error);
     return {
       stargazers_count: 0,
       description: 'FlowDesk - A local-first desktop workspace.',
@@ -42,17 +51,27 @@ export async function getLatestRelease(): Promise<Release> {
   try {
     const res = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest`, {
       headers: getHeaders(),
-      next: { revalidate: 300 },
+      next: { revalidate: 60 },
     });
     
-    if (!res.ok) throw new Error('Failed to fetch latest release');
+    if (!res.ok) {
+      console.warn('GitHub API rate limit exceeded or latest release not found. Using fallback data.');
+      return {
+        tag_name: 'v1.5.0',
+        name: 'FlowDesk v1.5.0 (Fallback)',
+        published_at: new Date().toISOString(),
+        body: '',
+        assets: [],
+        html_url: `https://github.com/${REPO_OWNER}/${REPO_NAME}/releases`
+      };
+    }
     
     return res.json();
   } catch (error) {
-    console.error('getLatestRelease error:', error);
+    console.warn('getLatestRelease error:', error);
     return {
-      tag_name: 'v0.0.0',
-      name: 'Fallback Release',
+      tag_name: 'v1.5.0',
+      name: 'FlowDesk v1.5.0 (Fallback)',
       published_at: new Date().toISOString(),
       body: '',
       assets: [],
@@ -65,14 +84,17 @@ export async function getAllReleases(): Promise<Release[]> {
   try {
     const res = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/releases`, {
       headers: getHeaders(),
-      next: { revalidate: 300 },
+      next: { revalidate: 60 },
     });
     
-    if (!res.ok) throw new Error('Failed to fetch all releases');
+    if (!res.ok) {
+      console.warn('GitHub API rate limit exceeded or releases not found. Using fallback data.');
+      return [];
+    }
     
     return res.json();
   } catch (error) {
-    console.error('getAllReleases error:', error);
+    console.warn('getAllReleases error:', error);
     return [];
   }
 }
@@ -81,14 +103,17 @@ export async function getRecentCommits(limit: number = 20): Promise<Commit[]> {
   try {
     const res = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/commits?per_page=${limit}`, {
       headers: getHeaders(),
-      next: { revalidate: 300 },
+      next: { revalidate: 60 },
     });
     
-    if (!res.ok) throw new Error('Failed to fetch commits');
+    if (!res.ok) {
+      console.warn('GitHub API rate limit exceeded or commits not found. Using fallback data.');
+      return [];
+    }
     
     return res.json();
   } catch (error) {
-    console.error('getRecentCommits error:', error);
+    console.warn('getRecentCommits error:', error);
     return [];
   }
 }

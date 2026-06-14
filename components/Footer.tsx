@@ -33,7 +33,19 @@ export default function Footer({ repoUrl, dict, currentLang }: FooterProps) {
             <Link href={`/${currentLang}/#features`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
               {dict.features}
             </Link>
-            <Link href={`/${currentLang}/#download`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+            <Link href={`/${currentLang}/docs`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+              {dict.docs}
+            </Link>
+            <Link href={`/${currentLang}/philosophy`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+              {dict.philosophy}
+            </Link>
+            <Link href={`/${currentLang}/sponsor`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+              {dict.sponsor}
+            </Link>
+            <Link href={`/${currentLang}/contact`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+              {dict.contact}
+            </Link>
+            <Link href={`/${currentLang}/download`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
               {dict.download}
             </Link>
             <Link href={`/${currentLang}/changelog`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">

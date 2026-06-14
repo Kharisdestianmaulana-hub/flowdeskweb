@@ -8,6 +8,9 @@ import PlatformDownload from '@/components/PlatformDownload';
 import ChangelogStrip from '@/components/ChangelogStrip';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
+import UseCases from '@/components/UseCases';
+import HowItWorks from '@/components/HowItWorks';
+import FAQ from '@/components/FAQ';
 
 import { getRepoInfo, getLatestRelease, getRecentCommits } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
@@ -36,8 +39,12 @@ export default async function Home({ params }: { params: Promise<{ lang: 'en' | 
       <SocialProof dict={dict.socialProof} />
       
       <Features dict={dict.features} />
+
+      <UseCases dict={dict.useCases} />
       
       <WhyFlowDesk dict={dict.whyFlowDesk} />
+
+      <HowItWorks dict={dict.howItWorks} />
       
       <AppPreview dict={dict.appPreview} />
       
@@ -49,6 +56,8 @@ export default async function Home({ params }: { params: Promise<{ lang: 'en' | 
       
       <ChangelogStrip commits={commits} dict={dict.changelogStrip} currentLang={lang} />
       
+      <FAQ dict={dict.faq} />
+
       <CTASection assets={latestRelease.assets} dict={dict.cta} />
       
       <Footer repoUrl={repoInfo.html_url} dict={dict.footer} currentLang={lang} />
