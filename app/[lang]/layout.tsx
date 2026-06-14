@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "../globals.css";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -46,6 +47,7 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <ScrollToTop />
       </body>
     </html>
   );

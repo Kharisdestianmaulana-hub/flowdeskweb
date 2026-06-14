@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Globe } from 'lucide-react';
 import { GithubIcon as Github } from './GithubIcon';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 interface NavbarProps {
@@ -16,8 +16,17 @@ interface NavbarProps {
 
 export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleLanguage = () => {
     const newLang = currentLang === 'en' ? 'id' : 'en';
@@ -32,9 +41,10 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-[rgba(10,10,15,0.85)] backdrop-blur-md border-b border-[var(--color-border-subtle)] h-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-        {/* Left: Logo */}
+    <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${isScrolled ? 'py-4 px-4 pointer-events-none' : 'py-0 px-0'}`}>
+      <nav className={`pointer-events-auto mx-auto transition-all duration-300 backdrop-blur-lg border border-[var(--color-border-subtle)] ${isScrolled ? 'max-w-5xl rounded-full bg-[rgba(20,20,25,0.7)] shadow-2xl h-[60px]' : 'max-w-none w-full rounded-none bg-[rgba(10,10,15,0.85)] border-t-0 border-l-0 border-r-0 h-16'}`}>
+        <div className={`h-full flex items-center justify-between transition-all duration-300 ${isScrolled ? 'px-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
+          {/* Left: Logo */}
         <div className="flex-shrink-0">
           <Link href="/" className="flex items-center gap-2 text-xl tracking-tight text-[var(--color-text-primary)] transition-all duration-200">
             <Image src="/logo.png" alt="FlowDesk Logo" width={28} height={28} className="rounded-[6px]" />
@@ -108,7 +118,7 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden bg-[var(--color-surface)] border-b border-[var(--color-border-subtle)] px-4 pt-2 pb-4 space-y-1">
+        <div className={`md:hidden bg-[var(--color-surface)] border border-[var(--color-border-subtle)] px-4 pt-2 pb-4 space-y-1 mx-auto ${isScrolled ? 'mt-2 max-w-5xl rounded-2xl shadow-xl pointer-events-auto' : 'w-full rounded-none border-t-0 border-l-0 border-r-0'}`}>
           <Link href={`/${currentLang}/#features`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.features}</Link>
           <Link href={`/${currentLang}/docs`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.docs}</Link>
           <Link href={`/${currentLang}/philosophy`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.philosophy}</Link>
@@ -138,6 +148,7 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           </div>
         </div>
       )}
-    </nav>
+      </nav>
+    </header>
   );
 }
