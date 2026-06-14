@@ -210,20 +210,6 @@
       "gettingStarted": "Getting Started",
       "localWorkspace": "Local Workspace Guide",
       "dataBackups": "Data & Backups"
-    },
-    "content": {
-      "gettingStarted": {
-        "title": "Getting Started",
-        "body": "Welcome to FlowDesk! Installation is straightforward. Simply download the `.exe` (for Windows) or `.dmg` (for macOS) from our Download page. Once installed, launch the application. You do not need an account or internet connection to start creating projects, tasks, and documents."
-      },
-      "localWorkspace": {
-        "title": "Local Workspace Guide",
-        "body": "FlowDesk v1.5.0 introduces 'Local Workspace' – a magical way to collaborate without the cloud. To host a session, enter your workspace, go to Settings, and toggle 'Local Workspace' on. FlowDesk will use UDP broadcasting to advertise your session on your local network (Wi-Fi or LAN). For teammates to join, they just need to be on the same router, select 'Join' on their app, enter their name, and wait for your approval. All syncs happen in real-time via SignalR directly between your computers."
-      },
-      "dataBackups": {
-        "title": "Data & Backups",
-        "body": "Because FlowDesk is Local-First, your data never leaves your computer. Everything is stored locally in an SQLite database file. By default, FlowDesk automatically creates daily backups of your database to prevent data loss. You can find these backup files in your application data directory. We recommend occasionally copying these backups to an external hard drive or your own private cloud storage for extra safety."
-      }
     }
   },
   "philosophyPage": {

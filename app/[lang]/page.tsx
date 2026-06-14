@@ -12,17 +12,19 @@ import UseCases from '@/components/UseCases';
 import HowItWorks from '@/components/HowItWorks';
 import FAQ from '@/components/FAQ';
 import Newsletter from '@/components/Newsletter';
+import Contributors from '@/components/Contributors';
 
-import { getRepoInfo, getLatestRelease, getRecentCommits } from '@/lib/github';
+import { getRepoInfo, getLatestRelease, getRecentCommits, getContributors } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
 
 export default async function Home({ params }: { params: Promise<{ lang: 'en' | 'id' }> }) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
-  const [repoInfo, latestRelease, commits] = await Promise.all([
+  const [repoInfo, latestRelease, commits, contributors] = await Promise.all([
     getRepoInfo(),
     getLatestRelease(),
     getRecentCommits(5),
+    getContributors(),
   ]);
 
   return (
@@ -58,6 +60,8 @@ export default async function Home({ params }: { params: Promise<{ lang: 'en' | 
       <ChangelogStrip commits={commits} dict={dict.changelogStrip} currentLang={lang} />
       
       <FAQ dict={dict.faq} />
+
+      <Contributors contributors={contributors} lang={lang} />
 
       <CTASection assets={latestRelease.assets} dict={dict.cta} />
       

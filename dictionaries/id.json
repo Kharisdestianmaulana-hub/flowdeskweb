@@ -210,20 +210,6 @@
       "gettingStarted": "Mulai Menggunakan",
       "localWorkspace": "Panduan Local Workspace",
       "dataBackups": "Data & Pencadangan"
-    },
-    "content": {
-      "gettingStarted": {
-        "title": "Mulai Menggunakan",
-        "body": "Selamat datang di FlowDesk! Instalasinya sangat mudah. Cukup unduh `.exe` (untuk Windows) atau `.dmg` (untuk macOS) dari halaman Unduhan kami. Setelah terinstal, buka aplikasinya. Anda tidak perlu membuat akun atau koneksi internet untuk mulai membuat proyek, tugas, dan dokumen."
-      },
-      "localWorkspace": {
-        "title": "Panduan Local Workspace",
-        "body": "FlowDesk v1.5.0 memperkenalkan 'Local Workspace' – cara ajaib untuk berkolaborasi tanpa awan (cloud). Untuk menjadi Host, masuk ke ruang kerja Anda, buka Pengaturan, dan nyalakan opsi 'Local Workspace'. FlowDesk akan menyiarkan sinyal UDP ke jaringan lokal Anda (Wi-Fi atau LAN). Anggota tim hanya perlu berada di jaringan yang sama, mengeklik 'Join' di aplikasi mereka, memasukkan nama, dan menunggu persetujuan Anda. Sinkronisasi terjadi secara langsung dan real-time antar komputer menggunakan SignalR."
-      },
-      "dataBackups": {
-        "title": "Data & Pencadangan",
-        "body": "Karena FlowDesk berkonsep Lokal-Pertama, data Anda tidak pernah meninggalkan komputer Anda. Semuanya disimpan secara lokal dalam file database SQLite. Secara default, FlowDesk secara otomatis membuat cadangan harian database Anda untuk mencegah kehilangan data. Kami menyarankan Anda sesekali menyalin file cadangan ini ke hard disk eksternal atau penyimpanan pribadi Anda untuk keamanan ekstra."
-      }
     }
   },
   "philosophyPage": {

@@ -111,9 +111,31 @@ export async function getRecentCommits(limit: number = 20): Promise<Commit[]> {
       return [];
     }
     
-    return res.json();
+    const data = await res.json();
+    return data;
   } catch (error) {
-    console.warn('getRecentCommits error:', error);
+    console.error('Error fetching commits:', error);
+    return [];
+  }
+}
+
+export async function getContributors() {
+  try {
+    const response = await fetch(`${GITHUB_API_URL}/repos/${REPO_OWNER}/${REPO_NAME}/contributors`, {
+      next: { revalidate: 3600 },
+      headers: {
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch contributors');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching contributors:', error);
     return [];
   }
 }
