@@ -105,8 +105,16 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           </Link>
         </div>
 
-        {/* Mobile menu button */}
-        <div className="md:hidden flex items-center">
+        {/* Mobile menu button & Mobile Language Toggle */}
+        <div className="md:hidden flex items-center gap-3">
+          <button 
+            onClick={toggleLanguage}
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all"
+            title={currentLang === 'en' ? 'Switch to Indonesian' : 'Switch to English'}
+          >
+            <span className="text-[10px] font-bold uppercase">{currentLang}</span>
+          </button>
+
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-all duration-200"
