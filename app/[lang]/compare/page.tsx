@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import { getDictionary } from '@/lib/dictionary';
 import { getRepoInfo } from '@/lib/github';
 import { Check, X } from 'lucide-react';
+import { SiNotion, SiObsidian, SiEvernote, SiJira } from 'react-icons/si';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -27,10 +28,18 @@ export default async function CompareNotionPage({ params }: { params: Promise<{ 
             </div>
             <span className="text-3xl text-[var(--color-text-muted)] font-light px-4">vs</span>
             <div className="flex -space-x-4">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-white border border-gray-200 flex items-center justify-center text-black text-xl sm:text-2xl font-serif font-bold shadow-lg z-10">N</div>
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-purple-600 border border-gray-200 flex items-center justify-center text-white text-xl sm:text-2xl font-serif font-bold shadow-lg z-20">O</div>
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-green-500 border border-gray-200 flex items-center justify-center text-white text-xl sm:text-2xl font-serif font-bold shadow-lg z-30">E</div>
-              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-blue-500 border border-gray-200 flex items-center justify-center text-white text-xl sm:text-2xl font-serif font-bold shadow-lg z-40">J</div>
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-white border border-gray-200 flex items-center justify-center text-black shadow-lg z-10 transition-transform hover:z-50 hover:scale-110">
+                <SiNotion className="w-6 h-6 sm:w-8 sm:h-8" />
+              </div>
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-[#483699] border border-[#3e2e85] flex items-center justify-center text-white shadow-lg z-20 transition-transform hover:z-50 hover:scale-110">
+                <SiObsidian className="w-6 h-6 sm:w-8 sm:h-8" />
+              </div>
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-[#00a82d] border border-[#008f26] flex items-center justify-center text-white shadow-lg z-30 transition-transform hover:z-50 hover:scale-110">
+                <SiEvernote className="w-6 h-6 sm:w-8 sm:h-8" />
+              </div>
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-[var(--radius-lg)] bg-[#0052cc] border border-[#0047b3] flex items-center justify-center text-white shadow-lg z-40 transition-transform hover:z-50 hover:scale-110">
+                <SiJira className="w-6 h-6 sm:w-8 sm:h-8" />
+              </div>
             </div>
           </div>
           <h1 className="text-4xl sm:text-5xl font-[800] tracking-tight mb-6 text-[var(--color-text-primary)]">
