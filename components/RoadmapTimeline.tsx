@@ -1,6 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { CheckCircle2, Clock, CircleDashed } from 'lucide-react';
 
 interface RoadmapItem {
@@ -19,6 +20,18 @@ interface RoadmapTimelineProps {
 }
 
 export default function RoadmapTimeline({ data, lang, dict }: RoadmapTimelineProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+  
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'completed':
@@ -49,9 +62,15 @@ export default function RoadmapTimeline({ data, lang, dict }: RoadmapTimelinePro
   };
 
   return (
-    <div className="relative max-w-4xl mx-auto py-12">
-      {/* Central Line */}
+    <div ref={containerRef} className="relative max-w-4xl mx-auto py-12">
+      {/* Background Line */}
       <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[2px] bg-[var(--color-border-subtle)] -translate-x-1/2" />
+      
+      {/* Animated Foreground Line */}
+      <motion.div 
+        className="absolute left-8 md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-purple-500 via-blue-500 to-emerald-500 origin-top -translate-x-1/2 z-0" 
+        style={{ scaleY }}
+      />
 
       <div className="space-y-16 relative">
         {data.map((item, index) => {
@@ -60,34 +79,51 @@ export default function RoadmapTimeline({ data, lang, dict }: RoadmapTimelinePro
           const isEven = index % 2 === 0;
 
           return (
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+            <div 
               key={item.version}
-              className="relative flex flex-col md:flex-row items-start md:justify-between w-full"
+              className={`relative flex flex-col md:flex-row items-start md:justify-between w-full ${!isEven ? 'md:flex-row-reverse' : ''}`}
             >
               {/* Timeline Node */}
-              <div className="absolute left-8 md:left-1/2 top-6 -translate-x-1/2 -translate-y-1/2 z-10">
-                <div className={`w-10 h-10 rounded-full border-4 border-[var(--color-bg)] ${config.bgColor} flex items-center justify-center`}>
+              <motion.div 
+                initial={{ backgroundColor: 'var(--color-bg)', borderColor: 'var(--color-bg)' }}
+                whileInView={{ backgroundColor: 'var(--color-bg)', borderColor: 'var(--color-bg)' }}
+                viewport={{ once: true, margin: "-50% 0px -50% 0px" }}
+                className="absolute left-8 md:left-1/2 top-6 -translate-x-1/2 -translate-y-1/2 z-10"
+              >
+                <motion.div 
+                  initial={{ scale: 0.8, opacity: 0.5 }}
+                  whileInView={{ scale: 1, opacity: 1, boxShadow: '0 0 20px rgba(124,58,237,0.3)' }}
+                  viewport={{ once: true, margin: "-50% 0px -50% 0px" }}
+                  transition={{ duration: 0.4 }}
+                  className={`w-10 h-10 rounded-full border-4 border-[var(--color-bg)] ${config.bgColor} flex items-center justify-center transition-colors`}
+                >
                   <Icon className={`w-5 h-5 ${config.color}`} />
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
-              {/* Left Side (Empty on mobile, content on desktop if even) */}
-              <div className={`hidden md:block w-[calc(50%-3rem)] ${isEven ? 'text-right' : ''}`}>
-                {isEven && (
-                  <div className="pt-3">
-                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-[var(--color-text-primary)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] mb-3">
-                      {item.quarter} • {item.version}
-                    </span>
-                  </div>
-                )}
+              {/* Left Side (Empty on mobile, content on desktop) */}
+              <div className={`hidden md:block w-[calc(50%-3rem)] ${isEven ? 'text-right' : 'text-left'}`}>
+                <motion.div 
+                  initial={{ opacity: 0, x: isEven ? -20 : 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50% 0px -50% 0px" }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                  className="pt-3"
+                >
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-[var(--color-text-primary)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] mb-3 shadow-[var(--shadow-card)]">
+                    {item.quarter} • {item.version}
+                  </span>
+                </motion.div>
               </div>
 
               {/* Content Card */}
-              <div className={`w-[calc(100%-4rem)] ml-16 md:ml-0 md:w-[calc(50%-3rem)] ${isEven ? '' : 'text-left'}`}>
+              <motion.div 
+                initial={{ opacity: 0, x: isEven ? 30 : -30, y: 20 }}
+                whileInView={{ opacity: 1, x: 0, y: 0 }}
+                viewport={{ once: true, margin: "-50% 0px -50% 0px" }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className={`w-[calc(100%-4rem)] ml-16 md:ml-0 md:w-[calc(50%-3rem)] ${isEven ? 'text-left' : 'text-right'}`}
+              >
                 {/* Mobile Meta (Hidden on Desktop for Even) */}
                 <div className={`mb-3 md:${isEven ? 'hidden' : 'block'}`}>
                   <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-[var(--color-text-primary)] bg-[var(--color-surface-raised)] border border-[var(--color-border)]">
@@ -107,13 +143,13 @@ export default function RoadmapTimeline({ data, lang, dict }: RoadmapTimelinePro
                     {item.title[lang] || item.title['en']}
                   </h3>
                   
-                  <p className="text-[15px] text-[var(--color-text-secondary)] leading-relaxed mb-6">
+                  <p className={`text-[15px] text-[var(--color-text-secondary)] leading-relaxed mb-6 ${isEven ? 'text-left' : 'text-right'}`}>
                     {item.description[lang] || item.description['en']}
                   </p>
 
-                  <ul className="space-y-3">
+                  <ul className={`space-y-3 flex flex-col ${isEven ? 'items-start' : 'items-end'}`}>
                     {(item.items[lang] || item.items['en']).map((listItem, i) => (
-                      <li key={i} className="flex items-start gap-3">
+                      <li key={i} className={`flex items-start gap-3 ${isEven ? 'flex-row' : 'flex-row-reverse text-right'}`}>
                         <div className={`mt-1.5 w-1.5 h-1.5 rounded-full ${config.color} flex-shrink-0`} />
                         <span className="text-[14px] text-[var(--color-text-muted)] leading-relaxed">
                           {listItem}
@@ -122,8 +158,8 @@ export default function RoadmapTimeline({ data, lang, dict }: RoadmapTimelinePro
                     ))}
                   </ul>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           );
         })}
       </div>
