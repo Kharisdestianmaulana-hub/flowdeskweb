@@ -2,7 +2,6 @@
 
 import { Lock, Command, FolderKanban, FileText, Wifi, Users, Folder, UserCheck, Database, ShieldCheck } from 'lucide-react';
 import Reveal from './animations/Reveal';
-import Highlight from './animations/Highlight';
 import { motion } from 'framer-motion';
 
 export default function Features({ dict }: { dict: any }) {
@@ -28,9 +27,7 @@ export default function Features({ dict }: { dict: any }) {
         <Reveal>
           <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-[800] tracking-tight text-[var(--color-text-primary)]">
-              <Highlight color="rgba(124, 58, 237, 0.4)">
-                {dict.title}
-              </Highlight>
+              {dict.title}
             </h2>
           </div>
         </Reveal>

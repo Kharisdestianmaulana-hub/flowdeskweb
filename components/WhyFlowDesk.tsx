@@ -2,7 +2,6 @@
 
 import { Check, X } from 'lucide-react';
 import Reveal from './animations/Reveal';
-import Highlight from './animations/Highlight';
 
 export default function WhyFlowDesk({ dict }: { dict: any }) {
 
@@ -15,9 +14,7 @@ export default function WhyFlowDesk({ dict }: { dict: any }) {
         <Reveal>
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-[700] tracking-[-0.01em] text-[var(--color-text-primary)] mb-6">
-              <Highlight color="rgba(124, 58, 237, 0.4)">
-                {dict.title}
-              </Highlight>
+              {dict.title}
             </h2>
             <p className="text-[18px] leading-[1.7] text-[var(--color-text-secondary)]">
               {dict.subtitle}

@@ -1,7 +1,6 @@
 import { GithubIcon as Github } from './GithubIcon';
 import { ReleaseAsset } from '../types/github';
 import Reveal from './animations/Reveal';
-import Highlight from './animations/Highlight';
 
 interface CTASectionProps {
   assets: ReleaseAsset[];
@@ -16,9 +15,7 @@ export default function CTASection({ assets, dict }: CTASectionProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <Reveal>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-[800] tracking-[-0.01em] text-[var(--color-text-primary)] mb-6">
-            <Highlight color="rgba(0, 0, 0, 0.2)">
-              {dict.title}
-            </Highlight>
+            {dict.title}
           </h2>
           <p className="text-[18px] text-[var(--color-text-secondary)] mb-10 max-w-2xl mx-auto">
             {dict.subtitle}

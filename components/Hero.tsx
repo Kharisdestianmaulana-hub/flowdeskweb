@@ -19,25 +19,46 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
 
   return (
     <section className="relative min-h-[calc(100vh-64px)] flex flex-col justify-center items-center overflow-hidden bg-[var(--color-bg)] py-24 px-4 sm:px-6 lg:px-8">
-      {/* Animated Glow Blobs */}
+      {/* Animated Aurora Waves & Vignette */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div 
-          className="absolute top-[-10%] left-[10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-purple-600/30 rounded-full blur-[100px] md:blur-[150px]"
-          animate={{ 
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-            scale: [1, 1.1, 1]
+        {/* Top Left Vignette */}
+        <div className="absolute top-0 left-0 w-full h-[60%] bg-[radial-gradient(ellipse_at_top_left,rgba(0,0,0,0.6)_0%,transparent_70%)] z-0 dark:block hidden" />
+        {/* Top Right Vignette */}
+        <div className="absolute top-0 right-0 w-full h-[60%] bg-[radial-gradient(ellipse_at_top_right,rgba(0,0,0,0.6)_0%,transparent_70%)] z-0 dark:block hidden" />
+        
+        {/* Aurora Waves */}
+        <motion.div
+          className="absolute top-[-20%] left-[-20%] w-[140%] h-[60%] opacity-30 blur-[80px] md:blur-[100px]"
+          style={{
+            background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(124,58,237,0.6) 25%, rgba(56,189,248,0.6) 50%, rgba(124,58,237,0.6) 75%, rgba(124,58,237,0) 100%)',
           }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          animate={{
+            x: ['-20%', '0%', '-20%'],
+            y: [0, 30, 0],
+            scaleY: [1, 1.3, 1]
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
         />
-        <motion.div 
-          className="absolute bottom-[-10%] right-[10%] w-[500px] md:w-[700px] h-[500px] md:h-[700px] bg-indigo-600/20 rounded-full blur-[100px] md:blur-[150px]"
-          animate={{ 
-            x: [0, -100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1]
+        <motion.div
+          className="absolute top-[-10%] left-[-20%] w-[140%] h-[50%] opacity-20 blur-[80px] md:blur-[120px]"
+          style={{
+            background: 'linear-gradient(90deg, rgba(236,72,153,0) 0%, rgba(236,72,153,0.4) 30%, rgba(139,92,246,0.4) 70%, rgba(236,72,153,0) 100%)',
           }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          animate={{
+            x: ['0%', '-15%', '0%'],
+            y: [0, -20, 0],
+            scaleY: [1, 1.5, 1]
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
         />
       </div>
 

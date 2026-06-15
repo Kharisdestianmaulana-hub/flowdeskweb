@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Highlight from './animations/Highlight';
 import Reveal from './animations/Reveal';
 
 interface Contributor {
@@ -28,9 +27,7 @@ export default function Contributors({ contributors, lang }: ContributorsProps) 
       <Reveal>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-[800] tracking-tight text-[var(--color-text-primary)] mb-4">
-            <Highlight color="rgba(124, 58, 237, 0.4)">
-              {title}
-            </Highlight>
+            {title}
           </h2>
           <p className="text-[16px] text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto">
             {subtitle}
