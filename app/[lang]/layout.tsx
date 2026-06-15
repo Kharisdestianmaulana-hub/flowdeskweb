@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Outfit } from "next/font/google";
 import "../globals.css";
+import ProgressBar from "@/components/ProgressBar";
+import TabManager from "@/components/TabManager";
 import ScrollToTop from "@/components/ScrollToTop";
 
 const inter = Inter({
@@ -11,6 +13,12 @@ const inter = Inter({
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
   display: "swap",
 });
@@ -43,9 +51,11 @@ export default async function RootLayout({
   return (
     <html lang={lang} className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased overflow-x-hidden`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${outfit.variable} font-sans antialiased overflow-x-hidden selection:bg-[var(--color-primary)] selection:text-white`}
         suppressHydrationWarning
       >
+        <ProgressBar />
+        <TabManager currentLang={lang} />
         {children}
         <ScrollToTop />
       </body>

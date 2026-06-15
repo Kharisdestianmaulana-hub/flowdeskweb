@@ -2,7 +2,7 @@
 
 import { GithubIcon as Github } from './GithubIcon';
 import { ReleaseAsset } from '../types/github';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Reveal from './animations/Reveal';
 import { useOs } from '../hooks/useOs';
 
@@ -16,6 +16,11 @@ interface HeroProps {
 
 export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProps) {
   const os = useOs();
+  const { scrollY } = useScroll();
+  
+  // Parallax effects for Aurora
+  const y1 = useTransform(scrollY, [0, 1000], [0, 300]);
+  const y2 = useTransform(scrollY, [0, 1000], [0, 150]);
   
   // Find assets
   const macAsset = assets?.find(a => a.name.includes('.dmg'));
@@ -49,6 +54,7 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
           className="absolute top-[-30%] left-[-20%] w-[140%] h-[80%] opacity-40 mix-blend-screen"
           style={{
             background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(124,58,237,0.4) 0%, rgba(56,189,248,0.2) 40%, transparent 70%)',
+            y: y1
           }}
           animate={{
             x: ['-10%', '0%', '-10%'],
@@ -65,6 +71,7 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
           className="absolute top-[-20%] left-[-10%] w-[120%] h-[70%] opacity-30 mix-blend-screen"
           style={{
             background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(236,72,153,0.3) 0%, rgba(139,92,246,0.2) 50%, transparent 70%)',
+            y: y2
           }}
           animate={{
             x: ['0%', '-10%', '0%'],
