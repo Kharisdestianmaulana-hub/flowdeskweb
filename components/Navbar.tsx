@@ -21,10 +21,15 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
   const pathname = usePathname();
   const router = useRouter();
   const megaMenuRef = useRef<HTMLDivElement>(null);
+  const gripButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (megaMenuRef.current && !megaMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (
+        megaMenuRef.current && !megaMenuRef.current.contains(target) &&
+        gripButtonRef.current && !gripButtonRef.current.contains(target)
+      ) {
         setIsMegaOpen(false);
       }
     };
@@ -86,6 +91,7 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
         {/* Right: Actions */}
         <div className="hidden md:flex items-center space-x-4">
           <button 
+            ref={gripButtonRef}
             onClick={() => setIsMegaOpen(!isMegaOpen)}
             className={`flex items-center justify-center w-9 h-9 rounded-full transition-all ${isMegaOpen ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]' : 'bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}
             title="More Menu"
