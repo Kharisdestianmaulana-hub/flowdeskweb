@@ -175,55 +175,55 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
         </div>
       )}
 
-      {/* Desktop Apple-Style Mega Menu */}
+      </nav>
+
+      {/* Desktop Apple-Style Mega Menu (Full Width) */}
       <div 
         ref={megaMenuRef}
-        className={`hidden md:block absolute top-[calc(100%+8px)] right-0 w-full max-w-[600px] bg-[rgba(20,20,25,0.95)] backdrop-blur-2xl border border-[var(--color-border)] rounded-2xl shadow-2xl transition-all duration-300 origin-top-right overflow-hidden ${isMegaOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
+        className={`hidden md:block absolute left-0 w-full bg-[rgba(10,10,15,0.95)] backdrop-blur-2xl border-b border-[var(--color-border-subtle)] transition-all duration-400 ease-[cubic-bezier(0.32,0.72,0,1)] overflow-hidden pointer-events-auto ${isMegaOpen ? 'top-full opacity-100 max-h-[400px]' : 'top-[calc(100%-20px)] opacity-0 max-h-0 pointer-events-none'}`}
       >
-        <div className="p-6 grid grid-cols-2 gap-x-8 gap-y-6">
-          <Link href={`/${currentLang}/changelog`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+        <div className="max-w-5xl mx-auto px-8 py-10 grid grid-cols-4 gap-8">
+          <Link href={`/${currentLang}/changelog`} onClick={() => setIsMegaOpen(false)} className="group flex flex-col gap-3">
             <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-[var(--color-primary-light)] group-hover:text-[var(--color-primary)] transition-colors">
               <Activity className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-primary)]" />
             </div>
             <div>
               <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.changelog}</h4>
-              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">See the latest updates and release notes</p>
+              <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">See the latest updates and release notes</p>
             </div>
           </Link>
           
-          <Link href={`/${currentLang}/sponsor`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+          <Link href={`/${currentLang}/sponsor`} onClick={() => setIsMegaOpen(false)} className="group flex flex-col gap-3">
             <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-pink-500/10 transition-colors">
               <Heart className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-pink-500" />
             </div>
             <div>
               <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.sponsor}</h4>
-              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Support the independent development</p>
+              <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">Support the independent development</p>
             </div>
           </Link>
 
-          <Link href={`/${currentLang}/contact`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+          <Link href={`/${currentLang}/contact`} onClick={() => setIsMegaOpen(false)} className="group flex flex-col gap-3">
             <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-blue-500/10 transition-colors">
               <MessageCircle className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-blue-500" />
             </div>
             <div>
               <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.contact || 'Contact & Community'}</h4>
-              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Join Discord and talk to the developer</p>
+              <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">Join Discord and talk to the developer</p>
             </div>
           </Link>
 
-          <Link href={`/${currentLang}/license`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+          <Link href={`/${currentLang}/license`} onClick={() => setIsMegaOpen(false)} className="group flex flex-col gap-3">
             <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-[var(--color-surface-raised)] transition-colors">
               <Scale className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]" />
             </div>
             <div>
               <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.license || 'License'}</h4>
-              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Terms, conditions, and copyright</p>
+              <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">Terms, conditions, and copyright</p>
             </div>
           </Link>
         </div>
       </div>
-
-      </nav>
     </header>
   );
 }
