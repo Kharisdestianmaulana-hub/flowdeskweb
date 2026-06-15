@@ -1,7 +1,8 @@
 'use client';
 
 import { User, Users, Shield } from 'lucide-react';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import Reveal from './animations/Reveal';
+import Highlight from './animations/Highlight';
 
 export default function UseCases({ dict }: { dict: any }) {
   const [ref, isIntersecting] = useIntersectionObserver();
@@ -36,38 +37,36 @@ export default function UseCases({ dict }: { dict: any }) {
   return (
     <section className="py-24 sm:py-32 bg-[var(--color-bg)] border-t border-[var(--color-border-subtle)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div 
-          ref={ref}
-          className={`text-center max-w-2xl mx-auto mb-16 transition-all duration-700 ease-out transform ${
-            isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <h2 className="text-3xl sm:text-4xl font-[700] tracking-[-0.01em] text-[var(--color-text-primary)] mb-4">
-            {dict.title}
-          </h2>
-          <p className="text-[18px] leading-[1.7] text-[var(--color-text-secondary)]">
-            {dict.subtitle}
-          </p>
-        </div>
+        <Reveal>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl sm:text-4xl font-[700] tracking-[-0.01em] text-[var(--color-text-primary)] mb-4">
+              <Highlight color="rgba(124, 58, 237, 0.4)">
+                {dict.title}
+              </Highlight>
+            </h2>
+            <p className="text-[18px] leading-[1.7] text-[var(--color-text-secondary)]">
+              {dict.subtitle}
+            </p>
+          </div>
+        </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {cases.map((item, index) => {
             const Icon = item.icon;
             return (
-              <div 
-                key={item.id}
-                className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-xl)] p-8 flex flex-col items-center text-center hover:border-[var(--color-primary)] transition-colors duration-300 shadow-[var(--shadow-card)]"
-              >
-                <div className={`w-16 h-16 rounded-full ${item.bg} flex items-center justify-center mb-6`}>
-                  <Icon className={`w-8 h-8 ${item.color}`} />
+              <Reveal key={item.id} delay={0.2 + (index * 0.1)}>
+                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-xl)] p-8 flex flex-col items-center text-center hover:border-[var(--color-primary)] transition-colors duration-300 shadow-[var(--shadow-card)] h-full">
+                  <div className={`w-16 h-16 rounded-full ${item.bg} flex items-center justify-center mb-6`}>
+                    <Icon className={`w-8 h-8 ${item.color}`} />
+                  </div>
+                  <h3 className="text-xl font-[600] text-[var(--color-text-primary)] mb-4">
+                    {item.title}
+                  </h3>
+                  <p className="text-[15px] leading-[1.6] text-[var(--color-text-muted)]">
+                    {item.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-[600] text-[var(--color-text-primary)] mb-4">
-                  {item.title}
-                </h3>
-                <p className="text-[15px] leading-[1.6] text-[var(--color-text-muted)]">
-                  {item.description}
-                </p>
-              </div>
+              </Reveal>
             );
           })}
         </div>
