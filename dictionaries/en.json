@@ -6,7 +6,10 @@
     "sponsor": "Sponsor",
     "contact": "Contact",
     "download": "Download",
-    "changelog": "Changelog"
+    "changelog": "Changelog",
+    "license": "License",
+    "compare": "Compare",
+    "viewGithub": "View on GitHub"
   },
   "hero": {
     "title": "Your clean, offline productivity haven.",

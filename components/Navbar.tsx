@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Globe, Grip, Activity, Heart, MessageCircle, Scale } from 'lucide-react';
+import { Menu, X, Globe, Grip, Activity, Heart, MessageCircle, Scale, ArrowRightLeft } from 'lucide-react';
 import { GithubIcon as Github } from './GithubIcon';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -188,7 +188,17 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
         ref={megaMenuRef}
         className={`hidden md:block absolute left-0 w-full bg-[rgba(10,10,15,0.95)] backdrop-blur-2xl border-b border-[var(--color-border-subtle)] transition-all duration-400 ease-[cubic-bezier(0.32,0.72,0,1)] overflow-hidden pointer-events-auto ${isMegaOpen ? 'top-full opacity-100 max-h-[400px]' : 'top-[calc(100%-20px)] opacity-0 max-h-0 pointer-events-none'}`}
       >
-        <div className="max-w-5xl mx-auto px-8 py-10 grid grid-cols-4 gap-8">
+        <div className="max-w-6xl mx-auto px-8 py-10 grid grid-cols-5 gap-8">
+          <Link href={`/${currentLang}/compare/notion`} onClick={() => setIsMegaOpen(false)} className="group flex flex-col gap-3">
+            <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-purple-500/10 transition-colors">
+              <ArrowRightLeft className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-purple-500" />
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.compare || 'Compare Apps'}</h4>
+              <p className="text-xs text-[var(--color-text-muted)] mt-1.5 leading-relaxed">FlowDesk vs Notion & others</p>
+            </div>
+          </Link>
+
           <Link href={`/${currentLang}/changelog`} onClick={() => setIsMegaOpen(false)} className="group flex flex-col gap-3">
             <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-[var(--color-primary-light)] group-hover:text-[var(--color-primary)] transition-colors">
               <Activity className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-primary)]" />
