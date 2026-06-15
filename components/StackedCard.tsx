@@ -35,9 +35,9 @@ export default function StackedCard({ children, zIndex, bgClass = 'bg-[var(--col
     >
       <motion.div 
         style={!isLast ? { scale, opacity } : {}}
-        className="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col justify-center custom-scrollbar"
+        className="w-full h-full overflow-hidden flex flex-col justify-center"
       >
-        {/* We wrap children here so they can be scrolled if taller than screen */}
+        {/* Children will be centered vertically without internal scrollbars */}
         <div className="w-full">
           {children}
         </div>
