@@ -4,7 +4,6 @@ import Reveal from './animations/Reveal';
 import Highlight from './animations/Highlight';
 
 export default function HowItWorks({ dict }: { dict: any }) {
-  const [ref, isIntersecting] = useIntersectionObserver();
 
   const steps = [
     { num: "01", title: dict.step1.title, desc: dict.step1.description },

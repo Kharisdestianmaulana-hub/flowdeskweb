@@ -5,7 +5,6 @@ import Reveal from './animations/Reveal';
 import Highlight from './animations/Highlight';
 
 export default function FAQ({ dict }: { dict: any }) {
-  const [ref, isIntersecting] = useIntersectionObserver();
 
   return (
     <section className="py-24 sm:py-32 bg-[var(--color-bg)]">

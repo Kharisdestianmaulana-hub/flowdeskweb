@@ -5,7 +5,6 @@ import Reveal from './animations/Reveal';
 import Highlight from './animations/Highlight';
 
 export default function UseCases({ dict }: { dict: any }) {
-  const [ref, isIntersecting] = useIntersectionObserver();
 
   const cases = [
     {
