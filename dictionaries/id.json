@@ -292,23 +292,26 @@
     "error": "Ups! Terjadi kesalahan. Silakan coba lagi."
   },
   "comparePage": {
-    "notion": {
-      "title": "FlowDesk vs Notion",
-      "subtitle": "Mengapa FlowDesk adalah alternatif Local-First terbaik untuk Notion bagi individu dan tim yang mengutamakan privasi.",
+    "all": {
+      "title": "FlowDesk vs Aplikasi Lain",
+      "subtitle": "Mengapa FlowDesk adalah alternatif Local-First terbaik untuk individu dan tim yang mengutamakan privasi, kecepatan, dan kepemilikan data.",
       "tableHeaders": {
         "feature": "Fitur",
         "flowdesk": "FlowDesk",
-        "notion": "Notion"
+        "notion": "Notion",
+        "obsidian": "Obsidian",
+        "evernote": "Evernote",
+        "jira": "Jira"
       },
       "features": [
-        { "name": "Penyimpanan Data", "fd": "100% Lokal (SQLite)", "nt": "Cloud Server (AWS)" },
-        { "name": "Harga", "fd": "100% Gratis", "nt": "Berlangganan Bulanan" },
-        { "name": "Mode Offline", "fd": "Berfungsi Penuh", "nt": "Sangat Terbatas" },
-        { "name": "Kecepatan / Jeda", "fd": "Instan (Nol Latensi)", "nt": "Tergantung Koneksi Internet" },
-        { "name": "Kolaborasi Jaringan Lokal", "fd": "Ya (LAN / UDP)", "nt": "Tidak (Wajib Internet)" },
-        { "name": "Kode Sumber Terbuka", "fd": "Ya (GitHub)", "nt": "Tidak (Sumber Tertutup)" }
+        { "name": "Penyimpanan Data", "fd": "100% Lokal (SQLite)", "nt": "Cloud Server", "ob": "Lokal Markdown", "ev": "Cloud Server", "ji": "Cloud Server" },
+        { "name": "Harga", "fd": "100% Gratis", "nt": "Berlangganan", "ob": "Sync Berbayar", "ev": "Berlangganan", "ji": "Berlangganan" },
+        { "name": "Mode Offline", "fd": "Berfungsi Penuh", "nt": "Terbatas", "ob": "Berfungsi Penuh", "ev": "Terbatas", "ji": "Tidak Ada" },
+        { "name": "Kecepatan / Jeda", "fd": "Instan", "nt": "Tergantung Internet", "ob": "Instan", "ev": "Tergantung Internet", "ji": "Tergantung Internet" },
+        { "name": "Kolaborasi Jaringan Lokal", "fd": "Ya (LAN / UDP)", "nt": "Tidak", "ob": "Tidak", "ev": "Tidak", "ji": "Tidak" },
+        { "name": "Kode Sumber Terbuka", "fd": "Ya (GitHub)", "nt": "Tidak", "ob": "Tidak", "ev": "Tidak", "ji": "Tidak" }
       ],
-      "conclusion": "Jika Anda lelah dengan biaya langganan bulanan dan menginginkan kontrol mutlak atas data privasi Anda dengan kecepatan aplikasi desktop asli, FlowDesk dibuat khusus untuk Anda."
+      "conclusion": "Jika Anda menginginkan kontrol mutlak atas data Anda dengan kecepatan aplikasi desktop asli dan kolaborasi tim lokal, FlowDesk diciptakan untuk Anda."
     }
   }
 }

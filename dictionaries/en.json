@@ -293,23 +293,26 @@
     "error": "Oops! Something went wrong. Please try again."
   },
   "comparePage": {
-    "notion": {
-      "title": "FlowDesk vs Notion",
-      "subtitle": "Why FlowDesk is the ultimate Local-First alternative to Notion for privacy-conscious individuals and teams.",
+    "all": {
+      "title": "FlowDesk vs The Rest",
+      "subtitle": "Why FlowDesk is the ultimate Local-First alternative for individuals and teams who prioritize privacy, speed, and ownership.",
       "tableHeaders": {
         "feature": "Feature",
         "flowdesk": "FlowDesk",
-        "notion": "Notion"
+        "notion": "Notion",
+        "obsidian": "Obsidian",
+        "evernote": "Evernote",
+        "jira": "Jira"
       },
       "features": [
-        { "name": "Data Storage", "fd": "100% Local (SQLite)", "nt": "Cloud (AWS)" },
-        { "name": "Pricing", "fd": "100% Free", "nt": "Subscription" },
-        { "name": "Offline Mode", "fd": "Fully Functional", "nt": "Extremely Limited" },
-        { "name": "Speed / Latency", "fd": "Instant (Zero Latency)", "nt": "Depends on Internet" },
-        { "name": "Local Network Collab", "fd": "Yes (LAN / UDP)", "nt": "No (Requires Internet)" },
-        { "name": "Open Source Code", "fd": "Yes (GitHub)", "nt": "No (Closed Source)" }
+        { "name": "Data Storage", "fd": "100% Local (SQLite)", "nt": "Cloud Server", "ob": "Local Markdown", "ev": "Cloud Server", "ji": "Cloud Server" },
+        { "name": "Pricing", "fd": "100% Free", "nt": "Monthly Sub", "ob": "Sync is Paid", "ev": "Monthly Sub", "ji": "Monthly Sub" },
+        { "name": "Offline Mode", "fd": "Fully Functional", "nt": "Limited", "ob": "Fully Functional", "ev": "Limited", "ji": "None" },
+        { "name": "Speed / Latency", "fd": "Instant", "nt": "Internet Dependent", "ob": "Instant", "ev": "Internet Dependent", "ji": "Internet Dependent" },
+        { "name": "Local LAN Collaboration", "fd": "Yes (LAN / UDP)", "nt": "No", "ob": "No", "ev": "No", "ji": "No" },
+        { "name": "Open Source", "fd": "Yes (GitHub)", "nt": "No", "ob": "No", "ev": "No", "ji": "No" }
       ],
-      "conclusion": "If you are tired of monthly subscriptions and want absolute control over your private data with the speed of a native desktop app, FlowDesk is built specifically for you."
+      "conclusion": "If you want absolute control over your data with native speed and local team collaboration, FlowDesk is built for you."
     }
   }
 }
