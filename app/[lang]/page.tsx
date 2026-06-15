@@ -40,6 +40,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         dict={dict.hero}
       />
       
+      <AppPreview dict={dict.appPreview} />
+
       <SocialProof dict={dict.socialProof} />
       
       <Features dict={dict.features} />
@@ -49,8 +51,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <WhyFlowDesk dict={dict.whyFlowDesk} />
 
       <HowItWorks dict={dict.howItWorks} />
-      
-      <AppPreview dict={dict.appPreview} />
       
       <PlatformDownload 
         assets={latestRelease.assets} 

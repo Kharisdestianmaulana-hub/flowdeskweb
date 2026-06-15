@@ -25,13 +25,14 @@ export default function WhyFlowDesk({ dict }: { dict: any }) {
         {/* Comparison Table */}
         <Reveal delay={0.2}>
           <div className="max-w-4xl mx-auto -mx-4 px-4 sm:mx-auto sm:px-0 overflow-x-auto pb-4">
-            <table className="w-full text-left border-collapse min-w-[600px]">
+            <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
               <tr>
-                <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-muted)] font-medium w-[40%]"></th>
-                <th className="p-4 border-b-2 border-[var(--color-primary)] text-[var(--color-text-primary)] font-[700] text-[18px] bg-[var(--color-surface)] rounded-t-[var(--radius-md)] text-center w-[20%]">FlowDesk</th>
-                <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] font-medium text-center w-[20%]">Notion</th>
-                <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] font-medium text-center w-[20%]">Linear</th>
+                <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-muted)] font-medium w-[28%]"></th>
+                <th className="p-4 border-b-2 border-[var(--color-primary)] text-[var(--color-text-primary)] font-[700] text-[18px] bg-[var(--color-surface)] rounded-t-[var(--radius-md)] text-center w-[18%]">FlowDesk</th>
+                <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] font-medium text-center w-[18%]">Notion / Evernote</th>
+                <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] font-medium text-center w-[18%]">Obsidian / Logseq</th>
+                <th className="p-4 border-b border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] font-medium text-center w-[18%]">Linear / Jira</th>
               </tr>
             </thead>
             <tbody className="text-[16px]">
@@ -39,17 +40,20 @@ export default function WhyFlowDesk({ dict }: { dict: any }) {
                 <td className="p-4 font-medium text-[var(--color-text-primary)]">{dict.table.offline}</td>
                 <td className="p-4 text-center bg-[var(--color-surface)] border-x border-[var(--color-primary-glow)]"><Check className="w-5 h-5 mx-auto text-[var(--color-success)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
+                <td className="p-4 text-center opacity-90"><Check className="w-5 h-5 mx-auto text-[var(--color-success)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
               </tr>
               <tr className="bg-[var(--color-surface-raised)] border-b border-[var(--color-border-subtle)]">
                 <td className="p-4 font-medium text-[var(--color-text-primary)]">{dict.table.noSub}</td>
                 <td className="p-4 text-center bg-[var(--color-surface)] border-x border-[var(--color-primary-glow)]"><Check className="w-5 h-5 mx-auto text-[var(--color-success)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
+                <td className="p-4 text-center opacity-90"><Check className="w-5 h-5 mx-auto text-[var(--color-success)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
               </tr>
               <tr className="border-b border-[var(--color-border-subtle)]">
                 <td className="p-4 font-medium text-[var(--color-text-primary)]">{dict.table.lan}</td>
                 <td className="p-4 text-center bg-[var(--color-surface)] border-x border-[var(--color-primary-glow)]"><Check className="w-5 h-5 mx-auto text-[var(--color-success)]" /></td>
+                <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
               </tr>
@@ -61,6 +65,7 @@ export default function WhyFlowDesk({ dict }: { dict: any }) {
                     <span className="text-[var(--color-success)] font-medium text-sm">(v2.0)</span>
                   </div>
                 </td>
+                <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
                 <td className="p-4 text-center opacity-50"><X className="w-5 h-5 mx-auto text-[var(--color-error)]" /></td>
               </tr>
