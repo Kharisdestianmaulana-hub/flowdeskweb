@@ -19,45 +19,45 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
 
   return (
     <section className="relative min-h-[calc(100vh-64px)] flex flex-col justify-center items-center overflow-hidden bg-[var(--color-bg)] py-24 px-4 sm:px-6 lg:px-8">
-      {/* Animated Aurora Waves & Vignette */}
+      {/* Animated Aurora Waves & Vignette (Optimized for Performance) */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Top Left Vignette */}
         <div className="absolute top-0 left-0 w-full h-[60%] bg-[radial-gradient(ellipse_at_top_left,rgba(0,0,0,0.6)_0%,transparent_70%)] z-0 dark:block hidden" />
         {/* Top Right Vignette */}
         <div className="absolute top-0 right-0 w-full h-[60%] bg-[radial-gradient(ellipse_at_top_right,rgba(0,0,0,0.6)_0%,transparent_70%)] z-0 dark:block hidden" />
         
-        {/* Aurora Waves */}
+        {/* Aurora Waves - GPU Optimized (No heavy blur filters) */}
         <motion.div
-          className="absolute top-[-20%] left-[-20%] w-[140%] h-[60%] opacity-30 blur-[80px] md:blur-[100px]"
+          className="absolute top-[-30%] left-[-20%] w-[140%] h-[80%] opacity-40 mix-blend-screen"
           style={{
-            background: 'linear-gradient(90deg, rgba(124,58,237,0) 0%, rgba(124,58,237,0.6) 25%, rgba(56,189,248,0.6) 50%, rgba(124,58,237,0.6) 75%, rgba(124,58,237,0) 100%)',
+            background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(124,58,237,0.4) 0%, rgba(56,189,248,0.2) 40%, transparent 70%)',
           }}
           animate={{
-            x: ['-20%', '0%', '-20%'],
-            y: [0, 30, 0],
-            scaleY: [1, 1.3, 1]
+            x: ['-10%', '0%', '-10%'],
+            y: [0, 20, 0],
+            scale: [1, 1.1, 1]
           }}
           transition={{
-            duration: 18,
+            duration: 15,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
         <motion.div
-          className="absolute top-[-10%] left-[-20%] w-[140%] h-[50%] opacity-20 blur-[80px] md:blur-[120px]"
+          className="absolute top-[-20%] left-[-10%] w-[120%] h-[70%] opacity-30 mix-blend-screen"
           style={{
-            background: 'linear-gradient(90deg, rgba(236,72,153,0) 0%, rgba(236,72,153,0.4) 30%, rgba(139,92,246,0.4) 70%, rgba(236,72,153,0) 100%)',
+            background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(236,72,153,0.3) 0%, rgba(139,92,246,0.2) 50%, transparent 70%)',
           }}
           animate={{
-            x: ['0%', '-15%', '0%'],
-            y: [0, -20, 0],
-            scaleY: [1, 1.5, 1]
+            x: ['0%', '-10%', '0%'],
+            y: [0, -15, 0],
+            scale: [1, 1.2, 1]
           }}
           transition={{
-            duration: 25,
+            duration: 20,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 2
+            delay: 1
           }}
         />
       </div>
