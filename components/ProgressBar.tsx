@@ -4,7 +4,7 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 
 export default function ProgressBar() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
+  const scaleY = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
@@ -12,8 +12,8 @@ export default function ProgressBar() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 h-[2px] sm:h-[3px] bg-gradient-to-r from-purple-500 via-blue-500 to-emerald-500 origin-left z-[100]"
-      style={{ scaleX }}
+      className="fixed top-0 left-0 bottom-0 w-[2px] sm:w-[3px] bg-gradient-to-b from-purple-500 via-blue-500 to-emerald-500 origin-top z-[100]"
+      style={{ scaleY }}
     />
   );
 }

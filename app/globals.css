@@ -63,7 +63,7 @@
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color: var(--color-border) var(--color-bg);
+    scrollbar-color: var(--color-primary) var(--color-bg);
   }
 
   /* Custom Scrollbar for Webkit */
@@ -78,12 +78,12 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    background: var(--color-border);
+    background: var(--color-primary);
     border-radius: var(--radius-full);
     border: 2px solid var(--color-bg);
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-text-muted);
+    background: var(--color-primary-hover);
   }
 }
