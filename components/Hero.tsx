@@ -4,6 +4,7 @@ import { GithubIcon as Github } from './GithubIcon';
 import { ReleaseAsset } from '../types/github';
 import { motion } from 'framer-motion';
 import Reveal from './animations/Reveal';
+import { useOs } from '../hooks/useOs';
 
 interface HeroProps {
   stars: number;
@@ -14,8 +15,25 @@ interface HeroProps {
 }
 
 export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProps) {
-  // Find macOS DMG asset for primary download button
+  const os = useOs();
+  
+  // Find assets
   const macAsset = assets?.find(a => a.name.includes('.dmg'));
+  const winAsset = assets?.find(a => a.name.includes('.exe') || a.name.includes('.msi'));
+
+  let downloadText = dict.downloadMac;
+  let downloadUrl = macAsset ? macAsset.browser_download_url : '#download';
+
+  if (os === 'Windows') {
+    downloadText = dict.downloadWin || 'Download for Windows';
+    downloadUrl = winAsset ? winAsset.browser_download_url : '#download';
+  } else if (os === 'macOS') {
+    downloadText = dict.downloadMac;
+    downloadUrl = macAsset ? macAsset.browser_download_url : '#download';
+  } else if (os !== 'Unknown') {
+    downloadText = dict.downloadOther || 'View All Versions';
+    downloadUrl = '#download';
+  }
 
   return (
     <section className="relative min-h-[calc(100vh-64px)] flex flex-col justify-center items-center overflow-hidden bg-[var(--color-bg)] py-24 px-4 sm:px-6 lg:px-8">
@@ -90,10 +108,10 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
           {/* CTA Row */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <a
-              href={macAsset ? macAsset.browser_download_url : '#download'}
+              href={downloadUrl}
               className="w-full sm:w-auto px-8 py-3.5 rounded-[var(--radius-md)] bg-[image:var(--gradient-cta)] text-white text-[15px] font-semibold shadow-[var(--shadow-btn)] hover:brightness-110 transition-all duration-200 text-center"
             >
-              {dict.downloadMac}
+              {downloadText}
             </a>
             <a
               href={repoUrl}

@@ -15,6 +15,8 @@
     "title": "Your clean, offline productivity haven.",
     "subtitle": "Manage projects, tasks, docs, and files — entirely on your machine. No cloud. No subscription.",
     "downloadMac": "Download for macOS",
+    "downloadWin": "Download for Windows",
+    "downloadOther": "View All Versions",
     "viewGithub": "View on GitHub",
     "stars": "stars on GitHub"
   },
