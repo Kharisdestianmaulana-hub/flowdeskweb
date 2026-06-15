@@ -1,9 +1,10 @@
-import { getRepoInfo, getAllReleases } from '@/lib/github';
+import { getRepoInfo, getAllReleases, getTotalDownloads } from '@/lib/github';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Newsletter from '@/components/Newsletter';
 import { getDictionary } from '@/lib/dictionary';
-import { Apple, Monitor, Terminal, Code } from 'lucide-react';
+import { Apple, Monitor, Terminal, Code, Download } from 'lucide-react';
+import NumberCounter from '@/components/animations/NumberCounter';
 
 const Github = (props: any) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -16,9 +17,10 @@ export default async function DownloadPage({ params }: { params: Promise<{ lang:
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
-  const [releases, repoInfo] = await Promise.all([
+  const [releases, repoInfo, totalDownloads] = await Promise.all([
     getAllReleases(),
-    getRepoInfo()
+    getRepoInfo(),
+    getTotalDownloads()
   ]);
 
   return (
@@ -30,9 +32,17 @@ export default async function DownloadPage({ params }: { params: Promise<{ lang:
           <h1 className="text-4xl sm:text-5xl font-[800] text-[var(--color-text-primary)] mb-4 tracking-tight">
             {dict.downloadPage.title}
           </h1>
-          <p className="text-[18px] text-[var(--color-text-secondary)] max-w-2xl mx-auto">
+          <p className="text-[18px] text-[var(--color-text-secondary)] max-w-2xl mx-auto mb-8">
             {dict.downloadPage.subtitle}
           </p>
+          <div className="inline-flex items-center justify-center gap-2 bg-[var(--color-surface-raised)] border border-[var(--color-border-subtle)] px-6 py-2.5 rounded-full shadow-[var(--shadow-card)]">
+            <Download className="w-4 h-4 text-[var(--color-primary)]" />
+            <span className="text-[14px] font-medium text-[var(--color-text-muted)]">
+               {dict.downloadPage.totalDownloads.split('{count}')[0]}
+               <strong className="text-[var(--color-text-primary)] mx-1 text-[15px]"><NumberCounter value={totalDownloads} /></strong>
+               {dict.downloadPage.totalDownloads.split('{count}')[1]}
+            </span>
+          </div>
         </div>
 
         <div className="space-y-8">

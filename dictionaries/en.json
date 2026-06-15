@@ -18,7 +18,8 @@
     "downloadWin": "Download for Windows",
     "downloadOther": "View All Versions",
     "viewGithub": "View on GitHub",
-    "stars": "stars on GitHub"
+    "stars": "stars on GitHub",
+    "totalDownloads": "Downloaded {count} times worldwide"
   },
   "socialProof": [
     "Private & Secure",
@@ -98,7 +99,8 @@
     "comingSoon": "Coming soon",
     "downloadAction": "Download",
     "dmg": ".dmg (Universal)",
-    "exe": ".exe (Installer)"
+    "exe": ".exe (Installer)",
+    "totalDownloads": "Trusted by {count}+ downloads"
   },
   "changelogStrip": {
     "title": "Recent Updates",
@@ -220,7 +222,8 @@
     "macOS": "macOS",
     "windows": "Windows",
     "linux": "Linux",
-    "sourceCode": "Source code"
+    "sourceCode": "Source code",
+    "totalDownloads": "Total global downloads: {count}"
   },
   "docsPage": {
     "title": "Documentation",

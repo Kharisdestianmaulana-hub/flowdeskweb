@@ -17,7 +17,8 @@
     "downloadWin": "Unduh untuk Windows",
     "downloadOther": "Lihat Semua Versi",
     "viewGithub": "Lihat di GitHub",
-    "stars": "bintang di GitHub"
+    "stars": "bintang di GitHub",
+    "totalDownloads": "Telah diunduh {count} kali di seluruh dunia"
   },
   "socialProof": [
     "Privat & Aman",
@@ -97,7 +98,8 @@
     "comingSoon": "Segera hadir",
     "downloadAction": "Unduh",
     "dmg": ".dmg (Universal)",
-    "exe": ".exe (Pemasang)"
+    "exe": ".exe (Pemasang)",
+    "totalDownloads": "Dipercaya lebih dari {count} unduhan"
   },
   "changelogStrip": {
     "title": "Pembaruan Terkini",
@@ -219,7 +221,8 @@
     "macOS": "macOS",
     "windows": "Windows",
     "linux": "Linux",
-    "sourceCode": "Kode Sumber"
+    "sourceCode": "Kode Sumber",
+    "totalDownloads": "Total unduhan global: {count}"
   },
   "docsPage": {
     "title": "Dokumentasi",

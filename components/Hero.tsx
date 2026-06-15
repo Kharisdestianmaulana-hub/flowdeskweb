@@ -5,6 +5,7 @@ import { ReleaseAsset } from '../types/github';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Reveal from './animations/Reveal';
 import { useOs } from '../hooks/useOs';
+import NumberCounter from './animations/NumberCounter';
 
 interface HeroProps {
   stars: number;
@@ -12,9 +13,10 @@ interface HeroProps {
   repoUrl: string;
   assets: ReleaseAsset[];
   dict: any;
+  totalDownloads?: number;
 }
 
-export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProps) {
+export default function Hero({ stars, version, repoUrl, assets, dict, totalDownloads = 0 }: HeroProps) {
   const os = useOs();
   const { scrollY } = useScroll();
   
@@ -133,10 +135,18 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
         </Reveal>
 
         <Reveal delay={0.4} yOffset={60}>
-          {/* Stars */}
-          <p className="text-sm font-medium text-[var(--color-text-muted)] mb-16">
-            ★ {stars.toLocaleString()} {dict.stars}
-          </p>
+          {/* Metadata */}
+          <div className="flex flex-col items-center gap-2 mb-16">
+            <p className="text-sm font-medium text-[var(--color-text-muted)] flex items-center justify-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              {dict.totalDownloads.split('{count}')[0]}
+              <strong className="text-[var(--color-text-primary)]"><NumberCounter value={totalDownloads} /></strong>
+              {dict.totalDownloads.split('{count}')[1]}
+            </p>
+            <p className="text-xs font-medium text-[var(--color-text-muted)] opacity-70">
+              ★ {stars.toLocaleString()} {dict.stars}
+            </p>
+          </div>
 
           {/* Platform Support */}
           <div className="flex flex-wrap items-center justify-center gap-3">

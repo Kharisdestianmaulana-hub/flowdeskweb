@@ -4,14 +4,16 @@ import { Apple, Monitor, Terminal, Download } from 'lucide-react';
 import { ReleaseAsset } from '../types/github';
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { useOs } from '../hooks/useOs';
+import NumberCounter from './animations/NumberCounter';
 
 interface PlatformDownloadProps {
   assets: ReleaseAsset[];
   version: string;
   dict: any;
+  totalDownloads?: number;
 }
 
-export default function PlatformDownload({ assets, version, dict }: PlatformDownloadProps) {
+export default function PlatformDownload({ assets, version, dict, totalDownloads = 0 }: PlatformDownloadProps) {
   const [ref, isIntersecting] = useIntersectionObserver();
   const detectedOs = useOs();
 
@@ -66,6 +68,14 @@ export default function PlatformDownload({ assets, version, dict }: PlatformDown
           <p className="text-[18px] leading-[1.7] text-[var(--color-text-secondary)] mb-2">
             {dict.subtitle}
           </p>
+          <div className="mt-4 flex items-center justify-center text-sm font-medium text-[var(--color-text-muted)] gap-2">
+             <span className="flex items-center gap-1.5 bg-[var(--color-surface-raised)] border border-[var(--color-border-subtle)] px-4 py-1.5 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                {dict.totalDownloads.split('{count}')[0]}
+                <strong className="text-[var(--color-text-primary)]"><NumberCounter value={totalDownloads} /></strong>
+                {dict.totalDownloads.split('{count}')[1]}
+             </span>
+          </div>
         </div>
 
         {/* Dynamic OS Section */}

@@ -14,18 +14,19 @@ import FAQ from '@/components/FAQ';
 import Newsletter from '@/components/Newsletter';
 import Contributors from '@/components/Contributors';
 
-import { getRepoInfo, getLatestRelease, getRecentCommits, getContributors } from '@/lib/github';
+import { getRepoInfo, getLatestRelease, getRecentCommits, getContributors, getTotalDownloads } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
-  const [repoInfo, latestRelease, commits, contributors] = await Promise.all([
+  const [repoInfo, latestRelease, commits, contributors, totalDownloads] = await Promise.all([
     getRepoInfo(),
     getLatestRelease(),
     getRecentCommits(5),
     getContributors(),
+    getTotalDownloads(),
   ]);
 
   return (
@@ -38,6 +39,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         repoUrl={repoInfo.html_url} 
         assets={latestRelease.assets} 
         dict={dict.hero}
+        totalDownloads={totalDownloads}
       />
       
       <AppPreview dict={dict.appPreview} />
@@ -56,6 +58,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         assets={latestRelease.assets} 
         version={latestRelease.tag_name} 
         dict={dict.download}
+        totalDownloads={totalDownloads}
       />
       
       <ChangelogStrip commits={commits} dict={dict.changelogStrip} currentLang={lang} />

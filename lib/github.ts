@@ -139,3 +139,26 @@ export async function getContributors() {
     return [];
   }
 }
+
+export async function getTotalDownloads(): Promise<number> {
+  try {
+    const releases = await getAllReleases();
+    if (!releases || releases.length === 0) return 0;
+    
+    let total = 0;
+    releases.forEach(release => {
+      if (release.assets && release.assets.length > 0) {
+        release.assets.forEach(asset => {
+          total += asset.download_count || 0;
+        });
+      }
+    });
+    
+    // Add a base multiplier or base count if you want to include historical non-GitHub downloads, 
+    // but for now we just return the pure GitHub stats.
+    return total;
+  } catch (error) {
+    console.warn('getTotalDownloads error:', error);
+    return 0; // Fallback
+  }
+}
