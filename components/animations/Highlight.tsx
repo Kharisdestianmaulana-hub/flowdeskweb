@@ -22,7 +22,7 @@ export default function Highlight({ children, delay = 0.2, className, color = 'r
   const width = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <span ref={ref} className={cn('relative inline-block whitespace-nowrap px-1.5 mx-1', className)}>
+    <span ref={ref} className={cn('relative inline-block px-1.5 mx-1', className)}>
       <motion.span
         className="absolute inset-0 z-0 rounded-md"
         style={{ backgroundColor: color, width }}
