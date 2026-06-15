@@ -4,7 +4,6 @@ import { GithubIcon as Github } from './GithubIcon';
 import { ReleaseAsset } from '../types/github';
 import { motion } from 'framer-motion';
 import Reveal from './animations/Reveal';
-import Highlight from './animations/Highlight';
 
 interface HeroProps {
   stars: number;
@@ -21,7 +20,7 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
   return (
     <section className="relative min-h-[calc(100vh-64px)] flex flex-col justify-center items-center overflow-hidden bg-[var(--color-bg)] py-24 px-4 sm:px-6 lg:px-8">
       {/* Animated Glow Blobs */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
           className="absolute top-[-10%] left-[10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-purple-600/30 rounded-full blur-[100px] md:blur-[150px]"
           animate={{ 
@@ -54,10 +53,8 @@ export default function Hero({ stars, version, repoUrl, assets, dict }: HeroProp
 
         <Reveal delay={0.1} yOffset={60}>
           {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-[800] leading-[1.2] tracking-[-0.03em] mb-6 text-white">
-            <Highlight color="rgba(124, 58, 237, 0.4)">
-              {dict.title}
-            </Highlight>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-[800] leading-[1.2] tracking-[-0.03em] mb-6 text-transparent bg-clip-text bg-[image:var(--gradient-hero)]">
+            {dict.title}
           </h1>
         </Reveal>
 
