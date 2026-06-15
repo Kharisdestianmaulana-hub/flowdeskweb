@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, Grip, Activity, Heart, MessageCircle, Scale } from 'lucide-react';
 import { GithubIcon as Github } from './GithubIcon';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 interface NavbarProps {
@@ -16,9 +16,21 @@ interface NavbarProps {
 
 export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMegaOpen, setIsMegaOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const megaMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (megaMenuRef.current && !megaMenuRef.current.contains(event.target as Node)) {
+        setIsMegaOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,20 +78,23 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           <Link href={`/${currentLang}/philosophy`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
             {dict.philosophy}
           </Link>
-          <Link href={`/${currentLang}/sponsor`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-pink-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-            {dict.sponsor}
-          </Link>
           <Link href={`/${currentLang}/download`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
             {dict.download}
-          </Link>
-          <Link href={`/${currentLang}/changelog`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
-            {dict.changelog}
           </Link>
         </div>
 
         {/* Right: Actions */}
         <div className="hidden md:flex items-center space-x-4">
+          <button 
+            onClick={() => setIsMegaOpen(!isMegaOpen)}
+            className={`flex items-center justify-center w-9 h-9 rounded-full transition-all ${isMegaOpen ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]' : 'bg-transparent text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}
+            title="More Menu"
+          >
+            <Grip className="w-5 h-5" />
+          </button>
+          
+          <div className="w-[1px] h-5 bg-[var(--color-border-subtle)] mx-1"></div>
+
           <button 
             onClick={toggleLanguage}
             className="flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-border-hover)] transition-all"
@@ -130,12 +145,15 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           <Link href={`/${currentLang}/#features`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.features}</Link>
           <Link href={`/${currentLang}/docs`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.docs}</Link>
           <Link href={`/${currentLang}/philosophy`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.philosophy}</Link>
+          <Link href={`/${currentLang}/download`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.download}</Link>
+          <Link href={`/${currentLang}/changelog`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.changelog}</Link>
           <Link href={`/${currentLang}/sponsor`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center gap-2">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-pink-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
             {dict.sponsor}
           </Link>
-          <Link href={`/${currentLang}/download`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.download}</Link>
-          <Link href={`/${currentLang}/changelog`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.changelog}</Link>
+          <Link href={`/${currentLang}/contact`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.contact || 'Contact & Community'}</Link>
+          <Link href={`/${currentLang}/license`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.license || 'License'}</Link>
+          
           <div className="pt-4 flex flex-col gap-3">
             <a
               href={repoUrl}
@@ -156,6 +174,55 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           </div>
         </div>
       )}
+
+      {/* Desktop Apple-Style Mega Menu */}
+      <div 
+        ref={megaMenuRef}
+        className={`hidden md:block absolute top-[calc(100%+8px)] right-0 w-full max-w-[600px] bg-[rgba(20,20,25,0.95)] backdrop-blur-2xl border border-[var(--color-border)] rounded-2xl shadow-2xl transition-all duration-300 origin-top-right overflow-hidden ${isMegaOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
+      >
+        <div className="p-6 grid grid-cols-2 gap-x-8 gap-y-6">
+          <Link href={`/${currentLang}/changelog`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+            <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-[var(--color-primary-light)] group-hover:text-[var(--color-primary)] transition-colors">
+              <Activity className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-primary)]" />
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.changelog}</h4>
+              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">See the latest updates and release notes</p>
+            </div>
+          </Link>
+          
+          <Link href={`/${currentLang}/sponsor`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+            <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-pink-500/10 transition-colors">
+              <Heart className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-pink-500" />
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.sponsor}</h4>
+              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Support the independent development</p>
+            </div>
+          </Link>
+
+          <Link href={`/${currentLang}/contact`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+            <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-blue-500/10 transition-colors">
+              <MessageCircle className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-blue-500" />
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.contact || 'Contact & Community'}</h4>
+              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Join Discord and talk to the developer</p>
+            </div>
+          </Link>
+
+          <Link href={`/${currentLang}/license`} onClick={() => setIsMegaOpen(false)} className="group flex items-start gap-4 p-3 -m-3 rounded-xl hover:bg-[var(--color-surface-raised)] transition-all">
+            <div className="w-10 h-10 rounded-full bg-[var(--color-surface)] flex items-center justify-center group-hover:bg-[var(--color-surface-raised)] transition-colors">
+              <Scale className="w-5 h-5 text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]" />
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-[var(--color-text-primary)]">{dict.license || 'License'}</h4>
+              <p className="text-xs text-[var(--color-text-muted)] mt-0.5">Terms, conditions, and copyright</p>
+            </div>
+          </Link>
+        </div>
+      </div>
+
       </nav>
     </header>
   );

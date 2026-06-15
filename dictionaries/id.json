@@ -106,17 +106,31 @@
     "viewGithub": "Lihat di GitHub"
   },
   "footer": {
-    "tagline": "Tempat produktivitas luring Anda yang bersih.",
+    "tagline": "Ruang kerja lokal pertama untuk proyek, tugas, dan catatan Anda.",
     "features": "Fitur",
     "docs": "Dokumentasi",
-    "philosophy": "Filosofi Kami",
-    "sponsor": "Dukung Kami",
-    "contact": "Kontak & Komunitas",
+    "philosophy": "Filosofi",
+    "sponsor": "Sponsor",
     "download": "Unduh",
-    "changelog": "Riwayat Pembaruan",
+    "changelog": "Pembaruan",
+    "contact": "Kontak & Komunitas",
     "license": "Lisensi",
-    "builtWith": "Dibangun dengan",
-    "copyright": "Kharis Destian Maulana (Riray). Hak Cipta Dilindungi."
+    "builtWith": "Dibuat dengan",
+    "copyright": "Kharis Destian Maulana. Hak cipta dilindungi.",
+    "badges": {
+      "offline": {
+        "title": "100% Offline",
+        "desc": "Tanpa cloud, tanpa masalah sinkronisasi"
+      },
+      "fast": {
+        "title": "Sangat Cepat",
+        "desc": "Performa aplikasi native"
+      },
+      "privacy": {
+        "title": "Privasi Terjamin",
+        "desc": "Data tetap di perangkat Anda"
+      }
+    }
   },
   "licensePage": {
     "title": "Lisensi & Hak Cipta",

@@ -106,17 +106,31 @@
     "viewGithub": "View on GitHub"
   },
   "footer": {
-    "tagline": "The clean, offline productivity haven.",
+    "tagline": "The offline-first workspace for your projects, tasks, and notes.",
     "features": "Features",
     "docs": "Documentation",
-    "philosophy": "Our Philosophy",
-    "sponsor": "Support Us",
-    "contact": "Contact & Community",
+    "philosophy": "Philosophy",
+    "sponsor": "Sponsor",
     "download": "Download",
     "changelog": "Changelog",
+    "contact": "Contact & Community",
     "license": "License",
     "builtWith": "Built with",
-    "copyright": "Kharis Destian Maulana (Riray). All rights reserved."
+    "copyright": "Kharis Destian Maulana. All rights reserved.",
+    "badges": {
+      "offline": {
+        "title": "100% Offline",
+        "desc": "No cloud, no sync issues"
+      },
+      "fast": {
+        "title": "Lightning Fast",
+        "desc": "Native performance"
+      },
+      "privacy": {
+        "title": "Privacy Assured",
+        "desc": "Your data stays on your device"
+      }
+    }
   },
   "licensePage": {
     "title": "License & Copyright",
