@@ -83,6 +83,9 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           <Link href={`/${currentLang}/philosophy`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
             {dict.philosophy}
           </Link>
+          <Link href={`/${currentLang}/roadmap`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+            {dict.roadmap}
+          </Link>
           <Link href={`/${currentLang}/download`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
             {dict.download}
           </Link>
@@ -151,6 +154,7 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           <Link href={`/${currentLang}/#features`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.features}</Link>
           <Link href={`/${currentLang}/docs`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.docs}</Link>
           <Link href={`/${currentLang}/philosophy`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.philosophy}</Link>
+          <Link href={`/${currentLang}/roadmap`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.roadmap}</Link>
           <Link href={`/${currentLang}/download`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.download}</Link>
           <Link href={`/${currentLang}/compare`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.compare || 'Compare Apps'}</Link>
           <Link href={`/${currentLang}/changelog`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.changelog}</Link>

@@ -1,0 +1,102 @@
+[
+  {
+    "quarter": "Q4 2026",
+    "status": "planned",
+    "version": "v2.0.0",
+    "title": {
+      "en": "Cloud Sync & Mobile Apps",
+      "id": "Sinkronisasi Cloud & Aplikasi Mobile"
+    },
+    "description": {
+      "en": "For those who want to move beyond local-first. Access your workspace from anywhere.",
+      "id": "Bagi mereka yang ingin lebih dari sekadar lokal-pertama. Akses ruang kerja Anda dari mana saja."
+    },
+    "items": {
+      "en": [
+        "Optional End-to-End Encrypted Cloud Sync",
+        "iOS & Android Companion Apps",
+        "Self-hosted ASP.NET Core Backend Option"
+      ],
+      "id": [
+        "Opsi Sinkronisasi Cloud dengan Enkripsi E2E",
+        "Aplikasi Pendamping iOS & Android",
+        "Opsi Backend ASP.NET Core Mandiri (Self-hosted)"
+      ]
+    }
+  },
+  {
+    "quarter": "Q3 2026",
+    "status": "planned",
+    "version": "v1.7.0",
+    "title": {
+      "en": "Plugins & API",
+      "id": "Plugin & API"
+    },
+    "description": {
+      "en": "Extend FlowDesk with powerful third-party integrations.",
+      "id": "Perluas kemampuan FlowDesk dengan integrasi pihak ketiga yang kuat."
+    },
+    "items": {
+      "en": [
+        "Local REST API",
+        "Community Plugin Marketplace",
+        "Custom Scripting Engine"
+      ],
+      "id": [
+        "REST API Lokal",
+        "Pasar Plugin Komunitas",
+        "Mesin Skrip Kustom"
+      ]
+    }
+  },
+  {
+    "quarter": "Q2 2026",
+    "status": "in-progress",
+    "version": "v1.6.0",
+    "title": {
+      "en": "Custom Themes & Aesthetics",
+      "id": "Tema Kustom & Estetika"
+    },
+    "description": {
+      "en": "Take full control over how your workspace looks and feels.",
+      "id": "Ambil kendali penuh atas tampilan dan nuansa ruang kerja Anda."
+    },
+    "items": {
+      "en": [
+        "Advanced Theme Builder",
+        "Custom CSS Injection",
+        "Custom UI Sounds"
+      ],
+      "id": [
+        "Pembuat Tema Lanjutan",
+        "Injeksi CSS Kustom",
+        "Suara UI Kustom"
+      ]
+    }
+  },
+  {
+    "quarter": "Q1 2026",
+    "status": "completed",
+    "version": "v1.5.0",
+    "title": {
+      "en": "LAN Collaboration V2",
+      "id": "Kolaborasi LAN V2"
+    },
+    "description": {
+      "en": "Massive improvements to our local network collaboration engine.",
+      "id": "Peningkatan besar-besaran pada mesin kolaborasi jaringan lokal kami."
+    },
+    "items": {
+      "en": [
+        "Automatic Workspace Discovery (UDP)",
+        "Zero-Config Peer Connections",
+        "Real-time Kanban Sync via SignalR"
+      ],
+      "id": [
+        "Penemuan Ruang Kerja Otomatis (UDP)",
+        "Koneksi Peer Tanpa Konfigurasi",
+        "Sinkronisasi Kanban Seketika via SignalR"
+      ]
+    }
+  }
+]

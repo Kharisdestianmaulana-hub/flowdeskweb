@@ -9,6 +9,7 @@
     "changelog": "Changelog",
     "license": "License",
     "compare": "Compare",
+    "roadmap": "Roadmap",
     "viewGithub": "View on GitHub"
   },
   "hero": {
@@ -120,6 +121,7 @@
     "sponsor": "Sponsor",
     "download": "Download",
     "changelog": "Changelog",
+    "roadmap": "Roadmap",
     "contact": "Contact & Community",
     "license": "License",
     "builtWith": "Built with",
@@ -137,6 +139,15 @@
         "title": "Privacy Assured",
         "desc": "Your data stays on your device"
       }
+    }
+  },
+  "roadmapPage": {
+    "title": "Roadmap",
+    "subtitle": "A transparent look at what we're working on and what's coming next for FlowDesk.",
+    "status": {
+      "completed": "Completed",
+      "in-progress": "In Progress",
+      "planned": "Planned"
     }
   },
   "licensePage": {

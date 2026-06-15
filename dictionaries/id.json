@@ -7,6 +7,7 @@
     "contact": "Kontak",
     "license": "Lisensi",
     "compare": "Perbandingan",
+    "roadmap": "Peta Jalan",
     "download": "Unduh",
     "changelog": "Log Perubahan"
   },
@@ -119,6 +120,7 @@
     "sponsor": "Sponsor",
     "download": "Unduh",
     "changelog": "Pembaruan",
+    "roadmap": "Peta Jalan",
     "contact": "Kontak & Komunitas",
     "license": "Lisensi",
     "builtWith": "Dibuat dengan",
@@ -136,6 +138,15 @@
         "title": "Privasi Terjamin",
         "desc": "Data tetap di perangkat Anda"
       }
+    }
+  },
+  "roadmapPage": {
+    "title": "Peta Jalan",
+    "subtitle": "Pandangan transparan tentang apa yang sedang kami kerjakan dan apa yang akan datang untuk FlowDesk.",
+    "status": {
+      "completed": "Selesai",
+      "in-progress": "Sedang Dikerjakan",
+      "planned": "Direncanakan"
     }
   },
   "licensePage": {
