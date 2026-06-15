@@ -102,18 +102,7 @@ export default function PlatformDownload({ assets, version, dict }: PlatformDown
           })}
         </div>
 
-        {/* Requirements Chip */}
-        <div className="flex justify-center">
-          <a 
-            href="https://dotnet.microsoft.com/download/dotnet/10.0" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[13px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-info)] hover:border-[var(--color-info)] transition-all"
-          >
-            <span className="w-2 h-2 rounded-full bg-[var(--color-info)] mr-2"></span>
-            .NET 10.0 SDK required
-          </a>
-        </div>
+
 
       </div>
     </section>
