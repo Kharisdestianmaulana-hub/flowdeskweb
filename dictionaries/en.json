@@ -18,9 +18,28 @@
     "downloadMac": "Download for macOS",
     "downloadWin": "Download for Windows",
     "downloadOther": "View All Versions",
+    "downloadDefault": "Download FlowDesk",
     "viewGithub": "View on GitHub",
     "stars": "stars on GitHub",
     "totalDownloads": "Downloaded {count} times worldwide"
+  },
+  "about": {
+    "title": "What is FlowDesk?",
+    "description": "FlowDesk is a clean, native desktop productivity application built with Avalonia UI. It is designed to be a personal, local-first workspace to manage your projects, tasks, documents, and files seamlessly without requiring an internet connection.",
+    "highlights": [
+      {
+        "title": "Private & Local First",
+        "description": "All your data is stored locally in an open SQLite database. No telemetry, no forced cloud sync, no tracking."
+      },
+      {
+        "title": "Local Network Collaboration",
+        "description": "Automatically discover and collaborate with team members on your Wi-Fi or LAN via UDP and SignalR."
+      },
+      {
+        "title": "Native & Standalone",
+        "description": "Built with .NET 10.0 for macOS, Windows, and Linux. Native performance without web framework bloat."
+      }
+    ]
   },
   "socialProof": [
     "Private & Secure",

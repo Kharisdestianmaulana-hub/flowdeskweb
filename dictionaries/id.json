@@ -17,9 +17,28 @@
     "downloadMac": "Unduh untuk macOS",
     "downloadWin": "Unduh untuk Windows",
     "downloadOther": "Lihat Semua Versi",
+    "downloadDefault": "Unduh FlowDesk",
     "viewGithub": "Lihat di GitHub",
     "stars": "bintang di GitHub",
     "totalDownloads": "Telah diunduh {count} kali di seluruh dunia"
+  },
+  "about": {
+    "title": "Apa itu FlowDesk?",
+    "description": "FlowDesk adalah aplikasi produktivitas desktop asli (native) yang rapi dan bersih, dibangun menggunakan Avalonia UI. Aplikasi ini dirancang sebagai ruang kerja pribadi yang mengutamakan kelokalan (local-first) untuk mengelola proyek, tugas, dokumen, dan file Anda dengan mulus tanpa memerlukan koneksi internet.",
+    "highlights": [
+      {
+        "title": "Privat & Lokal Pertama",
+        "description": "Seluruh data Anda disimpan secara lokal menggunakan SQLite. Tidak ada telemetri, pelacakan, atau sinkronisasi awan paksa."
+      },
+      {
+        "title": "Kolaborasi Jaringan Lokal",
+        "description": "Temukan dan berkolaborasi dengan anggota tim di Wi-Fi atau LAN Anda secara otomatis via UDP dan SignalR."
+      },
+      {
+        "title": "Native & Mandiri",
+        "description": "Dibangun menggunakan .NET 10.0 untuk macOS, Windows, dan Linux. Performa native tanpa beban web framework."
+      }
+    ]
   },
   "socialProof": [
     "Privat & Aman",

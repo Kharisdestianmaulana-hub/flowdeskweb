@@ -23,13 +23,13 @@ export default function Contributors({ contributors, lang }: ContributorsProps) 
     : "FlowDesk is developed independently and carefully shaped by our amazing authorized contributors.";
 
   return (
-    <section className="py-24 bg-[var(--color-bg)]">
+    <section className="py-24 bg-[var(--color-primary)]">
       <Reveal>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-[800] tracking-tight text-[var(--color-text-primary)] mb-4">
+          <h2 className="text-3xl font-[800] tracking-tight text-white mb-4">
             {title}
           </h2>
-          <p className="text-[16px] text-[var(--color-text-secondary)] mb-12 max-w-2xl mx-auto">
+          <p className="text-[16px] text-white/80 mb-12 max-w-2xl mx-auto">
             {subtitle}
           </p>
 
@@ -42,7 +42,7 @@ export default function Contributors({ contributors, lang }: ContributorsProps) 
               rel="noopener noreferrer"
               className="group relative"
             >
-              <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-[var(--color-border)] group-hover:border-[var(--color-primary)] transition-all transform group-hover:scale-110 group-hover:shadow-[var(--shadow-card-hover)] group-hover:z-10 bg-[var(--color-surface)]">
+              <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-white transition-all transform group-hover:scale-110 group-hover:shadow-lg group-hover:z-10 bg-white/10">
                 <Image 
                   src={user.avatar_url} 
                   alt={user.login} 
@@ -53,7 +53,7 @@ export default function Contributors({ contributors, lang }: ContributorsProps) 
               </div>
               
               {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-primary)] text-[12px] font-medium rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-xl">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-white/10 border border-white/20 backdrop-blur-md text-white text-[12px] font-medium rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-md">
                 @{user.login}
               </div>
             </a>

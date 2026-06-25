@@ -33,14 +33,14 @@ export default function UseCases({ dict }: { dict: any }) {
   ];
 
   return (
-    <section className="py-24 sm:py-32 bg-[var(--color-bg)] border-t border-[var(--color-border-subtle)]">
+    <section className="py-24 sm:py-32 bg-[var(--color-primary)] border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl sm:text-4xl font-[700] tracking-[-0.01em] text-[var(--color-text-primary)] mb-4">
+            <h2 className="text-3xl sm:text-4xl font-[700] tracking-[-0.01em] text-white mb-4">
               {dict.title}
             </h2>
-            <p className="text-[18px] leading-[1.7] text-[var(--color-text-secondary)]">
+            <p className="text-[18px] leading-[1.7] text-white/80">
               {dict.subtitle}
             </p>
           </div>
@@ -51,14 +51,14 @@ export default function UseCases({ dict }: { dict: any }) {
             const Icon = item.icon;
             return (
               <Reveal key={item.id} delay={0.2 + (index * 0.1)}>
-                <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-xl)] p-8 flex flex-col items-center text-center hover:border-[var(--color-primary)] transition-colors duration-300 shadow-[var(--shadow-card)] h-full">
+                <div className="bg-white/10 border border-white/10 rounded-[var(--radius-xl)] p-8 flex flex-col items-center text-center hover:border-white/30 transition-colors duration-300 shadow-md h-full backdrop-blur-md">
                   <div className={`w-16 h-16 rounded-full ${item.bg} flex items-center justify-center mb-6`}>
                     <Icon className={`w-8 h-8 ${item.color}`} />
                   </div>
-                  <h3 className="text-xl font-[600] text-[var(--color-text-primary)] mb-4">
+                  <h3 className="text-xl font-[600] text-white mb-4">
                     {item.title}
                   </h3>
-                  <p className="text-[15px] leading-[1.6] text-[var(--color-text-muted)]">
+                  <p className="text-[15px] leading-[1.6] text-white/70">
                     {item.description}
                   </p>
                 </div>

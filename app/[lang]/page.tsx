@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import SocialProof from '@/components/SocialProof';
+import AboutFlowDesk from '@/components/AboutFlowDesk';
 import Features from '@/components/Features';
 import WhyFlowDesk from '@/components/WhyFlowDesk';
 import AppPreview from '@/components/AppPreview';
@@ -46,6 +47,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       <SocialProof dict={dict.socialProof} />
       
+      <AboutFlowDesk dict={dict.about} />
+      
       <Features dict={dict.features} />
 
       <UseCases dict={dict.useCases} />
@@ -69,7 +72,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
       <CTASection assets={latestRelease.assets} dict={dict.cta} />
       
-      <div className="pb-24 px-4 sm:px-6 lg:px-8">
+      <div className="bg-[var(--color-primary)] py-24 px-4 sm:px-6 lg:px-8 border-t border-white/10">
         <Newsletter dict={dict.newsletter} />
       </div>
 

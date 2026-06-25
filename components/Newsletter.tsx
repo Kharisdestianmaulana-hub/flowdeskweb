@@ -36,12 +36,12 @@ export default function Newsletter({ dict }: { dict: any }) {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto mt-16 p-8 rounded-[var(--radius-xl)] bg-[var(--color-surface)] border border-[var(--color-border)] shadow-[var(--shadow-card)]">
+    <div className="w-full max-w-xl mx-auto mt-16 p-8 rounded-[var(--radius-xl)] bg-white/10 border border-white/20 shadow-md backdrop-blur-md">
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-[800] tracking-tight text-[var(--color-text-primary)] mb-2">
+        <h3 className="text-2xl font-[800] tracking-tight text-white mb-2">
           {dict.title}
         </h3>
-        <p className="text-[15px] text-[var(--color-text-secondary)] leading-relaxed">
+        <p className="text-[15px] text-white/80 leading-relaxed">
           {dict.subtitle}
         </p>
       </div>
@@ -54,12 +54,12 @@ export default function Newsletter({ dict }: { dict: any }) {
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === 'loading' || status === 'success'}
           placeholder={dict.placeholder}
-          className="flex-grow px-4 py-3 rounded-[var(--radius-md)] bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition-colors disabled:opacity-50"
+          className="flex-grow px-4 py-3 rounded-[var(--radius-md)] bg-white/5 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-colors disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          className="flex items-center justify-center gap-2 px-6 py-3 rounded-[var(--radius-md)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          className="flex items-center justify-center gap-2 px-6 py-3 rounded-[var(--radius-md)] bg-white text-[var(--color-primary)] hover:bg-slate-50 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
         >
           {status === 'loading' ? (
             <Loader2 className="w-5 h-5 animate-spin" />
