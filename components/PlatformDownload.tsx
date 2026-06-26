@@ -112,7 +112,7 @@ export default function PlatformDownload({ assets, version, dict, totalDownloads
                           className="w-full sm:w-auto h-[56px] px-8 flex items-center justify-center gap-3 rounded-[var(--radius-md)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-[16px] font-semibold shadow-[var(--shadow-btn)] transition-all"
                         >
                           <Download className="w-5 h-5" />
-                          {dict.downloadAction} {platform.name === 'macOS' ? dict.dmg : dict.exe}
+                          {dict.downloadAction} {platform.name === 'macOS' ? dict.dmg : platform.name === 'Linux' ? (dict.tar ?? '.tar.gz') : dict.exe}
                         </a>
                       )}
                     </div>
@@ -152,7 +152,7 @@ export default function PlatformDownload({ assets, version, dict, totalDownloads
                         href={downloadUrl}
                         className="h-[40px] flex items-center justify-center rounded-[var(--radius-sm)] bg-[var(--color-bg)] hover:bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-primary)] text-[13px] font-medium transition-all"
                       >
-                        {dict.downloadAction} {platform.name === 'macOS' ? dict.dmg : dict.exe}
+                        {dict.downloadAction} {platform.name === 'macOS' ? dict.dmg : platform.name === 'Linux' ? (dict.tar ?? '.tar.gz') : dict.exe}
                       </a>
                     )}
                   </div>
@@ -188,7 +188,7 @@ export default function PlatformDownload({ assets, version, dict, totalDownloads
                       href={downloadUrl}
                       className="h-[48px] flex items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white text-[14px] font-medium shadow-[var(--shadow-btn)] transition-all"
                     >
-                      {dict.downloadAction} {platform.name === 'macOS' ? dict.dmg : dict.exe}
+                      {dict.downloadAction} {platform.name === 'macOS' ? dict.dmg : platform.name === 'Linux' ? (dict.tar ?? '.tar.gz') : dict.exe}
                     </a>
                   )}
                 </div>

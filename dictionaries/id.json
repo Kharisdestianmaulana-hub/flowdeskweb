@@ -110,7 +110,7 @@
     }
   },
   "download": {
-    "title": "Tersedia untuk macOS dan Windows.",
+    "title": "Tersedia untuk macOS, Windows & Linux.",
     "subtitle": "Aplikasi mandiri. Tanpa dependensi tambahan.",
     "macOS": "macOS",
     "windows": "Windows",
@@ -119,6 +119,7 @@
     "downloadAction": "Unduh",
     "dmg": ".dmg (Universal)",
     "exe": ".exe (Pemasang)",
+    "tar": ".tar.gz (Linux)",
     "totalDownloads": "Dipercaya lebih dari {count} unduhan"
   },
   "changelogStrip": {
@@ -252,7 +253,41 @@
     "windows": "Windows",
     "linux": "Linux",
     "sourceCode": "Kode Sumber",
-    "totalDownloads": "Total unduhan global: {count}"
+    "totalDownloads": "Total unduhan global: {count}",
+    "installGuide": "Panduan Instalasi",
+    "installGuideShow": "Tampilkan panduan instalasi",
+    "installGuideHide": "Sembunyikan panduan instalasi",
+    "guides": {
+      "dmg": {
+        "title": "Instalasi di macOS (.dmg)",
+        "steps": [
+          "Klik dua kali file .dmg yang sudah diunduh untuk membukanya.",
+          "Seret ikon FlowDesk ke dalam folder Applications.",
+          "Buka Applications dan klik dua kali FlowDesk untuk menjalankannya.",
+          "Jika macOS menampilkan peringatan keamanan, buka Pengaturan Sistem → Privasi & Keamanan lalu klik 'Buka Tetap'."
+        ]
+      },
+      "exe": {
+        "title": "Instalasi di Windows (.exe)",
+        "steps": [
+          "Jalankan file installer .exe yang sudah diunduh.",
+          "Jika Windows SmartScreen muncul, klik 'Info selengkapnya' lalu 'Tetap jalankan'.",
+          "Ikuti langkah-langkah wizard instalasi yang muncul di layar.",
+          "Setelah instalasi selesai, FlowDesk akan muncul di Menu Start dan Desktop."
+        ]
+      },
+      "tar": {
+        "title": "Instalasi di Linux (.tar.gz)",
+        "steps": [
+          "Buka terminal di folder tempat file diunduh.",
+          "Ekstrak arsip: tar -xzf FlowDesk-*.tar.gz",
+          "Masuk ke folder hasil ekstrak: cd FlowDesk-*/",
+          "Buat file binary bisa dieksekusi: chmod +x FlowDesk",
+          "Jalankan aplikasi: ./FlowDesk",
+          "(Opsional) Pindah ke /usr/local/bin agar bisa diakses di mana saja: sudo mv FlowDesk /usr/local/bin/"
+        ]
+      }
+    }
   },
   "docsPage": {
     "title": "Dokumentasi",

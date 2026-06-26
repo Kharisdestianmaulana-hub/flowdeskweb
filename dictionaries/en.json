@@ -111,7 +111,7 @@
     }
   },
   "download": {
-    "title": "Available for macOS and Windows.",
+    "title": "Available for macOS, Windows & Linux.",
     "subtitle": "Standalone executable. No extra dependencies required.",
     "macOS": "macOS",
     "windows": "Windows",
@@ -120,6 +120,7 @@
     "downloadAction": "Download",
     "dmg": ".dmg (Universal)",
     "exe": ".exe (Installer)",
+    "tar": ".tar.gz (Linux)",
     "totalDownloads": "Trusted by {count}+ downloads"
   },
   "changelogStrip": {
@@ -253,7 +254,41 @@
     "windows": "Windows",
     "linux": "Linux",
     "sourceCode": "Source code",
-    "totalDownloads": "Total global downloads: {count}"
+    "totalDownloads": "Total global downloads: {count}",
+    "installGuide": "Installation Guide",
+    "installGuideShow": "Show install guide",
+    "installGuideHide": "Hide install guide",
+    "guides": {
+      "dmg": {
+        "title": "Installing on macOS (.dmg)",
+        "steps": [
+          "Double-click the downloaded .dmg file to open it.",
+          "Drag the FlowDesk icon into the Applications folder.",
+          "Open Applications and double-click FlowDesk to launch it.",
+          "If macOS shows a security warning, go to System Settings → Privacy & Security and click 'Open Anyway'."
+        ]
+      },
+      "exe": {
+        "title": "Installing on Windows (.exe)",
+        "steps": [
+          "Run the downloaded .exe installer file.",
+          "If Windows SmartScreen appears, click 'More info' then 'Run anyway'.",
+          "Follow the on-screen installation wizard steps.",
+          "After installation, FlowDesk will appear in your Start Menu and Desktop."
+        ]
+      },
+      "tar": {
+        "title": "Installing on Linux (.tar.gz)",
+        "steps": [
+          "Open a terminal in the folder where you downloaded the file.",
+          "Extract the archive: tar -xzf FlowDesk-*.tar.gz",
+          "Navigate into the extracted folder: cd FlowDesk-*/",
+          "Make the binary executable: chmod +x FlowDesk",
+          "Run the application: ./FlowDesk",
+          "(Optional) Move to /usr/local/bin for system-wide access: sudo mv FlowDesk /usr/local/bin/"
+        ]
+      }
+    }
   },
   "docsPage": {
     "title": "Documentation",
