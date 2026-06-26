@@ -4,7 +4,6 @@ import SocialProof from '@/components/SocialProof';
 import AboutFlowDesk from '@/components/AboutFlowDesk';
 import Features from '@/components/Features';
 import WhyFlowDesk from '@/components/WhyFlowDesk';
-import AppPreview from '@/components/AppPreview';
 import PlatformDownload from '@/components/PlatformDownload';
 import ChangelogStrip from '@/components/ChangelogStrip';
 import CTASection from '@/components/CTASection';
@@ -43,8 +42,6 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         totalDownloads={totalDownloads}
       />
       
-      <AppPreview dict={dict.appPreview} />
-
       <SocialProof dict={dict.socialProof} />
       
       <AboutFlowDesk dict={dict.about} />
