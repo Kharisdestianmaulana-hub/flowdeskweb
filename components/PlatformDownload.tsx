@@ -33,7 +33,7 @@ export default function PlatformDownload({ assets, version, dict, totalDownloads
 
   const macAsset = getAsset(['.dmg']);
   const winAsset = getAsset(['.exe', '.msi']);
-  const linuxAsset = getAsset(['.appimage', '.deb']);
+  const linuxAsset = getAsset(['.tar.gz', '.appimage', '.deb']);
 
   const platforms = [
     {

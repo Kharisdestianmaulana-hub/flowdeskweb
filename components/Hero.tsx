@@ -21,6 +21,7 @@ export default function Hero({ stars, version, repoUrl, assets, dict, totalDownl
   // Find assets
   const macAsset = assets?.find(a => a.name.includes('.dmg'));
   const winAsset = assets?.find(a => a.name.includes('.exe') || a.name.includes('.msi'));
+  const linuxAsset = assets?.find(a => a.name.toLowerCase().endsWith('.tar.gz') || a.name.toLowerCase().endsWith('.appimage') || a.name.toLowerCase().endsWith('.deb'));
 
   let downloadText = dict.downloadDefault || 'Download FlowDesk';
   let downloadUrl = '#download';
@@ -31,6 +32,9 @@ export default function Hero({ stars, version, repoUrl, assets, dict, totalDownl
   } else if (os === 'macOS') {
     downloadText = dict.downloadMac;
     downloadUrl = macAsset ? macAsset.browser_download_url : '#download';
+  } else if (os === 'Linux') {
+    downloadText = dict.downloadLinux || 'Download for Linux';
+    downloadUrl = linuxAsset ? linuxAsset.browser_download_url : '#download';
   }
 
   return (
@@ -94,19 +98,27 @@ export default function Hero({ stars, version, repoUrl, assets, dict, totalDownl
             </p>
           </div>
 
-          {/* Platform Support */}
+          {/* Platform Support — dynamic based on available assets */}
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {['macOS', 'Windows'].map((platform) => (
-              <span 
-                key={platform} 
-                className="px-3 py-1.5 text-xs font-medium text-[var(--color-text-primary)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-full"
-              >
-                {platform}
+            {macAsset && (
+              <span className="px-3 py-1.5 text-xs font-medium text-[var(--color-text-primary)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-full">
+                macOS
               </span>
-            ))}
-            <span className="px-3 py-1.5 text-xs font-medium text-[var(--color-text-muted)] bg-transparent border border-[var(--color-border-subtle)] rounded-full">
-              Linux (Soon)
-            </span>
+            )}
+            {winAsset && (
+              <span className="px-3 py-1.5 text-xs font-medium text-[var(--color-text-primary)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-full">
+                Windows
+              </span>
+            )}
+            {linuxAsset ? (
+              <span className="px-3 py-1.5 text-xs font-medium text-[var(--color-text-primary)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-full">
+                Linux
+              </span>
+            ) : (
+              <span className="px-3 py-1.5 text-xs font-medium text-[var(--color-text-muted)] bg-transparent border border-[var(--color-border-subtle)] rounded-full">
+                Linux (Soon)
+              </span>
+            )}
           </div>
         </Reveal>
       </div>
