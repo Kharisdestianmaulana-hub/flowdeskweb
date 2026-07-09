@@ -145,7 +145,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
               On this page
             </h4>
             <ul className="space-y-3 text-sm">
-              {toc.map((item, i) => (
+              {toc.map((item: { level: number; text: string; id: string }, i: number) => (
                 <li key={i} className={`${item.level === 3 ? 'ml-4' : ''}`}>
                   <a 
                     href={`#${item.id}`} 
