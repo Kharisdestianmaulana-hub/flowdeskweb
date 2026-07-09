@@ -1,6 +1,9 @@
+'use client';
+
 import { GithubIcon as Github } from './GithubIcon';
 import { ReleaseAsset } from '../types/github';
 import Reveal from './animations/Reveal';
+import { useOs } from '../hooks/useOs';
 
 interface CTASectionProps {
   assets: ReleaseAsset[];
@@ -8,7 +11,29 @@ interface CTASectionProps {
 }
 
 export default function CTASection({ assets, dict }: CTASectionProps) {
+  const os = useOs();
+  
   const macAsset = assets?.find(a => a.name.includes('.dmg'));
+  const winAsset = assets?.find(a => a.name.includes('.exe') || a.name.includes('.msi'));
+  const linuxAsset = assets?.find(a =>
+    a.name.toLowerCase().endsWith('.tar.gz') ||
+    a.name.toLowerCase().endsWith('.appimage') ||
+    a.name.toLowerCase().endsWith('.deb')
+  );
+
+  let downloadText = dict.downloadDefault || 'Download FlowDesk';
+  let downloadUrl = '#download';
+
+  if (os === 'Windows') {
+    downloadText = dict.downloadWin || 'Download for Windows';
+    downloadUrl = winAsset ? winAsset.browser_download_url : '#download';
+  } else if (os === 'macOS') {
+    downloadText = dict.downloadMac;
+    downloadUrl = macAsset ? macAsset.browser_download_url : '#download';
+  } else if (os === 'Linux') {
+    downloadText = dict.downloadLinux || 'Download for Linux';
+    downloadUrl = linuxAsset ? linuxAsset.browser_download_url : '#download';
+  }
 
   return (
     <section className="bg-[var(--color-surface)] py-24 sm:py-32 border-y border-[var(--color-border-subtle)]">
@@ -25,10 +50,10 @@ export default function CTASection({ assets, dict }: CTASectionProps) {
         <Reveal delay={0.2}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href={macAsset ? macAsset.browser_download_url : '#download'}
+              href={downloadUrl}
               className="w-full sm:w-auto px-8 py-3.5 rounded-[var(--radius-md)] bg-[image:var(--gradient-cta)] text-white text-[15px] font-bold shadow-[var(--shadow-btn)] hover:scale-105 transition-transform duration-200 text-center"
             >
-              {dict.downloadMac}
+              {downloadText}
             </a>
             <a
               href="https://github.com/Kharisdestianmaulana-hub/flowdesk"
