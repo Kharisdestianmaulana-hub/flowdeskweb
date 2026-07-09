@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
@@ -8,14 +8,23 @@ import { Search, ArrowRight, Clock } from 'lucide-react';
 
 export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: string, dict: any }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
   const categories = ['All', 'Blog', 'Updates', 'Engineering', 'Guides', 'Community'];
 
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 400); // 400ms debounce
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   // Filter posts
   const filteredPosts = posts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          post.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = post.title.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) || 
+                          post.content.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
     
     let matchesCategory = true;
     if (activeCategory !== 'All') {
