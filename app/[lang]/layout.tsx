@@ -38,6 +38,9 @@ export const metadata: Metadata = {
     title: "FlowDesk — Offline-first productivity",
     description: "Projects, tasks, docs, and files — entirely on your machine.",
   },
+  verification: {
+    google: "CVHrEOkr5FJVDbVTYo4o7xCH0i87asFgNFRBVuRkgXs",
+  },
 };
 
 export default async function RootLayout({
