@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LogOut, UploadCloud, Plus, Trash2, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
+import MarkdownEditor from '@/components/MarkdownEditor';
 
 export default function DashboardPortal() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -249,15 +250,8 @@ export default function DashboardPortal() {
               </div>
 
               {/* Markdown Content */}
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">Content (Markdown supported)</label>
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Write your post content here... Use markdown for styling: ## Heading, **bold**, etc."
-                  rows={15}
-                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] font-mono text-sm resize-y"
-                />
+              <div className="mt-8">
+                <MarkdownEditor value={content} onChange={setContent} />
               </div>
 
               <div className="pt-4 border-t border-[var(--color-border)] flex justify-end">

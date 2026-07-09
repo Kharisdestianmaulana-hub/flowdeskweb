@@ -8,7 +8,9 @@ import { getDictionary } from '@/lib/dictionary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getRepoInfo } from '@/lib/github';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Clock } from 'lucide-react';
+import ProgressBar from '@/components/blog/ProgressBar';
+import ShareButtons from '@/components/blog/ShareButtons';
 
 const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
 const dbId = process.env.CLOUDFLARE_DATABASE_ID;
@@ -36,6 +38,11 @@ async function getPost(slug: string) {
   }
 }
 
+function generateId(text: any) {
+  if (!text) return '';
+  return String(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+}
+
 export default async function BlogPostPage({ params }: { params: Promise<{ lang: string, slug: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';
@@ -48,48 +55,111 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
 
+  // Reading time
+  const wordCount = post.content.split(/\s+/).length;
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+  // Extract ToC
+  const headings = post.content.match(/^(##|###) (.*$)/gim) || [];
+  const toc = headings.map((h: string) => ({
+    level: h.startsWith('###') ? 3 : 2,
+    text: h.replace(/^(##|###) /, '').trim(),
+    id: generateId(h.replace(/^(##|###) /, '').trim())
+  }));
+
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)]">
+      <ProgressBar />
       <Navbar stars={repoInfo.stargazers_count} repoUrl={repoInfo.html_url} dict={dict.navbar} currentLang={lang} />
       
-      <article className="flex-1 max-w-3xl mx-auto w-full px-6 py-24 sm:py-32">
-        <Link href={`/${lang}/blog`} className="inline-flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors mb-12">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back to blog
-        </Link>
+      <div className="flex-1 w-full max-w-6xl mx-auto px-6 py-24 sm:py-32 flex flex-col lg:flex-row gap-12 xl:gap-24 items-start">
+        
+        {/* Main Article Content */}
+        <article className="w-full lg:w-[720px] shrink-0">
+          <Link href={`/${lang}/blog`} className="inline-flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors mb-12">
+            <ArrowLeft className="w-4 h-4 mr-2" /> Back to blog
+          </Link>
 
-        <header className="mb-12">
-          <h1 className="text-4xl sm:text-5xl font-[800] tracking-tight leading-[1.15] text-[var(--color-text-primary)] mb-6">
-            {post.title}
-          </h1>
-          <div className="flex items-center gap-4 text-sm text-[var(--color-text-muted)]">
-            <time dateTime={post.created_at}>
-              {format(new Date(post.created_at), 'MMMM d, yyyy')}
-            </time>
-          </div>
-        </header>
+          <header className="mb-12">
+            <h1 className="text-4xl sm:text-[44px] font-[800] tracking-tight leading-[1.15] text-[var(--color-text-primary)] mb-6">
+              {post.title}
+            </h1>
+            <div className="flex items-center gap-6 text-[15px] text-[var(--color-text-muted)] font-medium">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-600 flex items-center justify-center text-white font-bold text-xs">
+                  FD
+                </div>
+                <span>FlowDesk Team</span>
+              </div>
+              <time dateTime={post.created_at} className="hidden sm:block">
+                {format(new Date(post.created_at), 'MMMM d, yyyy')}
+              </time>
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" />
+                <span>{readingTime} min read</span>
+              </div>
+            </div>
+          </header>
 
-        {post.cover_image && (
-          <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden mb-16 border border-[var(--color-border)] shadow-sm">
-            <Image src={post.cover_image} alt={post.title} fill className="object-cover" priority />
+          {post.cover_image && (
+            <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden mb-16 border border-[var(--color-border)] shadow-sm">
+              <Image src={post.cover_image} alt={post.title} fill className="object-cover" priority />
+            </div>
+          )}
+
+          <div className="prose prose-invert max-w-none 
+            prose-headings:text-[var(--color-text-primary)] prose-headings:font-bold prose-headings:tracking-tight
+            prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:leading-snug
+            prose-h3:text-2xl prose-h3:mt-12 prose-h3:mb-4
+            prose-p:text-[var(--color-text-secondary)] prose-p:leading-[1.8] prose-p:text-[18px] prose-p:mb-8
+            prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-[var(--color-text-primary)]
+            prose-li:text-[var(--color-text-secondary)] prose-li:text-[18px] prose-li:leading-[1.8]
+            prose-ul:mt-4 prose-ul:mb-8 prose-ul:space-y-2
+            prose-ol:mt-4 prose-ol:mb-8 prose-ol:space-y-2
+            prose-code:text-[var(--color-text-primary)] prose-code:bg-[var(--color-surface-raised)] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:font-medium
+            prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-[#30363d] prose-pre:rounded-xl prose-pre:shadow-sm prose-pre:my-10
+            prose-blockquote:border-l-[4px] prose-blockquote:border-[var(--color-primary)] prose-blockquote:bg-[var(--color-surface)] prose-blockquote:py-3 prose-blockquote:px-6 prose-blockquote:my-10 prose-blockquote:not-italic prose-blockquote:text-[var(--color-text-muted)] prose-blockquote:text-[20px] prose-blockquote:leading-relaxed prose-blockquote:rounded-r-xl
+            prose-img:rounded-2xl prose-img:border prose-img:border-[var(--color-border-subtle)] prose-img:w-full prose-img:shadow-sm prose-img:my-12
+            prose-hr:border-[var(--color-border)] prose-hr:my-14
+            prose-table:w-full prose-table:my-10 prose-th:bg-[var(--color-surface-raised)] prose-th:p-4 prose-td:p-4 prose-td:border-t prose-td:border-[var(--color-border-subtle)]
+          ">
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h2: ({node, ...props}) => <h2 id={generateId(props.children)} {...props} />,
+                h3: ({node, ...props}) => <h3 id={generateId(props.children)} {...props} />
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
           </div>
+
+          <ShareButtons title={post.title} />
+        </article>
+
+        {/* Sticky Table of Contents sidebar for Desktop */}
+        {toc.length > 0 && (
+          <aside className="hidden lg:block w-64 shrink-0 sticky top-32">
+            <h4 className="text-sm font-bold text-[var(--color-text-primary)] uppercase tracking-wider mb-4">
+              On this page
+            </h4>
+            <ul className="space-y-3 text-sm">
+              {toc.map((item, i) => (
+                <li key={i} className={`${item.level === 3 ? 'ml-4' : ''}`}>
+                  <a 
+                    href={`#${item.id}`} 
+                    className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors line-clamp-2"
+                  >
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
         )}
 
-        <div className="prose prose-invert max-w-none 
-          prose-headings:text-[var(--color-text-primary)] prose-headings:font-bold
-          prose-p:text-[var(--color-text-secondary)] prose-p:leading-relaxed prose-p:text-[17px]
-          prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:underline
-          prose-strong:text-[var(--color-text-primary)]
-          prose-li:text-[var(--color-text-secondary)]
-          prose-code:text-[var(--color-text-primary)] prose-code:bg-[var(--color-surface-raised)] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
-          prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-[#30363d]
-          prose-blockquote:border-l-[var(--color-primary)] prose-blockquote:bg-[var(--color-surface)] prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic prose-blockquote:text-[var(--color-text-secondary)]
-          prose-img:rounded-xl prose-img:border prose-img:border-[var(--color-border)]
-        ">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {post.content}
-          </ReactMarkdown>
-        </div>
-      </article>
+      </div>
 
       <Footer repoUrl={repoInfo.html_url} dict={dict.footer} currentLang={lang} />
     </main>
