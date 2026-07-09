@@ -51,7 +51,7 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
               className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
                 activeCategory === cat 
                   ? 'bg-[var(--color-primary)] text-white shadow-md' 
-                  : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:border-[var(--color-border-hover)] hover:text-[var(--color-text-primary)]'
+                  : 'bg-[var(--color-surface)] text-[var(--color-text-secondary)] border border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]'
               }`}
             >
               {cat}
@@ -79,9 +79,9 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
         <div className="space-y-16">
           {/* Featured Post */}
           {featuredPost && (
-            <Link href={`/${lang}/blog/${featuredPost.slug}`} className="group block relative rounded-[2rem] bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden shadow-sm hover:shadow-[var(--shadow-elevated)] hover:border-[var(--color-border-hover)] transition-all duration-300">
+            <Link href={`/${lang}/blog/${featuredPost.slug}`} className="group block relative rounded-[2rem] bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden shadow-sm hover:shadow-[var(--shadow-elevated)] hover:border-[var(--color-primary)] transition-all duration-300">
               <div className="flex flex-col lg:flex-row">
-                <div className="w-full lg:w-3/5 aspect-[16/10] lg:aspect-auto lg:min-h-[480px] relative overflow-hidden bg-[var(--color-surface-raised)]">
+                <div className="w-full lg:w-3/5 aspect-[16/10] lg:aspect-auto lg:min-h-[480px] relative overflow-hidden bg-[var(--color-surface-raised)] border-r border-[var(--color-border-subtle)]">
                   {featuredPost.cover_image ? (
                     <Image src={featuredPost.cover_image} alt={featuredPost.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out" priority />
                   ) : (
@@ -122,7 +122,7 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
           {regularPosts.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {regularPosts.map((post: any) => (
-                <Link href={`/${lang}/blog/${post.slug}`} key={post.id} className="group flex flex-col bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-[var(--shadow-elevated)] hover:border-[var(--color-border-hover)] transition-all duration-300">
+                <Link href={`/${lang}/blog/${post.slug}`} key={post.id} className="group flex flex-col bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[1.5rem] overflow-hidden shadow-sm hover:shadow-[var(--shadow-elevated)] hover:border-[var(--color-primary)] transition-all duration-300">
                   <div className="relative aspect-[16/10] w-full bg-[var(--color-surface-raised)] border-b border-[var(--color-border-subtle)] overflow-hidden">
                     {post.cover_image ? (
                       <Image src={post.cover_image} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />
