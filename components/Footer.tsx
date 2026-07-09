@@ -12,57 +12,70 @@ export default function Footer({ repoUrl, dict, currentLang }: FooterProps) {
   return (
     <footer className="bg-[var(--color-surface)] border-t border-[var(--color-border-subtle)] py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 lg:gap-8 items-start">
           
           {/* Left: Logo & Tagline */}
-          <div className="flex flex-col items-center md:items-start">
-            <Link href="/" className="flex items-center gap-2 text-xl tracking-tight text-[var(--color-text-primary)] mb-2">
+          <div className="flex flex-col items-start md:col-span-1">
+            <Link href="/" className="flex items-center gap-2 text-xl tracking-tight text-[var(--color-text-primary)] mb-4">
               <Image src="/logo.png" alt="FlowDesk Logo" width={24} height={24} className="rounded-[4px]" />
               <div>
                 <span className="font-normal">Flow</span>
                 <span className="font-bold text-[var(--color-text-accent)]">Desk</span>
               </div>
             </Link>
-            <p className="text-[13px] text-[var(--color-text-muted)] text-center md:text-left">
+            <p className="text-[14px] text-[var(--color-text-muted)] leading-relaxed mb-6">
               {dict.tagline}
             </p>
-          </div>
-
-          {/* Center: Trust Badges */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-2xl mx-auto col-span-1 md:col-span-1">
-            <div className="flex flex-col items-center sm:items-start text-center sm:text-left space-y-2">
-              <div className="w-10 h-10 rounded-full bg-[var(--color-primary-light)] text-[var(--color-primary)] flex items-center justify-center mb-1">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              </div>
-              <h4 className="text-[15px] font-semibold text-[var(--color-text-primary)]">{dict.badges.offline.title}</h4>
-              <p className="text-[13px] text-[var(--color-text-muted)] leading-relaxed">{dict.badges.offline.desc}</p>
-            </div>
-            
-            <div className="flex flex-col items-center sm:items-start text-center sm:text-left space-y-2">
-              <div className="w-10 h-10 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center mb-1">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-              </div>
-              <h4 className="text-[15px] font-semibold text-[var(--color-text-primary)]">{dict.badges.fast.title}</h4>
-              <p className="text-[13px] text-[var(--color-text-muted)] leading-relaxed">{dict.badges.fast.desc}</p>
-            </div>
-
-            <div className="flex flex-col items-center sm:items-start text-center sm:text-left space-y-2">
-              <div className="w-10 h-10 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center mb-1">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              </div>
-              <h4 className="text-[15px] font-semibold text-[var(--color-text-primary)]">{dict.badges.privacy.title}</h4>
-              <p className="text-[13px] text-[var(--color-text-muted)] leading-relaxed">{dict.badges.privacy.desc}</p>
-            </div>
-          </div>
-
-          {/* Right: Built with info */}
-          <div className="flex flex-col items-center md:items-end text-[13px] text-[var(--color-text-muted)]">
-            <div className="flex items-center space-x-2 mb-2">
+            <div className="flex items-center space-x-2 text-[13px] text-[var(--color-text-muted)]">
               <span>{dict.builtWith}</span>
               <span className="px-2 py-0.5 rounded bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[11px] font-mono text-[var(--color-info)]">
                 v10.0
               </span>
             </div>
+          </div>
+
+          {/* Center & Right: Quick Links */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 md:col-span-3 w-full">
+            
+            {/* Column 1: Product */}
+            <div className="flex flex-col space-y-4">
+              <h4 className="text-[15px] font-semibold text-[var(--color-text-primary)]">Product</h4>
+              <div className="flex flex-col space-y-3">
+                <Link href={`/${currentLang}/download`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.download}</Link>
+                <Link href={`/${currentLang}/#features`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.features}</Link>
+                <Link href={`/${currentLang}/docs`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.docs}</Link>
+                <Link href={`/${currentLang}/blog`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.blog || 'Blog'}</Link>
+              </div>
+            </div>
+
+            {/* Column 2: Project */}
+            <div className="flex flex-col space-y-4">
+              <h4 className="text-[15px] font-semibold text-[var(--color-text-primary)]">Project</h4>
+              <div className="flex flex-col space-y-3">
+                <Link href={`/${currentLang}/changelog`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.changelog}</Link>
+                <Link href={`/${currentLang}/roadmap`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.roadmap}</Link>
+                <Link href={`/${currentLang}/compare`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.compare || 'Compare'}</Link>
+                <Link href={`/${currentLang}/philosophy`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.philosophy}</Link>
+              </div>
+            </div>
+
+            {/* Column 3: Support & Legal */}
+            <div className="flex flex-col space-y-4 col-span-2 sm:col-span-1">
+              <h4 className="text-[15px] font-semibold text-[var(--color-text-primary)]">Support & Legal</h4>
+              <div className="flex flex-col space-y-3">
+                <Link href={`/${currentLang}/contact`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.contact || 'Contact'}</Link>
+                <Link href={`/${currentLang}/sponsor`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-pink-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                  {dict.sponsor}
+                </Link>
+                <Link href={`/${currentLang}/license`} className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">{dict.license || 'License'}</Link>
+                <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-[14px] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors flex items-center gap-1.5">
+                  <Github className="w-3.5 h-3.5" />
+                  GitHub
+                </a>
+              </div>
+            </div>
+
           </div>
           
         </div>
