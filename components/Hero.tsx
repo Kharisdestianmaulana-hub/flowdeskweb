@@ -10,14 +10,14 @@ import { useOs } from '../hooks/useOs';
 import NumberCounter from './animations/NumberCounter';
 
 const SLIDES = [
-  '/Dashboard_Flowdesk.webp',
-  '/Project_flowdesk.webp',
-  '/Task_Flowdesk.webp',
-  '/Docs_Flowdesk.webp',
-  '/Files_Flowdesk.webp',
-  '/Members_Flowdesk.webp',
-  '/Reqquest_Flowdesk.webp',
-  '/Settings_Flowdesk.webp'
+  { src: '/Dashboard_Flowdesk.webp', label: 'Dashboard' },
+  { src: '/Project_flowdesk.webp', label: 'Projects' },
+  { src: '/Task_Flowdesk.webp', label: 'Tasks' },
+  { src: '/Docs_Flowdesk.webp', label: 'Documents' },
+  { src: '/Files_Flowdesk.webp', label: 'Files' },
+  { src: '/Members_Flowdesk.webp', label: 'Members' },
+  { src: '/Reqquest_Flowdesk.webp', label: 'Requests' },
+  { src: '/Settings_Flowdesk.webp', label: 'Settings' }
 ];
 const INTERVAL_MS = 5000;
 
@@ -167,11 +167,11 @@ export default function Hero({ stars, version, repoUrl, assets, dict, totalDownl
             <div className="relative w-full">
               {/* Screenshot container */}
               <div className="relative aspect-[16/10] w-full rounded-[var(--radius-xl)] overflow-hidden border border-[var(--color-border)] shadow-[var(--shadow-elevated)] bg-[var(--color-surface-raised)]">
-                {SLIDES.map((src, i) => (
-                  <AnimatePresence key={src} mode="wait">
+                {SLIDES.map((slide, i) => (
+                  <AnimatePresence key={slide.src} mode="wait">
                     {i === current && (
                       <motion.div
-                        key={src + i}
+                        key={slide.src + i}
                         initial={{ opacity: 0, scale: 1.03 }}
                         animate={{ opacity: isLoaded[i] ? 1 : 0, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.97 }}
@@ -179,14 +179,21 @@ export default function Hero({ stars, version, repoUrl, assets, dict, totalDownl
                         className="absolute inset-0"
                       >
                         <Image
-                          src={src}
-                          alt="FlowDesk App Screenshot"
+                          src={slide.src}
+                          alt={`FlowDesk ${slide.label}`}
                           fill
                           onLoad={() => handleLoad(i)}
                           className="object-cover object-top"
                           sizes="(max-width: 1024px) 100vw, 50vw"
                           priority={i === 0}
                         />
+                        
+                        {/* Slide Label Overlay */}
+                        <div className="absolute bottom-4 left-4 z-20">
+                          <span className="px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white/90 text-[13px] font-semibold tracking-wide border border-white/10 shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+                            {slide.label}
+                          </span>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
