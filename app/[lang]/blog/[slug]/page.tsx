@@ -111,46 +111,56 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)]">
       <Navbar stars={repoInfo.stargazers_count} repoUrl={repoInfo.html_url} dict={dict.navbar} currentLang={lang} />
       
-      <div className="flex-1 w-full max-w-6xl mx-auto px-6 py-24 sm:py-32 flex flex-col lg:flex-row gap-12 xl:gap-24 items-start justify-center">
+      <div className="flex-1 w-full max-w-6xl mx-auto px-6 pt-10 pb-24 sm:pt-16 sm:pb-32 flex flex-col lg:flex-row gap-12 xl:gap-24 items-start justify-center">
         
         {/* Main Article Content */}
         <article className="w-full lg:w-[720px] shrink-0">
-          <Link href={`/${lang}/blog`} className="inline-flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors mb-12">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to blog
+          <Link href={`/${lang}/blog`} className="inline-flex items-center text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors mb-8 sm:mb-12">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to blog
           </Link>
+          
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--color-text-primary)] leading-[1.1] mb-6 tracking-tight">
+            {post.title}
+          </h1>
 
-          <header className="mb-12">
-            <h1 className="text-4xl sm:text-[44px] font-[800] tracking-tight leading-[1.15] text-[var(--color-text-primary)] mb-6">
-              {post.title}
-            </h1>
-            <div className="flex items-center gap-6 text-[15px] text-[var(--color-text-muted)] font-medium">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-600 flex items-center justify-center text-white font-bold text-xs">
-                  FD
-                </div>
-                <span>FlowDesk Team</span>
+          <div className="flex flex-wrap items-center gap-6 text-sm text-[var(--color-text-muted)] mb-10 sm:mb-16">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white font-bold text-xs">
+                FD
               </div>
-              <time dateTime={post.created_at} className="hidden sm:block">
+              <span className="font-medium text-[var(--color-text-primary)]">FlowDesk Team</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <time dateTime={post.created_at}>
                 {format(new Date(post.created_at), 'MMMM d, yyyy')}
               </time>
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4" />
-                <span>{readingTime} min read</span>
-              </div>
             </div>
-          </header>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              <span>{readingTime} min read</span>
+            </div>
+          </div>
 
           {post.cover_image && (
-            <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden mb-16 border border-[var(--color-border)] shadow-sm">
-              <Image src={post.cover_image} alt={post.title} fill className="object-cover" priority />
+            <div className="relative w-full aspect-[16/9] mb-12 sm:mb-16 rounded-2xl overflow-hidden border border-[var(--color-border-subtle)] shadow-lg">
+              <Image 
+                src={post.cover_image} 
+                alt={post.title} 
+                fill 
+                className="object-cover"
+                priority
+              />
             </div>
           )}
 
-          <div className="prose prose-invert max-w-none 
+          <div className="
+            prose prose-invert max-w-none 
             prose-headings:text-[var(--color-text-primary)] prose-headings:font-bold prose-headings:tracking-tight
-            prose-h2:text-3xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:leading-snug
-            prose-h3:text-2xl prose-h3:mt-12 prose-h3:mb-4
-            prose-p:text-[var(--color-text-secondary)] prose-p:leading-[1.8] prose-p:text-[18px] prose-p:mb-8
+            prose-h1:text-4xl prose-h1:mt-10 prose-h1:mb-6
+            prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:border-[var(--color-border-subtle)] prose-h2:pb-3
+            prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
+            prose-p:text-[var(--color-text-secondary)] prose-p:leading-[1.8] prose-p:text-[18px] prose-p:mb-6
             prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:underline
             prose-strong:text-[var(--color-text-primary)]
             prose-li:text-[var(--color-text-secondary)] prose-li:text-[18px] prose-li:leading-[1.8]
@@ -166,8 +176,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{
-                h2: ({node, ...props}) => <h2 id={generateId(props.children)} {...props} />,
-                h3: ({node, ...props}) => <h3 id={generateId(props.children)} {...props} />
+                h2: ({node, ...props}) => <h2 id={generateId(props.children)} className="scroll-mt-24" {...props} />,
+                h3: ({node, ...props}) => <h3 id={generateId(props.children)} className="scroll-mt-24" {...props} />
               }}
             >
               {parsedContent}
