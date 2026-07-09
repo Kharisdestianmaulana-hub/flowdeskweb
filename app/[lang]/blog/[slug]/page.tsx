@@ -106,7 +106,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
 
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)]">
-      <ProgressBar />
       <Navbar stars={repoInfo.stargazers_count} repoUrl={repoInfo.html_url} dict={dict.navbar} currentLang={lang} />
       
       <div className="flex-1 w-full max-w-6xl mx-auto px-6 py-24 sm:py-32 flex flex-col lg:flex-row gap-12 xl:gap-24 items-start justify-center">
