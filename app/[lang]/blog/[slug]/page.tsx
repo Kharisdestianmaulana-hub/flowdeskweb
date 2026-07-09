@@ -154,6 +154,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
             </div>
           )}
 
+          {/* Mobile Table of Contents */}
+          {toc.length > 0 && (
+            <div className="lg:hidden mb-10 p-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border-subtle)] shadow-sm">
+              <h4 className="text-sm font-bold text-[var(--color-text-primary)] uppercase tracking-wider mb-4">
+                On this page
+              </h4>
+              <ul className="space-y-3 text-sm">
+                {toc.map((item: { level: number; text: string; id: string }, i: number) => (
+                  <li key={i} className={`${item.level === 3 ? 'ml-4' : ''}`}>
+                    <a 
+                      href={`#${item.id}`} 
+                      className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors line-clamp-2"
+                    >
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="
             prose prose-invert max-w-none 
             prose-headings:text-[var(--color-text-primary)] prose-headings:font-bold prose-headings:tracking-tight
