@@ -21,7 +21,7 @@ async function getPosts() {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ sql: 'SELECT * FROM posts ORDER BY created_at DESC' }),
+      body: JSON.stringify({ sql: 'SELECT p.*, u.username as author_username FROM posts p LEFT JOIN users u ON p.author = u.display_name ORDER BY p.created_at DESC' }),
       next: { revalidate: 60 } // Revalidate every minute
     });
     

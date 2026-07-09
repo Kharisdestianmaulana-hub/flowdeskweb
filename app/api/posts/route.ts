@@ -1,65 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import { getSession } from '@/lib/auth';
-
-const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-const dbId = process.env.CLOUDFLARE_DATABASE_ID;
-const token = process.env.CLOUDFLARE_D1_TOKEN;
-
-async function queryD1(sql: string, params: any[] = []) {
-  const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${dbId}/query`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ sql, params })
-  });
-  
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`D1 query failed: ${errorText}`);
-  }
-  
-  const data = await res.json();
-  return data.result[0].results;
-}
+import { queryD1 } from '@/lib/db';
 
 // GET all posts
 export async function GET(request: NextRequest) {
   try {
-    const posts = await queryD1('SELECT * FROM posts ORDER BY created_at DESC');
-    return NextResponse.json(posts);
-  } catch (error: any) {
-    console.error('Error fetching posts:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const results = await queryD1('SELECT * FROM posts ORDER BY created_at DESC');
+    return NextResponse.json(results);
+  } catch (error) {
+    console.error('Failed to fetch posts:', error);
+    return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
   }
 }
 
-// POST a new article
+// POST new post
 export async function POST(request: NextRequest) {
-  // Auth check
   const session = await getSession();
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
-    const { title, slug, content, cover_image, author, category } = await request.json();
+    const { title, slug, content, cover_image, category } = await request.json();
 
     if (!title || !slug || !content) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Force author to be the currently logged in user's display_name
+    const author = session.display_name;
+
     const id = uuidv4();
     await queryD1(
       'INSERT INTO posts (id, slug, title, content, cover_image, author, category) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [id, slug, title, content, cover_image || null, author || null, category || 'Blog']
+      [id, slug, title, content, cover_image || null, author, category || 'Blog']
     );
 
     return NextResponse.json({ success: true, id });
-  } catch (error: any) {
-    console.error('Error creating post:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    console.error('Failed to create post:', error);
+    return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
   }
 }

@@ -2,39 +2,67 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil } from 'lucide-react';
+import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
 
 export default function DashboardPortal() {
+  const router = useRouter();
+  
+  // Session State
+  const [user, setUser] = useState<{ username: string, display_name: string, role: string } | null>(null);
+  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'profile' | 'users'>('overview');
+  const [loading, setLoading] = useState(true);
+
+  // Posts State
   const [posts, setPosts] = useState<any[]>([]);
   const [view, setView] = useState<'list' | 'editor'>('list');
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  // Editor states
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
-  const [author, setAuthor] = useState('');
   const [category, setCategory] = useState('Blog');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  // Users State
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newDisplayName, setNewDisplayName] = useState('');
+  const [newRole, setNewRole] = useState('AUTHOR');
+
+  // Profile State
+  const [bio, setBio] = useState('');
+  const [socialLinks, setSocialLinks] = useState('');
+  const [profileDisplayName, setProfileDisplayName] = useState('');
+
   useEffect(() => {
-    fetchPosts();
+    fetchSession();
   }, []);
+
+  const fetchSession = async () => {
+    try {
+      const res = await fetch('/api/session');
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+        fetchPosts();
+      } else {
+        router.push('/dashboard/login');
+      }
+    } catch (e) {
+      router.push('/dashboard/login');
+    }
+  };
 
   const fetchPosts = async () => {
     try {
       const res = await fetch('/api/posts');
       const data = await res.json();
-      if (Array.isArray(data)) {
-        setPosts(data);
-      }
+      if (Array.isArray(data)) setPosts(data);
     } catch (e) {
       console.error(e);
     } finally {
@@ -42,11 +70,43 @@ export default function DashboardPortal() {
     }
   };
 
+  const fetchUsers = async () => {
+    if (user?.role !== 'SUPER_ADMIN') return;
+    try {
+      const res = await fetch('/api/users');
+      const data = await res.json();
+      if (Array.isArray(data)) setAllUsers(data);
+    } catch (e) {}
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch('/api/profile');
+      const data = await res.json();
+      if (res.ok) {
+        setBio(data.bio || '');
+        setSocialLinks(data.social_links || '');
+        setProfileDisplayName(data.display_name || '');
+      }
+    } catch (e) {}
+  };
+
+  // Effect to load data based on active menu
+  useEffect(() => {
+    if (!user) return;
+    if (activeMenu === 'posts') fetchPosts();
+    if (activeMenu === 'users') fetchUsers();
+    if (activeMenu === 'profile') fetchProfile();
+  }, [activeMenu, user]);
+
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/dashboard/login');
   };
 
+  // -------------------------------------------------------------
+  // POST EDITOR LOGIC
+  // -------------------------------------------------------------
   const generateSlug = (text: string) => {
     return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
   };
@@ -74,10 +134,11 @@ export default function DashboardPortal() {
       if (data.url) {
         setCoverImage(data.url);
       } else {
-        alert('Upload failed: ' + data.error);
+        alert(data.error || 'Failed to upload image');
       }
     } catch (e) {
-      alert('Error uploading image');
+      console.error(e);
+      alert('Failed to upload image');
     } finally {
       setUploadingImage(false);
     }
@@ -85,7 +146,7 @@ export default function DashboardPortal() {
 
   const handleSavePost = async () => {
     if (!title || !slug || !content) {
-      alert('Title, slug, and content are required.');
+      alert('Title, slug, and content are required');
       return;
     }
 
@@ -97,238 +158,321 @@ export default function DashboardPortal() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, slug, content, cover_image: coverImage, author, category }),
+        body: JSON.stringify({ title, slug, content, cover_image: coverImage, category }),
       });
 
       const data = await res.json();
       if (data.success) {
-        // Reset form and go back to list
+        setView('list');
         setTitle('');
         setSlug('');
+        setCategory('Blog');
         setContent('');
         setCoverImage('');
         setEditingSlug(null);
-        setView('list');
         fetchPosts();
       } else {
-        alert('Save failed: ' + data.error);
+        alert(data.error || 'Failed to save post');
       }
     } catch (e) {
-      alert('Error saving post');
+      alert('An error occurred');
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDeletePost = async (slugToDelete: string) => {
+  const handleDeletePost = async (postSlug: string) => {
     if (!confirm('Are you sure you want to delete this post?')) return;
-
     try {
-      const res = await fetch(`/api/posts/${slugToDelete}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(`/api/posts/${postSlug}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         fetchPosts();
+      } else {
+        alert(data.error || 'Failed to delete');
       }
     } catch (e) {
-      alert('Error deleting post');
+      alert('An error occurred');
     }
   };
 
-  const handleEditPost = (post: any) => {
-    setEditingSlug(post.slug);
-    setTitle(post.title);
-    setSlug(post.slug);
-    setContent(post.content);
-    setCoverImage(post.cover_image || '');
-    setView('editor');
+  // -------------------------------------------------------------
+  // USER MANAGEMENT LOGIC
+  // -------------------------------------------------------------
+  const handleCreateUser = async () => {
+    if (!newUsername || !newPassword || !newDisplayName) return alert("Fill all fields");
+    try {
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: newUsername, password: newPassword, display_name: newDisplayName, role: newRole })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setNewUsername('');
+        setNewPassword('');
+        setNewDisplayName('');
+        fetchUsers();
+      } else alert(data.error);
+    } catch (e) { alert("Error"); }
   };
 
+  const handleDeleteUser = async (id: string) => {
+    if (!confirm('Delete user?')) return;
+    await fetch(`/api/users?id=${id}`, { method: 'DELETE' });
+    fetchUsers();
+  };
+
+  // -------------------------------------------------------------
+  // PROFILE LOGIC
+  // -------------------------------------------------------------
+  const handleSaveProfile = async () => {
+    try {
+      const res = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bio, social_links: socialLinks, display_name: profileDisplayName })
+      });
+      if (res.ok) alert("Profile updated!");
+    } catch (e) { alert("Error"); }
+  };
+
+  if (loading || !user) {
+    return <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)] text-[var(--color-text-muted)]">Loading...</div>;
+  }
+
   return (
-    <div className="min-h-screen bg-[var(--color-bg)]">
-      {/* Top Navbar */}
-      <nav className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4 flex items-center justify-between sticky top-0 z-50">
-        <h1 className="text-xl font-bold text-[var(--color-text-primary)]">FlowDesk CMS</h1>
-        <div className="flex gap-4">
-          <button
-            onClick={() => {
-              setView(view === 'list' ? 'editor' : 'list');
-              if (view === 'list') {
-                setTitle('');
-                setSlug('');
-                setAuthor('');
-                setCategory('Blog');
-                setContent('');
-                setCoverImage('');
-                setEditingSlug(null);
-              }
-            }}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition"
-          >
-            {view === 'list' ? (
-              <><Plus className="w-4 h-4" /> New Post</>
-            ) : (
-              'Cancel'
-            )}
+    <div className="min-h-screen flex bg-[var(--color-bg)]">
+      
+      {/* SIDEBAR */}
+      <aside className="w-64 border-r border-[var(--color-border)] bg-[var(--color-surface)] flex flex-col hidden md:flex">
+        <div className="p-6">
+          <div className="flex items-center gap-2 text-xl font-black text-[var(--color-text-primary)]">
+            <div className="w-8 h-8 bg-gradient-to-tr from-[var(--color-primary)] to-blue-500 rounded-lg flex items-center justify-center text-white">FD</div>
+            FlowDesk
+          </div>
+          <div className="mt-2 text-xs text-[var(--color-text-muted)]">Logged in as <span className="font-semibold text-[var(--color-primary)]">{user.display_name}</span></div>
+        </div>
+
+        <nav className="flex-1 px-4 space-y-1">
+          <button onClick={() => { setActiveMenu('overview'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'overview' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+            <LayoutDashboard className="w-4 h-4" /> Overview
           </button>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-lg font-medium text-sm hover:text-[var(--color-text-primary)] transition"
-          >
+          <button onClick={() => { setActiveMenu('posts'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'posts' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+            <FileText className="w-4 h-4" /> Posts
+          </button>
+          <button onClick={() => setActiveMenu('profile')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'profile' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+            <UserCircle className="w-4 h-4" /> My Profile
+          </button>
+          
+          {user.role === 'SUPER_ADMIN' && (
+            <button onClick={() => setActiveMenu('users')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'users' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <Users className="w-4 h-4" /> Users
+            </button>
+          )}
+        </nav>
+
+        <div className="p-4">
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-lg font-medium text-sm hover:text-[var(--color-text-primary)] transition">
             <LogOut className="w-4 h-4" /> Logout
           </button>
         </div>
-      </nav>
+      </aside>
 
-      <main className="max-w-5xl mx-auto px-6 py-12">
-        {view === 'list' ? (
-          // POST LIST VIEW
-          <div>
-            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-8">Published Posts</h2>
-            {loading ? (
-              <p className="text-[var(--color-text-muted)]">Loading posts...</p>
-            ) : posts.length === 0 ? (
-              <div className="text-center py-24 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl border-dashed">
-                <p className="text-[var(--color-text-muted)]">No posts found. Create your first update!</p>
+      {/* MAIN CONTENT */}
+      <main className="flex-1 overflow-y-auto">
+        
+        {activeMenu === 'overview' && (
+          <div className="p-10 max-w-5xl mx-auto">
+            <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">Dashboard Overview</h1>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl">
+                <p className="text-[var(--color-text-secondary)] text-sm font-medium">Total Posts</p>
+                <p className="text-4xl font-black text-[var(--color-text-primary)] mt-2">{posts.length}</p>
               </div>
-            ) : (
-              <div className="grid gap-4">
-                {posts.map((post) => (
-                  <div key={post.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-border-hover)] transition-colors">
-                    <div className="flex items-center gap-4">
-                      {post.cover_image && (
-                        <div className="relative w-16 h-12 rounded overflow-hidden">
-                          <Image src={post.cover_image} alt="" fill className="object-cover" />
-                        </div>
-                      )}
-                      <div>
-                        <h3 className="font-semibold text-[var(--color-text-primary)]">{post.title}</h3>
-                        <p className="text-xs text-[var(--color-text-muted)]">
-                          {format(new Date(post.created_at), 'MMM d, yyyy HH:mm')} &middot; /{post.slug} {post.author ? `· By ${post.author}` : ''}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <a href={`/en/blog/${post.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
-                        <Eye className="w-4 h-4" />
-                      </a>
-                      <button onClick={() => {
-                        setEditingSlug(post.slug);
-                        setTitle(post.title);
-                        setSlug(post.slug);
-                        setAuthor(post.author || '');
-                        setCategory(post.category || 'Blog');
-                        setContent(post.content);
-                        setCoverImage(post.cover_image || '');
-                        setView('editor');
-                      }} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                      <button onClick={() => handleDeletePost(post.slug)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Delete">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
+              <div className="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl">
+                <p className="text-[var(--color-text-secondary)] text-sm font-medium">Your Role</p>
+                <p className="text-xl font-bold text-[var(--color-primary)] mt-2">{user.role}</p>
               </div>
-            )}
+            </div>
           </div>
-        ) : (
-          // EDITOR VIEW
-          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-6">Create New Post</h2>
+        )}
+
+        {activeMenu === 'posts' && view === 'list' && (
+          <div className="p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Posts</h1>
+              <button onClick={() => {
+                setTitle(''); setSlug(''); setCategory('Blog'); setContent(''); setCoverImage(''); setEditingSlug(null); setView('editor');
+              }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
+                <Plus className="w-4 h-4" /> New Post
+              </button>
+            </div>
             
-            <div className="space-y-6">
-              {/* Title & Slug */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">Post Title</label>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={handleTitleChange}
-                    placeholder="e.g., FlowDesk v1.7 is Here"
-                    className="w-full px-4 py-2 rounded-lg bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">URL Slug</label>
-                  <div className="flex">
-                    <span className="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-muted)] sm:text-sm">
-                      flowdesk.web.id/en/blog/
-                    </span>
-                    <input
-                      type="text"
-                      value={slug}
-                      onChange={(e) => setSlug(e.target.value)}
-                      className="flex-1 min-w-0 block w-full px-4 py-2 rounded-none rounded-r-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition"
-                    />
+            <div className="grid gap-4">
+              {posts.map((post) => (
+                <div key={post.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
+                  <div className="flex items-center gap-4">
+                    {post.cover_image && (
+                      <div className="relative w-16 h-12 rounded overflow-hidden">
+                        <Image src={post.cover_image} alt="" fill className="object-cover" />
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-semibold text-[var(--color-text-primary)]">{post.title}</h3>
+                      <p className="text-xs text-[var(--color-text-muted)]">
+                        {format(new Date(post.created_at), 'MMM d, yyyy HH:mm')} &middot; By {post.author}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <a href={`/id/blog/${post.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
+                      <Eye className="w-4 h-4" />
+                    </a>
+                    {(user.role === 'SUPER_ADMIN' || user.display_name === post.author) && (
+                      <>
+                        <button onClick={() => {
+                          setEditingSlug(post.slug);
+                          setTitle(post.title);
+                          setSlug(post.slug);
+                          setCategory(post.category || 'Blog');
+                          setContent(post.content);
+                          setCoverImage(post.cover_image || '');
+                          setView('editor');
+                        }} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => handleDeletePost(post.slug)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Delete">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+        )}
 
+        {activeMenu === 'posts' && view === 'editor' && (
+          <div className="p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{editingSlug ? 'Edit Post' : 'New Post'}</h1>
+              <button onClick={() => setView('list')} className="px-4 py-2 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-lg font-medium text-sm hover:text-[var(--color-text-primary)] transition">
+                Cancel
+              </button>
+            </div>
+            
+            <div className="space-y-6 bg-[var(--color-surface)] p-8 rounded-2xl border border-[var(--color-border)]">
               <div>
-                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Author Name</label>
-                <input
-                  type="text"
-                  value={author}
-                  onChange={(e) => setAuthor(e.target.value)}
-                  placeholder="e.g. John Doe"
-                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition"
-                />
-                <p className="text-xs text-[var(--color-text-muted)] mt-1.5">Leave blank to use default 'FlowDesk Team'</p>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title</label>
+                <input type="text" value={title} onChange={handleTitleChange} placeholder="Epic product update..." className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Category</label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition"
-                >
-                  <option value="Blog">Blog</option>
-                  <option value="Updates">Updates</option>
-                  <option value="Engineering">Engineering</option>
-                  <option value="Guides">Guides</option>
-                  <option value="Community">Community</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Slug</label>
+                  <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Category</label>
+                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition">
+                    <option value="Blog">Blog</option>
+                    <option value="Updates">Updates</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Guides">Guides</option>
+                    <option value="Community">Community</option>
+                  </select>
+                </div>
               </div>
 
-              {/* Cover Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">Cover Image</label>
                 <div className="flex items-center gap-4">
-                  <label className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 border-2 border-dashed border-[var(--color-border)] rounded-lg hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)]/5 transition text-[var(--color-text-muted)] hover:text-[var(--color-primary)]">
-                    <UploadCloud className="w-5 h-5" />
-                    <span className="text-sm font-medium">{uploadingImage ? 'Uploading...' : 'Upload Image'}</span>
-                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
+                  <label className="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-surface-raised)] border border-[var(--color-border)] hover:border-[var(--color-primary)] text-[var(--color-text-primary)] rounded-lg font-medium text-sm transition group">
+                    <UploadCloud className="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)] transition" />
+                    {uploadingImage ? 'Uploading...' : 'Upload Image'}
+                    <input type="file" accept="image/png, image/jpeg, image/webp" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
                   </label>
-                  {coverImage && (
-                    <div className="relative h-12 w-24 rounded overflow-hidden border border-[var(--color-border)]">
-                      <Image src={coverImage} alt="Cover Preview" fill className="object-cover" />
-                    </div>
-                  )}
+                  {coverImage && <div className="text-sm text-green-500 flex items-center gap-1">✓ Uploaded</div>}
                 </div>
               </div>
 
-              {/* Markdown Content */}
-              <div className="mt-8">
-                <MarkdownEditor value={content} onChange={setContent} />
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Content (Markdown)</label>
+                <div className="border border-[var(--color-border)] rounded-xl overflow-hidden bg-[var(--color-bg)]">
+                  <MarkdownEditor value={content} onChange={setContent} />
+                </div>
               </div>
 
-              <div className="pt-4 border-t border-[var(--color-border)] flex justify-end">
-                <button
-                  onClick={handleSavePost}
-                  disabled={saving || !title || !content}
-                  className="px-6 py-2.5 bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/90 text-white rounded-lg font-medium transition disabled:opacity-50"
-                >
-                  {saving ? 'Publishing...' : 'Publish Post'}
+              <div className="pt-4 flex justify-end">
+                <button onClick={handleSavePost} disabled={saving} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition disabled:opacity-50">
+                  {saving ? 'Saving...' : 'Publish Post'}
                 </button>
               </div>
             </div>
           </div>
         )}
+
+        {activeMenu === 'profile' && (
+          <div className="p-10 max-w-3xl mx-auto">
+            <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">My Profile</h1>
+            <div className="space-y-6 bg-[var(--color-surface)] p-8 rounded-2xl border border-[var(--color-border)]">
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Display Name</label>
+                <input type="text" value={profileDisplayName} onChange={(e) => setProfileDisplayName(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Bio</label>
+                <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={4} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="Short description about yourself..." />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Social Link (e.g. Twitter/X)</label>
+                <input type="text" value={socialLinks} onChange={(e) => setSocialLinks(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="https://x.com/username" />
+              </div>
+              <button onClick={handleSaveProfile} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition">
+                Save Profile
+              </button>
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'users' && user.role === 'SUPER_ADMIN' && (
+          <div className="p-10 max-w-5xl mx-auto">
+            <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">User Management</h1>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-[var(--color-surface)] p-6 rounded-2xl border border-[var(--color-border)]">
+                <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-4">Add User</h2>
+                <div className="space-y-4">
+                  <input type="text" placeholder="Username" value={newUsername} onChange={(e)=>setNewUsername(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-white outline-none" />
+                  <input type="password" placeholder="Password" value={newPassword} onChange={(e)=>setNewPassword(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-white outline-none" />
+                  <input type="text" placeholder="Display Name" value={newDisplayName} onChange={(e)=>setNewDisplayName(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-white outline-none" />
+                  <select value={newRole} onChange={(e)=>setNewRole(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-white outline-none">
+                    <option value="AUTHOR">Author</option>
+                    <option value="SUPER_ADMIN">Super Admin</option>
+                  </select>
+                  <button onClick={handleCreateUser} className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-bold">Create User</button>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-4">Existing Users</h2>
+                {allUsers.map(u => (
+                  <div key={u.id} className="flex justify-between items-center p-4 bg-[var(--color-surface)] rounded-xl border border-[var(--color-border)]">
+                    <div>
+                      <p className="font-bold text-white">{u.display_name} <span className="text-xs text-purple-400">({u.role})</span></p>
+                      <p className="text-sm text-[var(--color-text-muted)]">@{u.username}</p>
+                    </div>
+                    {u.id !== user.username && (
+                      <button onClick={() => handleDeleteUser(u.id)} className="text-red-500 p-2 hover:bg-red-500/10 rounded-lg"><Trash2 className="w-4 h-4"/></button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
     </div>
   );

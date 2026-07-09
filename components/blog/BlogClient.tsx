@@ -100,17 +100,35 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
                   </p>
                   <div className="flex items-center justify-between mt-auto pt-8 border-t border-[var(--color-border-subtle)]">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-inner">
-                        {featuredPost.author ? featuredPost.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-[var(--color-text-primary)]">{featuredPost.author || 'FlowDesk Team'}</p>
-                        <div className="flex items-center text-xs text-[var(--color-text-muted)] mt-0.5">
-                          <time dateTime={featuredPost.created_at}>{format(new Date(featuredPost.created_at), 'MMM d, yyyy')}</time>
-                          <span className="mx-1.5">&middot;</span>
-                          <span>{getReadingTime(featuredPost.content)} min read</span>
+                      {featuredPost.author_username ? (
+                        <Link href={`/${lang}/author/${featuredPost.author_username}`} onClick={(e) => e.stopPropagation()} className="group/author flex items-center gap-3 hover:opacity-80 transition">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-inner group-hover/author:shadow-lg transition">
+                            {featuredPost.author ? featuredPost.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-[var(--color-text-primary)] group-hover/author:text-[var(--color-primary)] transition">{featuredPost.author || 'FlowDesk Team'}</p>
+                            <div className="flex items-center text-xs text-[var(--color-text-muted)] mt-0.5">
+                              <time dateTime={featuredPost.created_at}>{format(new Date(featuredPost.created_at), 'MMM d, yyyy')}</time>
+                              <span className="mx-1.5">&middot;</span>
+                              <span>{getReadingTime(featuredPost.content)} min read</span>
+                            </div>
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--color-primary)] to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-inner">
+                            {featuredPost.author ? featuredPost.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-[var(--color-text-primary)]">{featuredPost.author || 'FlowDesk Team'}</p>
+                            <div className="flex items-center text-xs text-[var(--color-text-muted)] mt-0.5">
+                              <time dateTime={featuredPost.created_at}>{format(new Date(featuredPost.created_at), 'MMM d, yyyy')}</time>
+                              <span className="mx-1.5">&middot;</span>
+                              <span>{getReadingTime(featuredPost.content)} min read</span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -143,8 +161,16 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
                           {post.author ? post.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
                         </div>
                         <div className="flex flex-col">
-                          <p className="text-xs font-medium text-[var(--color-text-primary)]">{post.author || 'FlowDesk Team'}</p>
-                          <time className="text-[11px] text-[var(--color-text-muted)]">{format(new Date(post.created_at), 'MMM d, yyyy')}</time>
+                          {post.author_username ? (
+                            <Link href={`/${lang}/author/${post.author_username}`} onClick={(e) => e.stopPropagation()} className="font-semibold text-sm text-[var(--color-text-primary)] hover:text-[var(--color-primary)] transition">
+                              {post.author || 'FlowDesk Team'}
+                            </Link>
+                          ) : (
+                            <span className="font-semibold text-sm text-[var(--color-text-primary)]">
+                              {post.author || 'FlowDesk Team'}
+                            </span>
+                          )}
+                          <time dateTime={post.created_at} className="text-xs font-medium text-[var(--color-text-muted)] mt-0.5">{format(new Date(post.created_at), 'MMM d, yyyy')}</time>
                         </div>
                       </div>
                       <div className="w-8 h-8 rounded-full bg-[var(--color-surface-raised)] group-hover:bg-[var(--color-primary)] group-hover:text-white flex items-center justify-center text-[var(--color-text-muted)] transition-colors">
