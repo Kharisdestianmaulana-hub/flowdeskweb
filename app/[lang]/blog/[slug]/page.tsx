@@ -55,12 +55,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
 
+  // Fix literal newlines from database
+  const parsedContent = post.content.replace(/\\n/g, '\n');
+
   // Reading time
-  const wordCount = post.content.split(/\s+/).length;
+  const wordCount = parsedContent.split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
   // Extract ToC
-  const headings = post.content.match(/^(##|###) (.*$)/gim) || [];
+  const headings = parsedContent.match(/^(##|###) (.*$)/gim) || [];
   const toc = headings.map((h: string) => ({
     level: h.startsWith('###') ? 3 : 2,
     text: h.replace(/^(##|###) /, '').trim(),
@@ -131,7 +134,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
                 h3: ({node, ...props}) => <h3 id={generateId(props.children)} {...props} />
               }}
             >
-              {post.content}
+              {parsedContent}
             </ReactMarkdown>
           </div>
 
