@@ -18,7 +18,7 @@ async function run() {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ sql: "ALTER TABLE posts ADD COLUMN author TEXT;", params: [] })
+    body: JSON.stringify({ sql: "ALTER TABLE posts ADD COLUMN category TEXT DEFAULT 'Blog';", params: [] })
   });
   const data = await res.json();
   console.log(JSON.stringify(data, null, 2));

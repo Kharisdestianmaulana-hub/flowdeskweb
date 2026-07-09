@@ -10,7 +10,7 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const categories = ['All', 'Product', 'Engineering', 'Design', 'Community'];
+  const categories = ['All', 'Blog', 'Updates', 'Engineering', 'Guides', 'Community'];
 
   // Filter posts
   const filteredPosts = posts.filter(post => {
@@ -19,11 +19,7 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
     
     let matchesCategory = true;
     if (activeCategory !== 'All') {
-      const text = (post.title + ' ' + post.content).toLowerCase();
-      if (activeCategory === 'Product') matchesCategory = text.includes('flowdesk') || text.includes('update') || text.includes('fitur') || text.includes('product');
-      if (activeCategory === 'Engineering') matchesCategory = text.includes('code') || text.includes('dev') || text.includes('tech') || text.includes('build');
-      if (activeCategory === 'Design') matchesCategory = text.includes('design') || text.includes('ui') || text.includes('ux') || text.includes('desain');
-      if (activeCategory === 'Community') matchesCategory = text.includes('community') || text.includes('komunitas') || text.includes('team') || text.includes('tim');
+      matchesCategory = post.category === activeCategory;
     }
 
     return matchesSearch && matchesCategory;

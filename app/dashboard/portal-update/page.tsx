@@ -18,6 +18,7 @@ export default function DashboardPortal() {
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [author, setAuthor] = useState('');
+  const [category, setCategory] = useState('Blog');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -96,7 +97,7 @@ export default function DashboardPortal() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, slug, content, cover_image: coverImage, author }),
+        body: JSON.stringify({ title, slug, content, cover_image: coverImage, author, category }),
       });
 
       const data = await res.json();
@@ -157,6 +158,7 @@ export default function DashboardPortal() {
                 setTitle('');
                 setSlug('');
                 setAuthor('');
+                setCategory('Blog');
                 setContent('');
                 setCoverImage('');
                 setEditingSlug(null);
@@ -216,6 +218,7 @@ export default function DashboardPortal() {
                         setTitle(post.title);
                         setSlug(post.slug);
                         setAuthor(post.author || '');
+                        setCategory(post.category || 'Blog');
                         setContent(post.content);
                         setCoverImage(post.cover_image || '');
                         setView('editor');
@@ -275,6 +278,21 @@ export default function DashboardPortal() {
                   className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition"
                 />
                 <p className="text-xs text-[var(--color-text-muted)] mt-1.5">Leave blank to use default 'FlowDesk Team'</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Category</label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition"
+                >
+                  <option value="Blog">Blog</option>
+                  <option value="Updates">Updates</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Guides">Guides</option>
+                  <option value="Community">Community</option>
+                </select>
               </div>
 
               {/* Cover Image Upload */}
