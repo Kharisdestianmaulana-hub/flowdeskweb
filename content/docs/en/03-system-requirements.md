@@ -5,7 +5,7 @@ category: "Introduction"
 ---
 # System Requirements
 
-FlowDesk is built with Tauri and Rust, making it extremely lightweight and efficient compared to standard Electron-based applications.
+FlowDesk is built with Avalonia UI and .NET 10, making it extremely lightweight and efficient compared to standard Electron or web-based applications.
 
 ## Minimum Requirements
 

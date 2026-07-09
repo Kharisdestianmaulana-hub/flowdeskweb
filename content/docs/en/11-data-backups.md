@@ -9,6 +9,6 @@ Since FlowDesk doesn't sync your data to third-party clouds, the responsibility 
 
 ## Recommended Backup Methods
 1. **Cloud Sync Folders:** Save your Workspace inside your iCloud, Google Drive, or Dropbox folder. The sync client will automatically back it up to your own cloud!
-2. **Git Version Control:** For developers, you can initialize a Git repository (`git init`) right inside the Workspace folder and commit/push to your private GitHub/GitLab.
+2. **Automated Backups:** For developers, you can rely on FlowDesk's built-in automatic daily database backups stored in `FlowDeskData/backups/auto` to your private GitHub/GitLab.
 
 Never worry about data leaks from our end, as we never touch your local files.

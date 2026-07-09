@@ -5,7 +5,7 @@ category: "Pengenalan"
 ---
 # Spesifikasi Sistem
 
-FlowDesk dirancang dengan teknologi Tauri dan Rust, membuatnya sangat ringan dan efisien dibandingkan aplikasi berbasis Electron biasa.
+FlowDesk dirancang dengan teknologi Avalonia UI dan .NET 10, membuatnya sangat ringan dan efisien dibandingkan aplikasi berbasis web atau Electron.
 
 ## Syarat Minimum
 

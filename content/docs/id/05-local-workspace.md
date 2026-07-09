@@ -10,8 +10,8 @@ Saat Anda pertama kali membuka FlowDesk, Anda akan diminta untuk menentukan **Ru
 ## Apa itu Ruang Kerja?
 Ruang kerja hanyalah sebuah folder biasa di dalam komputer Anda (misalnya: `Documents/MyFlowDesk`). 
 
-FlowDesk akan menyimpan semua proyek, tugas, dan catatan Anda ke dalam folder ini dalam bentuk teks biasa.
-- Proyek disimpan sebagai file JSON.
+FlowDesk akan menyimpan semua proyek, tugas, dan catatan Anda ke dalam folder ini ke dalam database SQLite dan folder lokal.
+- Data proyek disimpan aman dalam `FlowDeskData/flowdesk.db`.
 - Catatan disimpan sebagai file Markdown (`.md`).
 
 ## Multi-Workspace

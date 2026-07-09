@@ -6,7 +6,7 @@ category: "Support"
 # Frequently Asked Questions (FAQ)
 
 **Q: Can I collaborate in real-time with my team?**
-A: Currently, FlowDesk is strictly focused on the solo (single-player) experience. We are exploring Peer-to-Peer (P2P) sync features for team collaboration in the future.
+A: Currently, FlowDesk is capable of real-time Local Network Collaboration. We use UDP Broadcast to discover peers and SignalR to sync task comments and changes instantly across your LAN.
 
 **Q: Will FlowDesk be available on iOS/Android?**
 A: We are monitoring the adoption of Tauri on mobile. For now, we are entirely focused on perfecting the Desktop experience.

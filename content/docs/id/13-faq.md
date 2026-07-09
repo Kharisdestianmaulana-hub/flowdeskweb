@@ -6,7 +6,7 @@ category: "Dukungan"
 # Pertanyaan yang Sering Diajukan (FAQ)
 
 **T: Bisakah saya berkolaborasi secara real-time dengan tim saya?**
-J: Untuk saat ini, FlowDesk berfokus murni pada pengalaman solo (single-player). Kami sedang merancang fitur sinkronisasi *Peer-to-Peer* (P2P) untuk kolaborasi tim di masa mendatang.
+J: Untuk saat ini, FlowDesk mendukung Kolaborasi Jaringan Lokal (LAN) secara real-time! Kami menggunakan UDP Broadcast untuk penemuan otomatis, dan SignalR untuk menyinkronkan komentar tugas secara instan tanpa cloud.
 
 **T: Apakah FlowDesk akan tersedia di iOS/Android?**
 J: Kami sedang memantau adopsi Tauri di *mobile*. Saat ini kami sepenuhnya berfokus menyempurnakan pengalaman di *Desktop*.
