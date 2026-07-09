@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
-import { Search, ArrowRight, Clock } from 'lucide-react';
+import { Search, ArrowRight, Clock, Eye } from 'lucide-react';
 
 export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: string, dict: any }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -111,6 +111,8 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
                               <time dateTime={featuredPost.created_at}>{format(new Date(featuredPost.created_at), 'MMM d, yyyy')}</time>
                               <span className="mx-1.5">&middot;</span>
                               <span>{getReadingTime(featuredPost.content)} min read</span>
+                              <span className="mx-1.5">&middot;</span>
+                              <span className="flex items-center gap-1"><Eye className="w-3 h-3"/>{featuredPost.views || 0} views</span>
                             </div>
                           </div>
                         </Link>
@@ -125,6 +127,8 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
                               <time dateTime={featuredPost.created_at}>{format(new Date(featuredPost.created_at), 'MMM d, yyyy')}</time>
                               <span className="mx-1.5">&middot;</span>
                               <span>{getReadingTime(featuredPost.content)} min read</span>
+                              <span className="mx-1.5">&middot;</span>
+                              <span className="flex items-center gap-1"><Eye className="w-3 h-3"/>{featuredPost.views || 0} views</span>
                             </div>
                           </div>
                         </div>
@@ -170,7 +174,11 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
                               {post.author || 'FlowDesk Team'}
                             </span>
                           )}
-                          <time dateTime={post.created_at} className="text-xs font-medium text-[var(--color-text-muted)] mt-0.5">{format(new Date(post.created_at), 'MMM d, yyyy')}</time>
+                          <div className="flex items-center text-xs font-medium text-[var(--color-text-muted)] mt-0.5">
+                            <time dateTime={post.created_at}>{format(new Date(post.created_at), 'MMM d, yyyy')}</time>
+                            <span className="mx-1.5">&middot;</span>
+                            <span className="flex items-center gap-1"><Eye className="w-3 h-3"/>{post.views || 0}</span>
+                          </div>
                         </div>
                       </div>
                       <div className="w-8 h-8 rounded-full bg-[var(--color-surface-raised)] group-hover:bg-[var(--color-primary)] group-hover:text-white flex items-center justify-center text-[var(--color-text-muted)] transition-colors">

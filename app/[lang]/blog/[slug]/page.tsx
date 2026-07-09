@@ -8,9 +8,10 @@ import { getDictionary } from '@/lib/dictionary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getRepoInfo } from '@/lib/github';
-import { ArrowLeft, Clock } from 'lucide-react';
+import { ArrowLeft, Clock, Eye } from 'lucide-react';
 import ProgressBar from '@/components/blog/ProgressBar';
 import ShareButtons from '@/components/blog/ShareButtons';
+import ViewTracker from '@/components/blog/ViewTracker';
 
 import { queryD1 } from '@/lib/db';
 
@@ -138,7 +139,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
               <Clock className="w-4 h-4" />
               <span>{readingTime} min read</span>
             </div>
+            <div className="flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              <span>{post.views || 0} views</span>
+            </div>
           </div>
+
+          <ViewTracker slug={post.slug} />
 
           {post.cover_image && (
             <div className="relative w-full aspect-[16/9] mb-12 sm:mb-16 rounded-2xl overflow-hidden border border-[var(--color-border-subtle)] shadow-lg">
