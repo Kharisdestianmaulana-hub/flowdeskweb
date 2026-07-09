@@ -24,18 +24,19 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "FlowDesk — Your clean, offline productivity haven",
-  description: "A local-first desktop workspace for projects, tasks, docs, and files. No cloud. No subscription.",
+  title: "FlowDesk | Offline-First Productivity App & Workspace",
+  description: "The best Notion alternative for offline work. A local-first desktop workspace for projects, tasks, docs, and files. No cloud, no subscription.",
+  keywords: ["offline productivity app", "local-first workspace", "Notion alternative offline", "no cloud productivity software", "offline task manager", "private workspace app"],
   openGraph: {
-    title: "FlowDesk",
-    description: "Local-first desktop productivity. Built with Avalonia UI.",
+    title: "FlowDesk | Offline-First Productivity App & Workspace",
+    description: "The best Notion alternative for offline work. A local-first desktop workspace for projects, tasks, docs, and files. No cloud, no subscription.",
     url: "https://flowdesk.app",
     siteName: "FlowDesk",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FlowDesk — Offline-first productivity",
+    title: "FlowDesk | Offline-First Productivity App",
     description: "Projects, tasks, docs, and files — entirely on your machine.",
   },
   verification: {
