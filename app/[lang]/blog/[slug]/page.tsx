@@ -12,25 +12,14 @@ import { ArrowLeft, Clock } from 'lucide-react';
 import ProgressBar from '@/components/blog/ProgressBar';
 import ShareButtons from '@/components/blog/ShareButtons';
 
-const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
-const dbId = process.env.CLOUDFLARE_DATABASE_ID;
-const token = process.env.CLOUDFLARE_D1_TOKEN;
+import { queryD1 } from '@/lib/db';
 
 async function getPost(slug: string) {
   try {
-    const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${accountId}/d1/database/${dbId}/query`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ sql: 'SELECT * FROM posts WHERE slug = ? LIMIT 1', params: [slug] }),
-      next: { revalidate: 60 }
-    });
-    
-    if (!res.ok) return null;
-    const data = await res.json();
-    const results = data.result[0].results;
+    const results = await queryD1(
+      'SELECT p.*, u.username as author_username FROM posts p LEFT JOIN users u ON p.author = u.display_name WHERE p.slug = ? LIMIT 1',
+      [slug]
+    );
     return results.length > 0 ? results[0] : null;
   } catch (e) {
     console.error('Failed to fetch post', e);
@@ -125,12 +114,21 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
           </h1>
 
           <div className="flex flex-wrap items-center gap-6 text-sm text-[var(--color-text-muted)] mb-10 sm:mb-16">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white font-bold text-xs">
-                {post.author ? post.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
+            {post.author_username ? (
+              <Link href={`/${lang}/author/${post.author_username}`} className="flex items-center gap-3 group hover:opacity-80 transition">
+                <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white font-bold text-xs shadow-inner group-hover:shadow-md transition">
+                  {post.author ? post.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
+                </div>
+                <span className="font-medium text-[var(--color-text-primary)] group-hover:text-[var(--color-primary)] transition">{post.author || 'FlowDesk Team'}</span>
+              </Link>
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white font-bold text-xs">
+                  {post.author ? post.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
+                </div>
+                <span className="font-medium text-[var(--color-text-primary)]">{post.author || 'FlowDesk Team'}</span>
               </div>
-              <span className="font-medium text-[var(--color-text-primary)]">{post.author || 'FlowDesk Team'}</span>
-            </div>
+            )}
             <div className="flex items-center gap-2">
               <time dateTime={post.created_at}>
                 {format(new Date(post.created_at), 'MMMM d, yyyy')}
