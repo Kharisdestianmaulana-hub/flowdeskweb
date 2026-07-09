@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, UploadCloud, Plus, Trash2, Eye } from 'lucide-react';
+import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
@@ -14,6 +14,7 @@ export default function DashboardPortal() {
   const router = useRouter();
 
   // Editor states
+  const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [content, setContent] = useState('');
@@ -88,8 +89,11 @@ export default function DashboardPortal() {
 
     setSaving(true);
     try {
-      const res = await fetch('/api/posts', {
-        method: 'POST',
+      const url = editingSlug ? `/api/posts/${editingSlug}` : '/api/posts';
+      const method = editingSlug ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, slug, content, cover_image: coverImage }),
       });
@@ -101,6 +105,7 @@ export default function DashboardPortal() {
         setSlug('');
         setContent('');
         setCoverImage('');
+        setEditingSlug(null);
         setView('list');
         fetchPosts();
       } else {
@@ -129,6 +134,15 @@ export default function DashboardPortal() {
     }
   };
 
+  const handleEditPost = (post: any) => {
+    setEditingSlug(post.slug);
+    setTitle(post.title);
+    setSlug(post.slug);
+    setContent(post.content);
+    setCoverImage(post.cover_image || '');
+    setView('editor');
+  };
+
   return (
     <div className="min-h-screen bg-[var(--color-bg)]">
       {/* Top Navbar */}
@@ -143,6 +157,7 @@ export default function DashboardPortal() {
                 setSlug('');
                 setContent('');
                 setCoverImage('');
+                setEditingSlug(null);
               }
             }}
             className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition"
@@ -191,10 +206,13 @@ export default function DashboardPortal() {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <a href={`/en/blog/${post.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition">
+                      <a href={`/en/blog/${post.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
                         <Eye className="w-4 h-4" />
                       </a>
-                      <button onClick={() => handleDeletePost(post.slug)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition">
+                      <button onClick={() => handleEditPost(post)} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => handleDeletePost(post.slug)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Delete">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>

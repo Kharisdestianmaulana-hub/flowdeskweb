@@ -64,3 +64,33 @@ export async function DELETE(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+// UPDATE a post by slug
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const session = await getSession();
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const resolvedParams = await params;
+    const { title, slug, content, cover_image } = await request.json();
+
+    if (!title || !slug || !content) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    await queryD1(
+      'UPDATE posts SET title = ?, slug = ?, content = ?, cover_image = ? WHERE slug = ?',
+      [title, slug, content, cover_image || null, resolvedParams.slug]
+    );
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error('Error updating post:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
