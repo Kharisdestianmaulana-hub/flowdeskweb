@@ -22,19 +22,41 @@ function getLocale(request: NextRequest) {
   return defaultLocale;
 }
 
-export function proxy(request: NextRequest) {
-  // Check if there is any supported locale in the pathname
+import { getSession } from './lib/auth';
+
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // --- DASHBOARD AUTH CHECK ---
+  if (pathname.startsWith('/dashboard') && !pathname.startsWith('/dashboard/login')) {
+    const session = await getSession();
+    if (!session) {
+      const loginUrl = new URL('/dashboard/login', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  if (pathname.startsWith('/dashboard/login')) {
+    const session = await getSession();
+    if (session) {
+      const dashboardUrl = new URL('/dashboard/portal-update', request.url);
+      return NextResponse.redirect(dashboardUrl);
+    }
+  }
+  // ----------------------------
+
+  // Check if there is any supported locale in the pathname
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
   if (pathnameHasLocale) return;
 
-  // Check if the path is a static file or api
+  // Check if the path is a static file, api, or dashboard
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
+    pathname.startsWith('/dashboard') ||
     pathname.includes('.')
   ) {
     return;

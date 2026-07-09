@@ -10,7 +10,12 @@
     "license": "License",
     "compare": "Compare",
     "roadmap": "Roadmap",
-    "viewGithub": "View on GitHub"
+    "viewGithub": "View on GitHub",
+    "blog": "Blog"
+  },
+  "blog": {
+    "title": "Updates",
+    "subtitle": "Latest news, product updates, and articles from FlowDesk."
   },
   "hero": {
     "title": "Your clean, offline productivity haven.",

@@ -9,7 +9,12 @@
     "compare": "Perbandingan",
     "roadmap": "Peta Jalan",
     "download": "Unduh",
-    "changelog": "Log Perubahan"
+    "changelog": "Log Perubahan",
+    "blog": "Blog"
+  },
+  "blog": {
+    "title": "Pembaruan",
+    "subtitle": "Berita terbaru, pembaruan produk, dan artikel dari FlowDesk."
   },
   "hero": {
     "title": "Tempat produktivitas luring Anda yang bersih.",

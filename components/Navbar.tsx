@@ -89,6 +89,9 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
           <Link href={`/${currentLang}/download`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
             {dict.download}
           </Link>
+          <Link href={`/${currentLang}/blog`} className="text-[14px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+            {dict.blog || 'Blog'}
+          </Link>
         </div>
 
         {/* Right: Actions */}
