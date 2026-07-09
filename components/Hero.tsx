@@ -9,7 +9,16 @@ import Reveal from './animations/Reveal';
 import { useOs } from '../hooks/useOs';
 import NumberCounter from './animations/NumberCounter';
 
-const SLIDES = ['/screenshot-dark.png', '/screenshot-light.png'];
+const SLIDES = [
+  '/Dashboard_Flowdesk.webp',
+  '/Project_flowdesk.webp',
+  '/Task_Flowdesk.webp',
+  '/Docs_Flowdesk.webp',
+  '/Files_Flowdesk.webp',
+  '/Members_Flowdesk.webp',
+  '/Reqquest_Flowdesk.webp',
+  '/Settings_Flowdesk.webp'
+];
 const INTERVAL_MS = 5000;
 
 interface HeroProps {
