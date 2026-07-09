@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link2, Check } from 'lucide-react';
-import { FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaTwitter, FaInstagram, FaTiktok } from 'react-icons/fa';
 
 export default function ShareButtons({ title }: { title: string }) {
   const [copied, setCopied] = useState(false);
@@ -22,8 +22,16 @@ export default function ShareButtons({ title }: { title: string }) {
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`, '_blank');
   };
 
-  const shareLinkedin = () => {
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+  const shareInstagram = () => {
+    navigator.clipboard.writeText(url);
+    alert('Link copied to clipboard! You can now paste it in Instagram.');
+    window.open('https://instagram.com', '_blank');
+  };
+
+  const shareTiktok = () => {
+    navigator.clipboard.writeText(url);
+    alert('Link copied to clipboard! You can now paste it in TikTok.');
+    window.open('https://tiktok.com', '_blank');
   };
 
   return (
@@ -32,8 +40,11 @@ export default function ShareButtons({ title }: { title: string }) {
       <button onClick={shareTwitter} className="p-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-blue-400 hover:border-blue-400/30 transition-colors" title="Share on Twitter">
         <FaTwitter size={18} />
       </button>
-      <button onClick={shareLinkedin} className="p-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-blue-600 hover:border-blue-600/30 transition-colors" title="Share on LinkedIn">
-        <FaLinkedin size={18} />
+      <button onClick={shareInstagram} className="p-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-pink-500 hover:border-pink-500/30 transition-colors" title="Share on Instagram">
+        <FaInstagram size={18} />
+      </button>
+      <button onClick={shareTiktok} className="p-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-white hover:border-white/30 transition-colors" title="Share on TikTok">
+        <FaTiktok size={18} />
       </button>
       <button onClick={handleCopy} className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors" title="Copy Link">
         {copied ? <Check size={16} className="text-green-500" /> : <Link2 size={16} />}

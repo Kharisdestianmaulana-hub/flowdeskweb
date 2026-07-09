@@ -43,6 +43,40 @@ function generateId(text: any) {
   return String(text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 }
 
+import TableOfContents from '@/components/blog/TableOfContents';
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string, slug: string }> }): Promise<import('next').Metadata> {
+  const resolvedParams = await params;
+  const post = await getPost(resolvedParams.slug);
+  
+  if (!post) {
+    return { title: 'Post Not Found | FlowDesk' };
+  }
+
+  const parsedContent = post.content.replace(/\\n/g, '\n');
+  // Ambil teks pertama yang bukan heading untuk deskripsi
+  const descriptionMatch = parsedContent.match(/^(?!#|>|-|\*).+$/m);
+  const description = descriptionMatch ? descriptionMatch[0].slice(0, 160).trim() + '...' : 'Artikel terbaru dari blog FlowDesk.';
+
+  return {
+    title: `${post.title} | FlowDesk Blog`,
+    description,
+    openGraph: {
+      title: post.title,
+      description,
+      images: post.cover_image ? [post.cover_image] : [],
+      type: 'article',
+      publishedTime: post.created_at,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description,
+      images: post.cover_image ? [post.cover_image] : [],
+    }
+  };
+}
+
 export default async function BlogPostPage({ params }: { params: Promise<{ lang: string, slug: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';
@@ -142,25 +176,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
         </article>
 
         {/* Sticky Table of Contents sidebar for Desktop */}
-        {toc.length > 0 && (
-          <aside className="hidden lg:block w-64 shrink-0 sticky top-32">
-            <h4 className="text-sm font-bold text-[var(--color-text-primary)] uppercase tracking-wider mb-4">
-              On this page
-            </h4>
-            <ul className="space-y-3 text-sm">
-              {toc.map((item: { level: number; text: string; id: string }, i: number) => (
-                <li key={i} className={`${item.level === 3 ? 'ml-4' : ''}`}>
-                  <a 
-                    href={`#${item.id}`} 
-                    className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors line-clamp-2"
-                  >
-                    {item.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        )}
+        <TableOfContents toc={toc} />
 
       </div>
 
