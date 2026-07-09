@@ -127,9 +127,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
           <div className="flex flex-wrap items-center gap-6 text-sm text-[var(--color-text-muted)] mb-10 sm:mb-16">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-white font-bold text-xs">
-                FD
+                {post.author ? post.author.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'FD'}
               </div>
-              <span className="font-medium text-[var(--color-text-primary)]">FlowDesk Team</span>
+              <span className="font-medium text-[var(--color-text-primary)]">{post.author || 'FlowDesk Team'}</span>
             </div>
             <div className="flex items-center gap-2">
               <time dateTime={post.created_at}>

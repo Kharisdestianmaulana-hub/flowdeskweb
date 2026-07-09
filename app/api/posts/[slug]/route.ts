@@ -77,15 +77,15 @@ export async function PUT(
 
   try {
     const resolvedParams = await params;
-    const { title, slug, content, cover_image } = await request.json();
+    const { title, slug, content, cover_image, author } = await request.json();
 
     if (!title || !slug || !content) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     await queryD1(
-      'UPDATE posts SET title = ?, slug = ?, content = ?, cover_image = ? WHERE slug = ?',
-      [title, slug, content, cover_image || null, resolvedParams.slug]
+      'UPDATE posts SET title = ?, slug = ?, content = ?, cover_image = ?, author = ? WHERE slug = ?',
+      [title, slug, content, cover_image || null, author || null, resolvedParams.slug]
     );
 
     return NextResponse.json({ success: true });

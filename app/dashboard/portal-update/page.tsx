@@ -17,6 +17,7 @@ export default function DashboardPortal() {
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
+  const [author, setAuthor] = useState('');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -95,7 +96,7 @@ export default function DashboardPortal() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, slug, content, cover_image: coverImage }),
+        body: JSON.stringify({ title, slug, content, cover_image: coverImage, author }),
       });
 
       const data = await res.json();
@@ -155,6 +156,7 @@ export default function DashboardPortal() {
               if (view === 'list') {
                 setTitle('');
                 setSlug('');
+                setAuthor('');
                 setContent('');
                 setCoverImage('');
                 setEditingSlug(null);
@@ -201,7 +203,7 @@ export default function DashboardPortal() {
                       <div>
                         <h3 className="font-semibold text-[var(--color-text-primary)]">{post.title}</h3>
                         <p className="text-xs text-[var(--color-text-muted)]">
-                          {format(new Date(post.created_at), 'MMM d, yyyy HH:mm')} &middot; /{post.slug}
+                          {format(new Date(post.created_at), 'MMM d, yyyy HH:mm')} &middot; /{post.slug} {post.author ? `· By ${post.author}` : ''}
                         </p>
                       </div>
                     </div>
@@ -209,7 +211,15 @@ export default function DashboardPortal() {
                       <a href={`/en/blog/${post.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
                         <Eye className="w-4 h-4" />
                       </a>
-                      <button onClick={() => handleEditPost(post)} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
+                      <button onClick={() => {
+                        setEditingSlug(post.slug);
+                        setTitle(post.title);
+                        setSlug(post.slug);
+                        setAuthor(post.author || '');
+                        setContent(post.content);
+                        setCoverImage(post.cover_image || '');
+                        setView('editor');
+                      }} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
                         <Pencil className="w-4 h-4" />
                       </button>
                       <button onClick={() => handleDeletePost(post.slug)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Delete">
@@ -240,14 +250,31 @@ export default function DashboardPortal() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">URL Slug (Auto-generated)</label>
-                  <input
-                    type="text"
-                    value={slug}
-                    onChange={(e) => setSlug(e.target.value)}
-                    className="w-full px-4 py-2 rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-muted)] font-mono text-sm"
-                  />
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">URL Slug</label>
+                  <div className="flex">
+                    <span className="inline-flex items-center px-4 rounded-l-lg border border-r-0 border-[var(--color-border)] bg-[var(--color-surface-raised)] text-[var(--color-text-muted)] sm:text-sm">
+                      flowdesk.web.id/en/blog/
+                    </span>
+                    <input
+                      type="text"
+                      value={slug}
+                      onChange={(e) => setSlug(e.target.value)}
+                      className="flex-1 min-w-0 block w-full px-4 py-2 rounded-none rounded-r-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition"
+                    />
+                  </div>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Author Name</label>
+                <input
+                  type="text"
+                  value={author}
+                  onChange={(e) => setAuthor(e.target.value)}
+                  placeholder="e.g. John Doe"
+                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] placeholder-[var(--color-text-muted)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none transition"
+                />
+                <p className="text-xs text-[var(--color-text-muted)] mt-1.5">Leave blank to use default 'FlowDesk Team'</p>
               </div>
 
               {/* Cover Image Upload */}
