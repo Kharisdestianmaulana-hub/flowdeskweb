@@ -36,7 +36,7 @@ export default function DashboardPortal() {
 
   // Profile State
   const [bio, setBio] = useState('');
-  const [socialLinks, setSocialLinks] = useState('');
+  const [socialLinks, setSocialLinks] = useState({ x: '', instagram: '', tiktok: '', github: '', linkedin: '' });
   const [profileDisplayName, setProfileDisplayName] = useState('');
 
   useEffect(() => {
@@ -85,8 +85,15 @@ export default function DashboardPortal() {
       const data = await res.json();
       if (res.ok) {
         setBio(data.bio || '');
-        setSocialLinks(data.social_links || '');
         setProfileDisplayName(data.display_name || '');
+        if (data.social_links) {
+          try {
+            const parsed = JSON.parse(data.social_links);
+            setSocialLinks(prev => ({ ...prev, ...parsed }));
+          } catch {
+            setSocialLinks(prev => ({ ...prev, x: data.social_links }));
+          }
+        }
       }
     } catch (e) {}
   };
@@ -231,7 +238,7 @@ export default function DashboardPortal() {
       const res = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bio, social_links: socialLinks, display_name: profileDisplayName })
+        body: JSON.stringify({ bio, social_links: JSON.stringify(socialLinks), display_name: profileDisplayName })
       });
       if (res.ok) alert("Profile updated!");
     } catch (e) { alert("Error"); }
@@ -426,9 +433,30 @@ export default function DashboardPortal() {
                 <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Bio</label>
                 <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={4} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="Short description about yourself..." />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Social Link (e.g. Twitter/X)</label>
-                <input type="text" value={socialLinks} onChange={(e) => setSocialLinks(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="https://x.com/username" />
+              <div className="pt-4 border-t border-[var(--color-border)]">
+                <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-4">Social Links</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">X / Twitter</label>
+                    <input type="text" value={socialLinks.x} onChange={(e) => setSocialLinks({...socialLinks, x: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="https://x.com/username" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Instagram</label>
+                    <input type="text" value={socialLinks.instagram} onChange={(e) => setSocialLinks({...socialLinks, instagram: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="https://instagram.com/username" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">TikTok</label>
+                    <input type="text" value={socialLinks.tiktok} onChange={(e) => setSocialLinks({...socialLinks, tiktok: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="https://tiktok.com/@username" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">LinkedIn</label>
+                    <input type="text" value={socialLinks.linkedin} onChange={(e) => setSocialLinks({...socialLinks, linkedin: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="https://linkedin.com/in/username" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">GitHub</label>
+                    <input type="text" value={socialLinks.github} onChange={(e) => setSocialLinks({...socialLinks, github: e.target.value})} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" placeholder="https://github.com/username" />
+                  </div>
+                </div>
               </div>
               <button onClick={handleSaveProfile} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition">
                 Save Profile

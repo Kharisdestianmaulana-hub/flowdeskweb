@@ -63,11 +63,27 @@ export default async function AuthorPage({ params }: { params: Promise<{ lang: s
             <p className="text-lg text-[var(--color-text-secondary)] leading-relaxed max-w-3xl mb-6">
               {author.bio || (lang === 'id' ? 'Penulis ini belum menambahkan deskripsi.' : 'This author hasn\'t added a bio yet.')}
             </p>
-            {author.social_links && (
-              <a href={author.social_links.startsWith('http') ? author.social_links : `https://${author.social_links}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:underline bg-[var(--color-primary)]/10 px-4 py-2 rounded-full transition">
-                <LinkIcon className="w-4 h-4" /> Connect with Author
-              </a>
-            )}
+            {(() => {
+              if (!author.social_links) return null;
+              try {
+                const links = JSON.parse(author.social_links);
+                return (
+                  <div className="flex flex-wrap items-center gap-3 mt-4">
+                    {links.x && <a href={links.x.startsWith('http') ? links.x : `https://${links.x}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:underline bg-[var(--color-primary)]/10 px-4 py-2 rounded-full transition">X / Twitter</a>}
+                    {links.instagram && <a href={links.instagram.startsWith('http') ? links.instagram : `https://${links.instagram}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:underline bg-[var(--color-primary)]/10 px-4 py-2 rounded-full transition">Instagram</a>}
+                    {links.tiktok && <a href={links.tiktok.startsWith('http') ? links.tiktok : `https://${links.tiktok}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:underline bg-[var(--color-primary)]/10 px-4 py-2 rounded-full transition">TikTok</a>}
+                    {links.linkedin && <a href={links.linkedin.startsWith('http') ? links.linkedin : `https://${links.linkedin}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:underline bg-[var(--color-primary)]/10 px-4 py-2 rounded-full transition">LinkedIn</a>}
+                    {links.github && <a href={links.github.startsWith('http') ? links.github : `https://${links.github}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:underline bg-[var(--color-primary)]/10 px-4 py-2 rounded-full transition">GitHub</a>}
+                  </div>
+                );
+              } catch {
+                return (
+                  <a href={author.social_links.startsWith('http') ? author.social_links : `https://${author.social_links}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] hover:underline bg-[var(--color-primary)]/10 px-4 py-2 rounded-full transition mt-4">
+                    <LinkIcon className="w-4 h-4" /> Connect with Author
+                  </a>
+                );
+              }
+            })()}
           </div>
         </div>
 
