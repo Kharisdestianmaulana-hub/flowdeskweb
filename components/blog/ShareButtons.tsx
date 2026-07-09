@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Twitter, Linkedin, Link2, Check } from 'lucide-react';
+import { Link2, Check } from 'lucide-react';
+import { FaTwitter, FaLinkedin } from 'react-icons/fa';
 
 export default function ShareButtons({ title }: { title: string }) {
   const [copied, setCopied] = useState(false);
@@ -29,10 +30,10 @@ export default function ShareButtons({ title }: { title: string }) {
     <div className="flex items-center gap-3 py-6 border-t border-[var(--color-border)] mt-12">
       <span className="text-sm font-medium text-[var(--color-text-muted)] mr-2">Share this article:</span>
       <button onClick={shareTwitter} className="p-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-blue-400 hover:border-blue-400/30 transition-colors" title="Share on Twitter">
-        <Twitter size={18} />
+        <FaTwitter size={18} />
       </button>
       <button onClick={shareLinkedin} className="p-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-blue-600 hover:border-blue-600/30 transition-colors" title="Share on LinkedIn">
-        <Linkedin size={18} />
+        <FaLinkedin size={18} />
       </button>
       <button onClick={handleCopy} className="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors" title="Copy Link">
         {copied ? <Check size={16} className="text-green-500" /> : <Link2 size={16} />}
