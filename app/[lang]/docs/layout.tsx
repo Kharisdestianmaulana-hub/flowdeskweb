@@ -12,6 +12,30 @@ export default async function DocsLayout({ children, params }: { children: React
   const repoInfo = await getRepoInfo();
   const docsList = getDocsList(lang);
 
+  // Group by category
+  const groupedDocs = docsList.reduce((acc, doc) => {
+    if (!acc[doc.category]) {
+      acc[doc.category] = [];
+    }
+    acc[doc.category].push(doc);
+    return acc;
+  }, {} as Record<string, typeof docsList>);
+
+  // Predefined category order
+  const categoryOrder = [
+    'Introduction', 'Pengenalan',
+    'Get Started', 'Memulai',
+    'Core Features', 'Fitur Utama',
+    'Settings & Security', 'Pengaturan & Keamanan',
+    'Support', 'Dukungan'
+  ];
+
+  const sortedCategories = Object.keys(groupedDocs).sort((a, b) => {
+    const indexA = categoryOrder.indexOf(a);
+    const indexB = categoryOrder.indexOf(b);
+    return (indexA === -1 ? 99 : indexA) - (indexB === -1 ? 99 : indexB);
+  });
+
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)]">
       <Navbar stars={repoInfo.stargazers_count} repoUrl={repoInfo.html_url} dict={dict.navbar} currentLang={lang} />
@@ -28,15 +52,24 @@ export default async function DocsLayout({ children, params }: { children: React
               {dict.docsPage.subtitle}
             </p>
             
-            <nav className="space-y-1">
-              {docsList.map((doc) => (
-                <Link 
-                  key={doc.slug} 
-                  href={`/${lang}/docs/${doc.slug}`}
-                  className="flex items-center gap-3 px-3 py-2 text-[14px] font-medium rounded-[var(--radius-md)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface)] transition-colors"
-                >
-                  {doc.title}
-                </Link>
+            <nav className="space-y-8">
+              {sortedCategories.map((category) => (
+                <div key={category}>
+                  <h3 className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-3 px-3">
+                    {category}
+                  </h3>
+                  <div className="space-y-1">
+                    {groupedDocs[category].map((doc) => (
+                      <Link 
+                        key={doc.slug} 
+                        href={`/${lang}/docs/${doc.slug}`}
+                        className="flex items-center gap-3 px-3 py-2 text-[14px] font-medium rounded-[var(--radius-md)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] transition-colors"
+                      >
+                        {doc.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
             </nav>
           </div>

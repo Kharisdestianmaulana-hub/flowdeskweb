@@ -8,6 +8,7 @@ export interface DocMeta {
   slug: string;
   title: string;
   order: number;
+  category: string;
 }
 
 export interface DocData extends DocMeta {
@@ -32,6 +33,7 @@ export function getDocsList(lang: string): DocMeta[] {
         slug,
         title: data.title || slug,
         order: data.order || 99,
+        category: data.category || 'Uncategorized',
       };
     })
     .sort((a, b) => a.order - b.order);
@@ -50,6 +52,7 @@ export function getDocData(lang: string, slug: string): DocData | null {
     slug,
     title: data.title || slug,
     order: data.order || 99,
+    category: data.category || 'Uncategorized',
     content,
   };
 }
