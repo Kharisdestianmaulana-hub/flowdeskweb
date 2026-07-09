@@ -153,27 +153,38 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className={`md:hidden bg-[var(--color-surface)] border border-[var(--color-border-subtle)] px-4 pt-2 pb-4 space-y-1 mx-auto ${isScrolled ? 'mt-2 max-w-5xl rounded-2xl shadow-xl pointer-events-auto' : 'w-full rounded-none border-t-0 border-l-0 border-r-0'}`}>
-          <Link href={`/${currentLang}/#features`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.features}</Link>
-          <Link href={`/${currentLang}/docs`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.docs}</Link>
-          <Link href={`/${currentLang}/philosophy`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.philosophy}</Link>
-          <Link href={`/${currentLang}/roadmap`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.roadmap}</Link>
-          <Link href={`/${currentLang}/download`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.download}</Link>
-          <Link href={`/${currentLang}/compare`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.compare || 'Compare Apps'}</Link>
-          <Link href={`/${currentLang}/changelog`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.changelog}</Link>
-          <Link href={`/${currentLang}/sponsor`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-pink-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-            {dict.sponsor}
-          </Link>
-          <Link href={`/${currentLang}/contact`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.contact || 'Contact & Community'}</Link>
-          <Link href={`/${currentLang}/license`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.license || 'License'}</Link>
+        <div className={`md:hidden bg-[var(--color-surface)] border border-[var(--color-border-subtle)] px-4 pt-4 pb-6 mx-auto ${isScrolled ? 'mt-2 max-w-5xl rounded-2xl shadow-xl pointer-events-auto' : 'w-full rounded-none border-t-0 border-l-0 border-r-0'}`}>
           
-          <div className="pt-4 flex flex-col gap-3">
+          {/* Group 1: Product */}
+          <div className="space-y-1">
+            <Link href={`/${currentLang}/#features`} onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-[16px] font-semibold text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] rounded-lg transition-colors">{dict.features}</Link>
+            <Link href={`/${currentLang}/docs`} onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-[16px] font-semibold text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] rounded-lg transition-colors">{dict.docs}</Link>
+            <Link href={`/${currentLang}/philosophy`} onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-[16px] font-semibold text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] rounded-lg transition-colors">{dict.philosophy}</Link>
+            <Link href={`/${currentLang}/roadmap`} onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-[16px] font-semibold text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] rounded-lg transition-colors">{dict.roadmap}</Link>
+            <Link href={`/${currentLang}/blog`} onClick={() => setIsOpen(false)} className="block px-3 py-2.5 text-[16px] font-semibold text-[var(--color-text-primary)] hover:bg-[var(--color-surface-raised)] rounded-lg transition-colors">{dict.blog || 'Blog'}</Link>
+          </div>
+
+          <div className="h-[1px] w-full bg-[var(--color-border-subtle)] my-4"></div>
+
+          {/* Group 2: Others */}
+          <div className="space-y-1 mb-6">
+            <Link href={`/${currentLang}/compare`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-[15px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.compare || 'Compare Apps'}</Link>
+            <Link href={`/${currentLang}/changelog`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-[15px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.changelog}</Link>
+            <Link href={`/${currentLang}/sponsor`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-[15px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-pink-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              {dict.sponsor}
+            </Link>
+            <Link href={`/${currentLang}/contact`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-[15px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.contact || 'Contact & Community'}</Link>
+            <Link href={`/${currentLang}/license`} onClick={() => setIsOpen(false)} className="block px-3 py-2 text-[15px] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">{dict.license || 'License'}</Link>
+          </div>
+          
+          {/* Actions */}
+          <div className="flex flex-col gap-3">
             <a
               href={repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center space-x-2 px-4 py-2 rounded-[var(--radius-md)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] font-medium"
+              className="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-[var(--radius-md)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] font-medium hover:text-[var(--color-text-primary)] hover:border-[var(--color-border-hover)] transition-all"
             >
               <Github className="w-5 h-5" />
               <span>GitHub ({formatStars(stars)})</span>
@@ -181,7 +192,7 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
             <Link
               href={`/${currentLang}/download`}
               onClick={() => setIsOpen(false)}
-              className="flex justify-center px-4 py-2 rounded-[var(--radius-md)] bg-[image:var(--gradient-cta)] text-white font-semibold shadow-[var(--shadow-btn)]"
+              className="flex justify-center px-4 py-2.5 rounded-[var(--radius-md)] bg-[image:var(--gradient-cta)] text-white font-semibold shadow-[var(--shadow-btn)] hover:opacity-90 transition-opacity"
             >
               {dict.download}
             </Link>
