@@ -201,7 +201,6 @@ export default function MarkdownEditor({ value, onChange, placeholder = 'Tulis c
             placeholder={placeholder}
             minRows={15}
             className="w-full bg-transparent text-[18px] leading-[1.8] text-[var(--color-text-secondary)] placeholder-[var(--color-text-muted)] resize-none outline-none font-mono"
-            style={{ minHeight }}
           />
         )}
       </div>
