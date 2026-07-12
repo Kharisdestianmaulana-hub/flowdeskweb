@@ -14,7 +14,7 @@ const s3Client = new S3Client({
 
 export async function GET(request: NextRequest) {
   const session = await getSession();
-  if (!session || session.role !== 'admin') {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const session = await getSession();
-  if (!session || session.role !== 'admin') {
+  if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
