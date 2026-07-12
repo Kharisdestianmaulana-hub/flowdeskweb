@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users } from 'lucide-react';
+import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
@@ -26,6 +26,12 @@ export default function DashboardPortal() {
   const [coverImage, setCoverImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Gallery State
+  const [showGallery, setShowGallery] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
+  const [loadingGallery, setLoadingGallery] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   // Users State
   const [allUsers, setAllUsers] = useState<any[]>([]);
@@ -148,6 +154,49 @@ export default function DashboardPortal() {
       alert('Failed to upload image');
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+  const fetchGallery = async () => {
+    setLoadingGallery(true);
+    try {
+      const res = await fetch('/api/images');
+      if (res.ok) {
+        const data = await res.json();
+        setGalleryImages(data);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingGallery(false);
+    }
+  };
+
+  const openGallery = () => {
+    setShowGallery(true);
+    fetchGallery();
+  };
+
+  const handleDeleteImage = async (url: string) => {
+    if (!confirm('Are you sure you want to delete this image? It will be removed from Cloudflare R2 forever and any posts using it will lose their cover image.')) return;
+    try {
+      const res = await fetch('/api/images', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchGallery();
+        // If the deleted image is currently selected, clear it
+        if (coverImage === url) {
+          setCoverImage('');
+        }
+      } else {
+        alert(data.error || 'Failed to delete image');
+      }
+    } catch (e) {
+      alert('An error occurred');
     }
   };
 
@@ -401,7 +450,13 @@ export default function DashboardPortal() {
                     {uploadingImage ? 'Uploading...' : 'Upload Image'}
                     <input type="file" accept="image/png, image/jpeg, image/webp" className="hidden" onChange={handleImageUpload} disabled={uploadingImage} />
                   </label>
-                  {coverImage && <div className="text-sm text-green-500 flex items-center gap-1">✓ Uploaded</div>}
+                  
+                  <button onClick={openGallery} className="flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)] text-[var(--color-text-primary)] rounded-lg font-medium text-sm transition">
+                    <ImageIcon className="w-4 h-4 text-[var(--color-text-muted)]" />
+                    Choose from Gallery
+                  </button>
+
+                  {coverImage && <div className="text-sm text-green-500 flex items-center gap-1">✓ Image Selected</div>}
                 </div>
               </div>
 
@@ -502,6 +557,64 @@ export default function DashboardPortal() {
         )}
 
       </main>
+
+      {/* GALLERY MODAL */}
+      {showGallery && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[85vh]">
+            <div className="flex items-center justify-between p-6 border-b border-[var(--color-border)]">
+              <h2 className="text-xl font-bold text-[var(--color-text-primary)] flex items-center gap-2">
+                <ImageIcon className="w-5 h-5 text-[var(--color-primary)]" />
+                Media Gallery
+              </h2>
+              <button onClick={() => setShowGallery(false)} className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 flex-1 overflow-y-auto">
+              {loadingGallery ? (
+                <div className="text-center py-10 text-[var(--color-text-muted)]">Loading images...</div>
+              ) : galleryImages.length === 0 ? (
+                <div className="text-center py-10 text-[var(--color-text-muted)]">No images found. Upload a cover image first.</div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {galleryImages.map((img, i) => (
+                    <div key={i} className="group relative aspect-video bg-[var(--color-bg)] rounded-xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-primary)] transition">
+                      <Image src={img.cover_image} alt="Gallery image" fill className="object-cover" />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2 backdrop-blur-sm">
+                        <button onClick={() => setPreviewImage(img.cover_image)} title="Preview" className="p-2 bg-white/20 text-white rounded-lg hover:bg-white/40 transition">
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => {
+                          setCoverImage(img.cover_image);
+                          setShowGallery(false);
+                        }} title="Use Image" className="px-3 py-1.5 bg-[var(--color-primary)] text-white text-sm font-semibold rounded-lg hover:brightness-110 transition">
+                          Select
+                        </button>
+                        <button onClick={() => handleDeleteImage(img.cover_image)} title="Delete from R2" className="p-2 bg-red-500/80 text-white rounded-lg hover:bg-red-500 transition">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PREVIEW MODAL */}
+      {previewImage && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4" onClick={() => setPreviewImage(null)}>
+          <div className="relative w-full max-w-5xl aspect-video" onClick={e => e.stopPropagation()}>
+            <Image src={previewImage} alt="Preview" fill className="object-contain" />
+            <button onClick={() => setPreviewImage(null)} className="absolute top-4 right-4 text-white hover:text-gray-300 p-2 bg-black/50 rounded-full">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
