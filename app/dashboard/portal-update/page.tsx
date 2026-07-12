@@ -548,6 +548,10 @@ export default function DashboardPortal() {
               <button onClick={handleSaveProfile} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition">
                 Save Profile
               </button>
+            </div>
+          </div>
+        )}
+
         {activeMenu === 'users' && user.role === 'SUPER_ADMIN' && (
           <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
             <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">User Management</h1>
