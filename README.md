@@ -10,38 +10,7 @@ This is the official landing page for **FlowDesk**, a local-first, offline-capab
 - **Icons**: `lucide-react`
 - **Data Source**: GitHub REST API v3
 
-## Setup Instructions
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Kharisdestianmaulana-hub/flowdesk.git
-   cd flowdesk
-   ```
-   *(Note: Adjust the repo name or path if the web code is separated)*
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Configure Environment Variables:**
-   Copy the example environment variables file:
-   ```bash
-   cp .env.local.example .env.local
-   ```
-   *Note: Adding a `GITHUB_TOKEN` is highly recommended to increase API rate limits.*
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `GITHUB_TOKEN` | A personal access token to prevent rate limits. | No, but recommended |
 
 ## Deployment
 

@@ -615,6 +615,28 @@ export default function DashboardPortal() {
           </div>
         </div>
       )}
+      {/* MOBILE BOTTOM NAV */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--color-surface)] border-t border-[var(--color-border)] z-40 flex items-center justify-around p-2 pb-safe">
+        <button onClick={() => { setActiveMenu('overview'); setView('list'); }} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'overview' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
+          <LayoutDashboard className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-medium">Overview</span>
+        </button>
+        <button onClick={() => { setActiveMenu('posts'); setView('list'); }} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'posts' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
+          <FileText className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-medium">Posts</span>
+        </button>
+        <button onClick={() => setActiveMenu('profile')} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'profile' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
+          <UserCircle className="w-5 h-5 mb-1" />
+          <span className="text-[10px] font-medium">Profile</span>
+        </button>
+        {user.role === 'SUPER_ADMIN' && (
+          <button onClick={() => setActiveMenu('users')} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'users' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
+            <Users className="w-5 h-5 mb-1" />
+            <span className="text-[10px] font-medium">Users</span>
+          </button>
+        )}
+      </nav>
+
     </div>
   );
 }
