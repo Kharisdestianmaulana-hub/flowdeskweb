@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/api/',
     },
-    sitemap: 'https://flowdesk.app/sitemap.xml',
+    sitemap: 'https://flowdesk.web.id/sitemap.xml',
   }
 }

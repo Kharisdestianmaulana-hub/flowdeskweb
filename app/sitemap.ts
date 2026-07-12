@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://flowdesk.app';
+  const baseUrl = 'https://flowdesk.web.id';
   
   // Define available locales
   const locales = ['en', 'id'];
