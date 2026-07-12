@@ -38,6 +38,12 @@ export async function PUT(request: NextRequest) {
       [bio || null, social_links || null, display_name, session.username]
     );
 
+    // Sync author name in posts table to match the new display name
+    await queryD1(
+      'UPDATE posts SET author = ? WHERE author = ?',
+      [display_name, session.display_name]
+    );
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Failed to update profile:', error);
