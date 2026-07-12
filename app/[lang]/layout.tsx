@@ -27,11 +27,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://flowdesk.web.id"),
   title: "FlowDesk | Offline-First Productivity App & Workspace",
   description: "The best Notion alternative for offline work. A local-first desktop workspace for projects, tasks, docs, and files. No cloud, no subscription.",
-  keywords: ["offline productivity app", "local-first workspace", "Notion alternative offline", "no cloud productivity software", "offline task manager", "private workspace app"],
+  keywords: ["Flowdesk", "flowdesk", "Flowdesk app", "offline productivity app", "local-first workspace", "Notion alternative offline", "no cloud productivity software", "offline task manager", "private workspace app"],
   openGraph: {
     title: "FlowDesk | Offline-First Productivity App & Workspace",
     description: "The best Notion alternative for offline work. A local-first desktop workspace for projects, tasks, docs, and files. No cloud, no subscription.",
-    url: "https://flowdesk.app",
+    url: "https://flowdesk.web.id",
     siteName: "FlowDesk",
     type: "website",
   },
