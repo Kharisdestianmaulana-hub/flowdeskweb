@@ -110,6 +110,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
             Back to blog
           </Link>
           
+          <div className="flex flex-wrap gap-2 mb-4">
+            {post.category && post.category.split(',').map((cat: string, i: number) => (
+              <span key={i} className="px-3 py-1 bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-bold uppercase tracking-wider rounded-full">
+                {cat.trim()}
+              </span>
+            ))}
+          </div>
+
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--color-text-primary)] leading-[1.1] mb-6 tracking-tight">
             {post.title}
           </h1>

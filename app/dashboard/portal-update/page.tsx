@@ -21,7 +21,8 @@ export default function DashboardPortal() {
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
-  const [category, setCategory] = useState('Blog');
+  const [categories, setCategories] = useState<string[]>(['Blog']);
+  const [categoryInput, setCategoryInput] = useState('');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -214,7 +215,7 @@ export default function DashboardPortal() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, slug, content, cover_image: coverImage, category }),
+        body: JSON.stringify({ title, slug, content, cover_image: coverImage, category: categories.join(', ') }),
       });
 
       const data = await res.json();
@@ -222,7 +223,8 @@ export default function DashboardPortal() {
         setView('list');
         setTitle('');
         setSlug('');
-        setCategory('Blog');
+        setCategories(['Blog']);
+        setCategoryInput('');
         setContent('');
         setCoverImage('');
         setEditingSlug(null);
@@ -359,7 +361,7 @@ export default function DashboardPortal() {
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Posts</h1>
               <button onClick={() => {
-                setTitle(''); setSlug(''); setCategory('Blog'); setContent(''); setCoverImage(''); setEditingSlug(null); setView('editor');
+                setTitle(''); setSlug(''); setCategories(['Blog']); setCategoryInput(''); setContent(''); setCoverImage(''); setEditingSlug(null); setView('editor');
               }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
                 <Plus className="w-4 h-4" /> New Post
               </button>
@@ -391,7 +393,8 @@ export default function DashboardPortal() {
                           setEditingSlug(post.slug);
                           setTitle(post.title);
                           setSlug(post.slug);
-                          setCategory(post.category || 'Blog');
+                          setCategories(post.category ? post.category.split(',').map((c: string) => c.trim()).filter(Boolean) : ['Blog']);
+                          setCategoryInput('');
                           setContent(post.content);
                           setCoverImage(post.cover_image || '');
                           setView('editor');
@@ -431,14 +434,43 @@ export default function DashboardPortal() {
                   <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Category</label>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition">
-                    <option value="Blog">Blog</option>
-                    <option value="Updates">Updates</option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Guides">Guides</option>
-                    <option value="Community">Community</option>
-                  </select>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Categories (Tags)</label>
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {categories.map((cat, idx) => (
+                      <span key={idx} className="flex items-center gap-1 bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium border border-[var(--color-primary)]/20">
+                        {cat}
+                        <button onClick={() => setCategories(categories.filter((_, i) => i !== idx))} className="hover:text-red-500 transition focus:outline-none">
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <input 
+                    type="text" 
+                    value={categoryInput} 
+                    onChange={(e) => setCategoryInput(e.target.value)} 
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ',') {
+                        e.preventDefault();
+                        const val = categoryInput.trim().replace(/,$/, '');
+                        if (val && !categories.includes(val)) {
+                          setCategories([...categories, val]);
+                        }
+                        setCategoryInput('');
+                      }
+                    }}
+                    placeholder="Type a category and press Enter or Comma..."
+                    className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" 
+                  />
+                  <div className="mt-2 flex gap-2 flex-wrap">
+                    {['Blog', 'Updates', 'Engineering', 'Guides', 'Community'].map(suggestion => (
+                      <button key={suggestion} onClick={() => {
+                        if (!categories.includes(suggestion)) setCategories([...categories, suggestion]);
+                      }} className="text-xs px-2 py-1 bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-md text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-primary)] transition">
+                        + {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 

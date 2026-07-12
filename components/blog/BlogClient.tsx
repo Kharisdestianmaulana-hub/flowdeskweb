@@ -11,7 +11,11 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const categories = ['All', 'Blog', 'Updates', 'Engineering', 'Guides', 'Community'];
+  // Extract all unique categories from posts, split by comma
+  const allCategories = Array.from(new Set(
+    posts.flatMap(post => post.category ? post.category.split(',').map((c: string) => c.trim()).filter(Boolean) : [])
+  )).sort();
+  const categories = ['All', ...allCategories];
 
   // Debounce search query
   useEffect(() => {
@@ -28,7 +32,8 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
     
     let matchesCategory = true;
     if (activeCategory !== 'All') {
-      matchesCategory = post.category === activeCategory;
+      const postCategories = post.category ? post.category.split(',').map((c: string) => c.trim()) : [];
+      matchesCategory = postCategories.includes(activeCategory);
     }
 
     return matchesSearch && matchesCategory;
@@ -89,8 +94,11 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
                   )}
                 </div>
                 <div className="w-full lg:w-2/5 p-8 sm:p-12 flex flex-col justify-center">
-                  <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-[var(--color-primary)] mb-6">
-                    <span className="px-3 py-1 bg-[var(--color-primary)]/10 rounded-full">Featured</span>
+                  <div className="flex flex-wrap items-center gap-2 mb-6">
+                    <span className="px-3 py-1 bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs font-bold uppercase tracking-wider rounded-full">Featured</span>
+                    {featuredPost.category && featuredPost.category.split(',').map((cat: string, i: number) => (
+                      <span key={i} className="px-3 py-1 bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-secondary)] text-xs font-bold uppercase tracking-wider rounded-full">{cat.trim()}</span>
+                    ))}
                   </div>
                   <h2 className="text-3xl sm:text-4xl font-bold text-[var(--color-text-primary)] mb-4 leading-tight group-hover:text-[var(--color-primary)] transition-colors line-clamp-3">
                     {featuredPost.title}
@@ -153,6 +161,11 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
                     )}
                   </div>
                   <div className="p-6 sm:p-8 flex flex-col flex-1">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {post.category && post.category.split(',').map((cat: string, i: number) => (
+                        <span key={i} className="px-2 py-0.5 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] text-[10px] font-bold uppercase tracking-wider rounded-md">{cat.trim()}</span>
+                      ))}
+                    </div>
                     <h3 className="text-xl font-bold text-[var(--color-text-primary)] mb-3 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors leading-snug">
                       {post.title}
                     </h3>
