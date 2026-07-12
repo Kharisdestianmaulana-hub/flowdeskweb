@@ -23,6 +23,7 @@ export default function DashboardPortal() {
   const [slug, setSlug] = useState('');
   const [categories, setCategories] = useState<string[]>(['Blog']);
   const [categoryInput, setCategoryInput] = useState('');
+  const [metaDescription, setMetaDescription] = useState('');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -215,7 +216,7 @@ export default function DashboardPortal() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, slug, content, cover_image: coverImage, category: categories.join(', ') }),
+        body: JSON.stringify({ title, slug, content, cover_image: coverImage, category: categories.join(', '), meta_description: metaDescription }),
       });
 
       const data = await res.json();
@@ -225,6 +226,7 @@ export default function DashboardPortal() {
         setSlug('');
         setCategories(['Blog']);
         setCategoryInput('');
+        setMetaDescription('');
         setContent('');
         setCoverImage('');
         setEditingSlug(null);
@@ -343,7 +345,7 @@ export default function DashboardPortal() {
         {activeMenu === 'overview' && (
           <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
             <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">Dashboard Overview</h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               <div className="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl">
                 <p className="text-[var(--color-text-secondary)] text-sm font-medium">Total Posts</p>
                 <p className="text-4xl font-black text-[var(--color-text-primary)] mt-2">{posts.length}</p>
@@ -353,6 +355,27 @@ export default function DashboardPortal() {
                 <p className="text-xl font-bold text-[var(--color-primary)] mt-2">{user.role}</p>
               </div>
             </div>
+            
+            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-6">Top 5 Popular Articles</h2>
+            <div className="space-y-4">
+              {[...posts].sort((a, b) => (b.views || 0) - (a.views || 0)).slice(0, 5).map((post, index) => (
+                <div key={post.id} className="flex items-center gap-4 p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl">
+                  <div className="w-8 h-8 flex-shrink-0 bg-[var(--color-primary)]/10 text-[var(--color-primary)] font-bold rounded-lg flex items-center justify-center">
+                    {index + 1}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-[var(--color-text-primary)] truncate">{post.title}</h3>
+                    <p className="text-xs text-[var(--color-text-muted)]">By {post.author}</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-[var(--color-text-secondary)] font-medium bg-[var(--color-surface-raised)] px-3 py-1.5 rounded-lg text-sm border border-[var(--color-border-subtle)]">
+                    <Eye className="w-4 h-4 text-[var(--color-primary)]" /> {post.views || 0}
+                  </div>
+                </div>
+              ))}
+              {posts.length === 0 && (
+                <p className="text-[var(--color-text-muted)] text-sm">No articles published yet.</p>
+              )}
+            </div>
           </div>
         )}
 
@@ -361,7 +384,7 @@ export default function DashboardPortal() {
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Posts</h1>
               <button onClick={() => {
-                setTitle(''); setSlug(''); setCategories(['Blog']); setCategoryInput(''); setContent(''); setCoverImage(''); setEditingSlug(null); setView('editor');
+                setTitle(''); setSlug(''); setCategories(['Blog']); setCategoryInput(''); setMetaDescription(''); setContent(''); setCoverImage(''); setEditingSlug(null); setView('editor');
               }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
                 <Plus className="w-4 h-4" /> New Post
               </button>
@@ -395,6 +418,7 @@ export default function DashboardPortal() {
                           setSlug(post.slug);
                           setCategories(post.category ? post.category.split(',').map((c: string) => c.trim()).filter(Boolean) : ['Blog']);
                           setCategoryInput('');
+                          setMetaDescription(post.meta_description || '');
                           setContent(post.content);
                           setCoverImage(post.cover_image || '');
                           setView('editor');
@@ -470,6 +494,38 @@ export default function DashboardPortal() {
                         + {suggestion}
                       </button>
                     ))}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2 flex justify-between">
+                  <span>SEO Meta Description</span>
+                  <span className={`text-xs ${metaDescription.length > 160 ? 'text-red-500' : 'text-[var(--color-text-muted)]'}`}>
+                    {metaDescription.length}/160
+                  </span>
+                </label>
+                <textarea 
+                  value={metaDescription} 
+                  onChange={(e) => setMetaDescription(e.target.value)} 
+                  placeholder="A short and catchy description of this article to entice readers on Google and social media..." 
+                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition resize-y min-h-[100px]"
+                />
+                
+                {/* SEO PREVIEW CARD */}
+                <div className="mt-4 p-5 bg-[var(--color-surface-raised)] border border-[var(--color-border-subtle)] rounded-xl">
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-3">Google Search Preview</p>
+                  <div className="bg-[#202124] p-4 rounded-lg border border-[#3c4043] font-sans">
+                    <p className="text-[#9aa0a6] text-[12px] flex items-center gap-2 mb-1">
+                      <span className="w-5 h-5 bg-[#3c4043] rounded-full inline-block"></span>
+                      flowdesk.web.id › blog › {slug || 'your-slug-here'}
+                    </p>
+                    <h3 className="text-[#8ab4f8] text-[20px] font-medium leading-tight mb-1 truncate">
+                      {title || 'Epic product update...'} - FlowDesk
+                    </h3>
+                    <p className="text-[#bdc1c6] text-[14px] leading-snug line-clamp-2">
+                      {metaDescription || 'A short and catchy description of this article to entice readers on Google and social media...'}
+                    </p>
                   </div>
                 </div>
               </div>

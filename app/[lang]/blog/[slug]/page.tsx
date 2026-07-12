@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 
   const parsedContent = post.content.replace(/\\n/g, '\n');
   const descriptionMatch = parsedContent.match(/^(?!#|>|-|\*).+$/m);
-  const description = descriptionMatch ? descriptionMatch[0].slice(0, 160).trim() + '...' : 'Artikel terbaru dari blog FlowDesk.';
+  const description = post.meta_description || (descriptionMatch ? descriptionMatch[0].slice(0, 160).trim() + '...' : 'Artikel terbaru dari blog FlowDesk.');
 
   const ogImageUrl = post.cover_image 
     ? `https://flowdesk.web.id/_next/image?url=${encodeURIComponent(post.cover_image)}&w=1200&q=75` 
