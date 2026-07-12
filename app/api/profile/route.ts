@@ -33,16 +33,22 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Display name is required' }, { status: 400 });
     }
 
+    // Fetch current user from DB to get the actual current display name
+    const currentUser = await queryD1('SELECT display_name FROM users WHERE username = ?', [session.username]);
+    const oldDisplayName = currentUser.length > 0 ? currentUser[0].display_name : session.display_name;
+
     await queryD1(
       'UPDATE users SET bio = ?, social_links = ?, display_name = ? WHERE username = ?',
       [bio || null, social_links || null, display_name, session.username]
     );
 
     // Sync author name in posts table to match the new display name
-    await queryD1(
-      'UPDATE posts SET author = ? WHERE author = ?',
-      [display_name, session.display_name]
-    );
+    if (oldDisplayName !== display_name) {
+      await queryD1(
+        'UPDATE posts SET author = ? WHERE author = ?',
+        [display_name, oldDisplayName]
+      );
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

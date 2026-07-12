@@ -28,8 +28,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Force author to be the currently logged in user's display_name
-    const author = session.display_name;
+    // Force author to be the currently logged in user's display_name from DB
+    const currentUser = await queryD1('SELECT display_name FROM users WHERE username = ?', [session.username]);
+    const author = currentUser.length > 0 ? currentUser[0].display_name : session.display_name;
 
     const id = uuidv4();
     await queryD1(
