@@ -338,10 +338,10 @@ export default function DashboardPortal() {
       </aside>
 
       {/* MAIN CONTENT */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto pb-24 md:pb-0">
         
         {activeMenu === 'overview' && (
-          <div className="p-10 max-w-5xl mx-auto">
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
             <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">Dashboard Overview</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="p-6 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl">
@@ -357,7 +357,7 @@ export default function DashboardPortal() {
         )}
 
         {activeMenu === 'posts' && view === 'list' && (
-          <div className="p-10 max-w-5xl mx-auto">
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Posts</h1>
               <button onClick={() => {
@@ -414,7 +414,7 @@ export default function DashboardPortal() {
         )}
 
         {activeMenu === 'posts' && view === 'editor' && (
-          <div className="p-10 max-w-5xl mx-auto">
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{editingSlug ? 'Edit Post' : 'New Post'}</h1>
               <button onClick={() => setView('list')} className="px-4 py-2 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-lg font-medium text-sm hover:text-[var(--color-text-primary)] transition">
@@ -422,13 +422,13 @@ export default function DashboardPortal() {
               </button>
             </div>
             
-            <div className="space-y-6 bg-[var(--color-surface)] p-8 rounded-2xl border border-[var(--color-border)]">
+            <div className="space-y-6 bg-[var(--color-surface)] p-4 sm:p-8 rounded-2xl border border-[var(--color-border)]">
               <div>
                 <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title</label>
                 <input type="text" value={title} onChange={handleTitleChange} placeholder="Epic product update..." className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Slug</label>
                   <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
@@ -509,9 +509,9 @@ export default function DashboardPortal() {
         )}
 
         {activeMenu === 'profile' && (
-          <div className="p-10 max-w-3xl mx-auto">
+          <div className="p-4 sm:p-6 md:p-10 max-w-3xl mx-auto">
             <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">My Profile</h1>
-            <div className="space-y-6 bg-[var(--color-surface)] p-8 rounded-2xl border border-[var(--color-border)]">
+            <div className="space-y-6 bg-[var(--color-surface)] p-4 sm:p-8 rounded-2xl border border-[var(--color-border)]">
               <div>
                 <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Display Name</label>
                 <input type="text" value={profileDisplayName} onChange={(e) => setProfileDisplayName(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] outline-none" />
@@ -548,15 +548,11 @@ export default function DashboardPortal() {
               <button onClick={handleSaveProfile} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition">
                 Save Profile
               </button>
-            </div>
-          </div>
-        )}
-
         {activeMenu === 'users' && user.role === 'SUPER_ADMIN' && (
-          <div className="p-10 max-w-5xl mx-auto">
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
             <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">User Management</h1>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-[var(--color-surface)] p-6 rounded-2xl border border-[var(--color-border)]">
+              <div className="bg-[var(--color-surface)] p-4 sm:p-8 rounded-2xl border border-[var(--color-border)]">
                 <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-4">Add User</h2>
                 <div className="space-y-4">
                   <input type="text" placeholder="Username" value={newUsername} onChange={(e)=>setNewUsername(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-white outline-none" />
