@@ -10,14 +10,12 @@ import { useOs } from '../hooks/useOs';
 import NumberCounter from './animations/NumberCounter';
 
 const SLIDES = [
-  { src: '/Dashboard_Flowdesk.webp', label: 'Dashboard' },
-  { src: '/Project_flowdesk.webp', label: 'Projects' },
-  { src: '/Task_Flowdesk.webp', label: 'Tasks' },
-  { src: '/Docs_Flowdesk.webp', label: 'Documents' },
-  { src: '/Files_Flowdesk.webp', label: 'Files' },
-  { src: '/Members_Flowdesk.webp', label: 'Members' },
-  { src: '/Reqquest_Flowdesk.webp', label: 'Requests' },
-  { src: '/Settings_Flowdesk.webp', label: 'Settings' }
+  { src: '/1.webp', label: 'Dashboard' },
+  { src: '/3.webp', label: 'Projects' },
+  { src: '/4.webp', label: 'Tasks' },
+  { src: '/5.webp', label: 'Documents' },
+  { src: '/7.webp', label: 'Files' },
+  { src: '/10.webp', label: 'Settings' }
 ];
 const INTERVAL_MS = 5000;
 
