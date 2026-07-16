@@ -10,12 +10,12 @@ import { useOs } from '../hooks/useOs';
 import NumberCounter from './animations/NumberCounter';
 
 const SLIDES = [
-  { src: '/1.webp', label: 'Dashboard' },
-  { src: '/3.webp', label: 'Projects' },
-  { src: '/4.webp', label: 'Tasks' },
-  { src: '/5.webp', label: 'Documents' },
-  { src: '/7.webp', label: 'Files' },
-  { src: '/10.webp', label: 'Settings' }
+  { src: '/1.webp', label: 'Own Your Workspace' },
+  { src: '/3.webp', label: 'Manage Every Projects' },
+  { src: '/4.webp', label: 'Organize Your Tasks' },
+  { src: '/5.webp', label: 'Documents And File Together' },
+  { src: '/7.webp', label: 'Build For Team Collaboration' },
+  { src: '/10.webp', label: 'Build For Modern Team' }
 ];
 const INTERVAL_MS = 5000;
 
