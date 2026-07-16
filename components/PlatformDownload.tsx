@@ -195,6 +195,7 @@ export default function PlatformDownload({ assets, version, dict, totalDownloads
               );
             })}
           </div>
+        )}
       </div>
 
       {/* Product Hunt Widget */}
