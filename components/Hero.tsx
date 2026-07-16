@@ -157,6 +157,19 @@ export default function Hero({ stars, version, repoUrl, assets, dict, totalDownl
                   </span>
                 )}
               </div>
+
+              {/* Product Hunt Badge */}
+              <div className="mt-8">
+                <a href="https://www.producthunt.com/products/flowdesk-4?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-flowdesk-5" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-90 transition-opacity">
+                  <Image 
+                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1196415&amp;theme=neutral&amp;t=1784203143551" 
+                    alt="FlowDesk - A local-first workspace for teams and creators | Product Hunt" 
+                    width={250} 
+                    height={54} 
+                    unoptimized
+                  />
+                </a>
+              </div>
             </Reveal>
           </div>
 
