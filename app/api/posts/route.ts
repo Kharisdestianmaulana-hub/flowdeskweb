@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { title, slug, content, cover_image, category, meta_description } = await request.json();
+    const { title, slug, content, cover_image, category, meta_description, status, published_at } = await request.json();
 
     if (!title || !slug || !content) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
 
     const id = uuidv4();
     await queryD1(
-      'INSERT INTO posts (id, slug, title, content, cover_image, author, category, meta_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [id, slug, title, content, cover_image || null, author, category || 'Blog', meta_description || null]
+      'INSERT INTO posts (id, slug, title, content, cover_image, author, category, meta_description, status, published_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [id, slug, title, content, cover_image || null, author, category || 'Blog', meta_description || null, status || 'published', published_at || new Date().toISOString()]
     );
 
     return NextResponse.json({ success: true, id });

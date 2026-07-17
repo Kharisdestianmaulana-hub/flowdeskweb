@@ -42,15 +42,15 @@ export async function PUT(
       return NextResponse.json({ error: 'Forbidden: You can only edit your own posts' }, { status: 403 });
     }
 
-    const { title, slug, content, cover_image, category, meta_description } = await request.json();
+    const { title, slug, content, cover_image, category, meta_description, status, published_at } = await request.json();
 
     if (!title || !slug || !content) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     await queryD1(
-      'UPDATE posts SET title = ?, slug = ?, content = ?, cover_image = ?, category = ?, meta_description = ? WHERE slug = ?',
-      [title, slug, content, cover_image || null, category || 'Blog', meta_description || null, resolvedParams.slug]
+      'UPDATE posts SET title = ?, slug = ?, content = ?, cover_image = ?, category = ?, meta_description = ?, status = ?, published_at = ? WHERE slug = ?',
+      [title, slug, content, cover_image || null, category || 'Blog', meta_description || null, status || 'published', published_at || new Date().toISOString(), resolvedParams.slug]
     );
 
     return NextResponse.json({ success: true });

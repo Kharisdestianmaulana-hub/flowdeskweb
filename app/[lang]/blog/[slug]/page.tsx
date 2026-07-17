@@ -18,7 +18,7 @@ import { queryD1 } from '@/lib/db';
 async function getPost(slug: string) {
   try {
     const results = await queryD1(
-      'SELECT p.*, u.username as author_username FROM posts p LEFT JOIN users u ON p.author = u.display_name WHERE p.slug = ? LIMIT 1',
+      "SELECT p.*, u.username as author_username FROM posts p LEFT JOIN users u ON p.author = u.display_name WHERE p.slug = ? AND p.status = 'published' AND datetime(p.published_at) <= datetime('now') LIMIT 1",
       [slug]
     );
     return results.length > 0 ? results[0] : null;

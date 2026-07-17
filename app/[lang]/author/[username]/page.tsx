@@ -21,7 +21,7 @@ async function getAuthorByUsername(username: string) {
 
 async function getPostsByAuthor(displayName: string) {
   try {
-    return await queryD1('SELECT * FROM posts WHERE author = ? ORDER BY created_at DESC', [displayName]);
+    return await queryD1("SELECT * FROM posts WHERE author = ? AND status = 'published' AND datetime(published_at) <= datetime('now') ORDER BY created_at DESC", [displayName]);
   } catch (e) {
     return [];
   }

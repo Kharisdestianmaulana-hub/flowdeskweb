@@ -26,6 +26,8 @@ export default function DashboardPortal() {
   const [metaDescription, setMetaDescription] = useState('');
   const [content, setContent] = useState('');
   const [coverImage, setCoverImage] = useState('');
+  const [status, setStatus] = useState('published');
+  const [publishedAt, setPublishedAt] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -216,7 +218,11 @@ export default function DashboardPortal() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, slug, content, cover_image: coverImage, category: categories.join(', '), meta_description: metaDescription }),
+        body: JSON.stringify({ 
+          title, slug, content, cover_image: coverImage, category: categories.join(', '), 
+          meta_description: metaDescription, status, 
+          published_at: status === 'scheduled' && publishedAt ? new Date(publishedAt).toISOString() : new Date().toISOString() 
+        }),
       });
 
       const data = await res.json();
@@ -229,6 +235,8 @@ export default function DashboardPortal() {
         setMetaDescription('');
         setContent('');
         setCoverImage('');
+        setStatus('published');
+        setPublishedAt('');
         setEditingSlug(null);
         fetchPosts();
       } else {
@@ -302,7 +310,7 @@ export default function DashboardPortal() {
   }
 
   return (
-    <div className="min-h-screen flex bg-[var(--color-bg)]">
+    <div className="h-screen overflow-hidden flex bg-[var(--color-bg)]">
       
       {/* SIDEBAR */}
       <aside className="w-64 border-r border-[var(--color-border)] bg-[var(--color-surface)] flex flex-col hidden md:flex">
@@ -384,7 +392,7 @@ export default function DashboardPortal() {
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Posts</h1>
               <button onClick={() => {
-                setTitle(''); setSlug(''); setCategories(['Blog']); setCategoryInput(''); setMetaDescription(''); setContent(''); setCoverImage(''); setEditingSlug(null); setView('editor');
+                setTitle(''); setSlug(''); setCategories(['Blog']); setCategoryInput(''); setMetaDescription(''); setContent(''); setCoverImage(''); setStatus('published'); setPublishedAt(''); setEditingSlug(null); setView('editor');
               }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
                 <Plus className="w-4 h-4" /> New Post
               </button>
@@ -400,7 +408,12 @@ export default function DashboardPortal() {
                       </div>
                     )}
                     <div>
-                      <h3 className="font-semibold text-[var(--color-text-primary)]">{post.title}</h3>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-semibold text-[var(--color-text-primary)]">{post.title}</h3>
+                        {post.status === 'draft' && <span className="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-500 text-[10px] font-bold tracking-wider uppercase">Draft</span>}
+                        {post.status === 'scheduled' && <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-500 text-[10px] font-bold tracking-wider uppercase">Scheduled</span>}
+                        {(!post.status || post.status === 'published') && <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-500 text-[10px] font-bold tracking-wider uppercase">Published</span>}
+                      </div>
                       <p className="text-xs text-[var(--color-text-muted)]">
                         {format(new Date(post.created_at), 'MMM d, yyyy HH:mm')} &middot; By {post.author}
                       </p>
@@ -421,6 +434,9 @@ export default function DashboardPortal() {
                           setMetaDescription(post.meta_description || '');
                           setContent(post.content);
                           setCoverImage(post.cover_image || '');
+                          setStatus(post.status || 'published');
+                          // Remove 'Z' if it's there and format to datetime-local expected format (YYYY-MM-DDThh:mm)
+                          setPublishedAt(post.published_at ? new Date(post.published_at).toISOString().slice(0, 16) : '');
                           setView('editor');
                         }} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
                           <Pencil className="w-4 h-4" />
@@ -528,6 +544,32 @@ export default function DashboardPortal() {
                     </p>
                   </div>
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Publish Status</label>
+                  <select 
+                    value={status} 
+                    onChange={(e) => setStatus(e.target.value)} 
+                    className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition"
+                  >
+                    <option value="draft">Draft (Hidden)</option>
+                    <option value="published">Published (Visible)</option>
+                    <option value="scheduled">Scheduled (Future)</option>
+                  </select>
+                </div>
+                {status === 'scheduled' && (
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Scheduled Date & Time</label>
+                    <input 
+                      type="datetime-local" 
+                      value={publishedAt} 
+                      onChange={(e) => setPublishedAt(e.target.value)} 
+                      className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" 
+                    />
+                  </div>
+                )}
               </div>
 
               <div>
