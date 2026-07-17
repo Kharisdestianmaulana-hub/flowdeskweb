@@ -20,7 +20,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/license', freq: 'monthly' as const, priority: 0.4 },
   ];
 
-  const sitemapEntries: MetadataRoute.Sitemap = [];
+  const sitemapEntries: MetadataRoute.Sitemap = [
+    // Root URL — penting buat Google kenali homepage
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 1.0,
+    },
+  ];
 
   // Static routes
   locales.forEach(locale => {
