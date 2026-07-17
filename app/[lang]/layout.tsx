@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   description: "The best Notion alternative for offline work. A local-first desktop workspace for projects, tasks, docs, and files. No cloud, no subscription.",
   keywords: ["FlowDesk", "flowdesk app", "offline productivity app", "local-first workspace", "Notion alternative offline", "no cloud productivity software", "offline task manager", "private workspace app", "desktop productivity app", "offline workspace"],
   alternates: {
-    canonical: "https://flowdesk.web.id/en",
+    canonical: "https://flowdesk.web.id",
     languages: {
       'en': 'https://flowdesk.web.id/en',
       'id': 'https://flowdesk.web.id/id',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "FlowDesk | Offline-First Productivity App & Workspace",
     description: "The best Notion alternative for offline work. A local-first desktop workspace for projects, tasks, docs, and files. No cloud, no subscription.",
-    url: "https://flowdesk.web.id/en",
+    url: "https://flowdesk.web.id",
     siteName: "FlowDesk",
     type: "website",
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'FlowDesk - Offline-First Productivity App' }],
