@@ -51,12 +51,22 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     ? `https://flowdesk.web.id/_next/image?url=${encodeURIComponent(post.cover_image)}&w=1200&q=75` 
     : '';
 
+  const canonicalUrl = `https://flowdesk.web.id/en/blog/${post.slug}`;
+
   return {
     title: `${post.title} | FlowDesk Blog`,
     description,
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        'en': `https://flowdesk.web.id/en/blog/${post.slug}`,
+        'id': `https://flowdesk.web.id/id/blog/${post.slug}`,
+      },
+    },
     openGraph: {
       title: post.title,
       description,
+      url: canonicalUrl,
       images: ogImageUrl ? [ogImageUrl] : [],
       type: 'article',
       publishedTime: post.created_at,
