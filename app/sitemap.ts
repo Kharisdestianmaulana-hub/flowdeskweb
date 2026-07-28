@@ -43,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   // Docs pages
-  const enDocs = getDocsList('en');
+  const enDocs = await getDocsList('en');
   enDocs.forEach(doc => {
     locales.forEach(locale => {
       sitemapEntries.push({

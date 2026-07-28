@@ -1,58 +1,42 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-
-const docsDirectory = path.join(process.cwd(), 'content/docs');
+import { queryD1 } from '@/lib/db';
 
 export interface DocMeta {
   slug: string;
   title: string;
   order: number;
   category: string;
+  lang: string;
 }
 
 export interface DocData extends DocMeta {
   content: string;
 }
 
-export function getDocsList(lang: string): DocMeta[] {
-  const langDir = path.join(docsDirectory, lang);
-  if (!fs.existsSync(langDir)) return [];
-
-  const fileNames = fs.readdirSync(langDir);
-  const docs = fileNames
-    .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(langDir, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
-      
-      const { data } = matter(fileContents);
-
-      return {
-        slug,
-        title: data.title || slug,
-        order: data.order || 99,
-        category: data.category || 'Uncategorized',
-      };
-    })
-    .sort((a, b) => a.order - b.order);
-
-  return docs;
+export async function getDocsList(lang: string): Promise<DocMeta[]> {
+  try {
+    const results = await queryD1(
+      'SELECT slug, title, order_num as "order", category, lang FROM docs WHERE lang = ? ORDER BY order_num ASC, title ASC',
+      [lang]
+    );
+    return results;
+  } catch (error) {
+    console.error('Failed to fetch docs list:', error);
+    return [];
+  }
 }
 
-export function getDocData(lang: string, slug: string): DocData | null {
-  const fullPath = path.join(docsDirectory, lang, `${slug}.md`);
-  if (!fs.existsSync(fullPath)) return null;
-
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
-
-  return {
-    slug,
-    title: data.title || slug,
-    order: data.order || 99,
-    category: data.category || 'Uncategorized',
-    content,
-  };
+export async function getDocData(lang: string, slug: string): Promise<DocData | null> {
+  try {
+    const results = await queryD1(
+      'SELECT slug, title, order_num as "order", category, lang, content FROM docs WHERE lang = ? AND slug = ? LIMIT 1',
+      [lang, slug]
+    );
+    
+    if (results.length === 0) return null;
+    
+    return results[0] as DocData;
+  } catch (error) {
+    console.error('Failed to fetch doc data:', error);
+    return null;
+  }
 }

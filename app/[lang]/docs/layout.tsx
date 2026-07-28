@@ -10,7 +10,7 @@ export default async function DocsLayout({ children, params }: { children: React
   const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
-  const docsList = getDocsList(lang);
+  const docsList = await getDocsList(lang);
 
   // Group by category
   const groupedDocs = docsList.reduce((acc, doc) => {

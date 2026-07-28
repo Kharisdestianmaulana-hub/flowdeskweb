@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string; slug: string }> }): Promise<import('next').Metadata> {
   const { lang, slug } = await params;
-  const doc = getDocData(lang, slug);
+  const doc = await getDocData(lang, slug);
   if (!doc) return { title: 'Not Found | FlowDesk Docs' };
 
   const canonicalUrl = `https://flowdesk.web.id/en/docs/${slug}`;
@@ -33,17 +33,18 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export async function generateStaticParams() {
   const langs = ['en', 'id'];
   const params: { lang: string; slug: string }[] = [];
-  langs.forEach(lang => {
-    getDocsList(lang).forEach(doc => {
+  for (const lang of langs) {
+    const docs = await getDocsList(lang);
+    docs.forEach(doc => {
       params.push({ lang, slug: doc.slug });
     });
-  });
+  }
   return params;
 }
 
 export default async function DocPage({ params }: { params: Promise<{ lang: string, slug: string }> }) {
   const { lang, slug } = await params;
-  const doc = getDocData(lang, slug);
+  const doc = await getDocData(lang, slug);
 
   if (!doc) {
     notFound();

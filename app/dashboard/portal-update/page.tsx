@@ -12,7 +12,7 @@ export default function DashboardPortal() {
   
   // Session State
   const [user, setUser] = useState<{ username: string, display_name: string, role: string } | null>(null);
-  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'profile' | 'users'>('overview');
+  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'profile' | 'users'>('overview');
   const [loading, setLoading] = useState(true);
 
   // Posts State
@@ -30,6 +30,13 @@ export default function DashboardPortal() {
   const [publishedAt, setPublishedAt] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Docs State
+  const [docs, setDocs] = useState<any[]>([]);
+  const [editingDocId, setEditingDocId] = useState<string | null>(null);
+  const [docLang, setDocLang] = useState('id');
+  const [docOrder, setDocOrder] = useState<number>(99);
+  const [docCategory, setDocCategory] = useState('');
 
   // Gallery State
   const [showGallery, setShowGallery] = useState(false);
@@ -80,6 +87,16 @@ export default function DashboardPortal() {
     }
   };
 
+  const fetchDocs = async () => {
+    try {
+      const res = await fetch('/api/docs');
+      const data = await res.json();
+      if (Array.isArray(data)) setDocs(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const fetchUsers = async () => {
     if (user?.role !== 'SUPER_ADMIN') return;
     try {
@@ -112,6 +129,7 @@ export default function DashboardPortal() {
   useEffect(() => {
     if (!user) return;
     if (activeMenu === 'posts') fetchPosts();
+    if (activeMenu === 'docs') fetchDocs();
     if (activeMenu === 'users') fetchUsers();
     if (activeMenu === 'profile') fetchProfile();
   }, [activeMenu, user]);
@@ -265,6 +283,64 @@ export default function DashboardPortal() {
   };
 
   // -------------------------------------------------------------
+  // DOCS EDITOR LOGIC
+  // -------------------------------------------------------------
+  const handleSaveDoc = async () => {
+    if (!title || !slug || !content) {
+      alert('Title, slug, and content are required');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const url = editingDocId ? `/api/docs/${editingDocId}` : '/api/docs';
+      const method = editingDocId ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          title, slug, content, lang: docLang, order_num: docOrder, category: docCategory
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setView('list');
+        setTitle('');
+        setSlug('');
+        setContent('');
+        setDocLang('id');
+        setDocOrder(99);
+        setDocCategory('');
+        setEditingDocId(null);
+        fetchDocs();
+      } else {
+        alert(data.error || 'Failed to save doc');
+      }
+    } catch (e) {
+      alert('An error occurred');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteDoc = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this doc?')) return;
+    try {
+      const res = await fetch(`/api/docs/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        fetchDocs();
+      } else {
+        alert(data.error || 'Failed to delete');
+      }
+    } catch (e) {
+      alert('An error occurred');
+    }
+  };
+
+  // -------------------------------------------------------------
   // USER MANAGEMENT LOGIC
   // -------------------------------------------------------------
   const handleCreateUser = async () => {
@@ -329,6 +405,11 @@ export default function DashboardPortal() {
           <button onClick={() => { setActiveMenu('posts'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'posts' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
             <FileText className="w-4 h-4" /> Posts
           </button>
+          {user.role === 'SUPER_ADMIN' && (
+            <button onClick={() => { setActiveMenu('docs'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'docs' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <FileText className="w-4 h-4" /> Docs
+            </button>
+          )}
           <button onClick={() => setActiveMenu('profile')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'profile' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
             <UserCircle className="w-4 h-4" /> My Profile
           </button>
@@ -600,6 +681,114 @@ export default function DashboardPortal() {
               <div className="pt-4 flex justify-end">
                 <button onClick={handleSavePost} disabled={saving} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition disabled:opacity-50">
                   {saving ? 'Saving...' : 'Publish Post'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'docs' && view === 'list' && (
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Documentation</h1>
+              <button onClick={() => {
+                setTitle(''); setSlug(''); setContent(''); setDocLang('id'); setDocOrder(99); setDocCategory(''); setEditingDocId(null); setView('editor');
+              }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
+                <Plus className="w-4 h-4" /> New Doc
+              </button>
+            </div>
+            
+            <div className="grid gap-4">
+              {docs.map((doc) => (
+                <div key={doc.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] font-bold text-sm text-[var(--color-text-secondary)] uppercase">
+                      {doc.lang}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-[var(--color-text-primary)]">{doc.title}</h3>
+                      <p className="text-xs text-[var(--color-text-muted)]">
+                        Order: {doc.order_num} &middot; Category: {doc.category} &middot; /docs/{doc.slug}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <a href={`/${doc.lang}/docs/${doc.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
+                      <Eye className="w-4 h-4" />
+                    </a>
+                    <button onClick={() => {
+                      setEditingDocId(doc.id);
+                      setTitle(doc.title);
+                      setSlug(doc.slug);
+                      setContent(doc.content);
+                      setDocLang(doc.lang);
+                      setDocOrder(doc.order_num);
+                      setDocCategory(doc.category || '');
+                      setView('editor');
+                    }} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => handleDeleteDoc(doc.id)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Delete">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {docs.length === 0 && (
+                <p className="text-[var(--color-text-muted)] text-sm">No documentation published yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'docs' && view === 'editor' && (
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{editingDocId ? 'Edit Doc' : 'New Doc'}</h1>
+              <button onClick={() => setView('list')} className="px-4 py-2 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-lg font-medium text-sm hover:text-[var(--color-text-primary)] transition">
+                Cancel
+              </button>
+            </div>
+            
+            <div className="space-y-6 bg-[var(--color-surface)] p-4 sm:p-8 rounded-2xl border border-[var(--color-border)]">
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title</label>
+                <input type="text" value={title} onChange={handleTitleChange} placeholder="Getting Started..." className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Slug</label>
+                  <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Language</label>
+                  <select value={docLang} onChange={(e) => setDocLang(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition">
+                    <option value="id">Indonesia (ID)</option>
+                    <option value="en">English (EN)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Order</label>
+                  <input type="number" value={docOrder} onChange={(e) => setDocOrder(parseInt(e.target.value) || 99)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Category (Optional)</label>
+                <input type="text" value={docCategory} onChange={(e) => setDocCategory(e.target.value)} placeholder="e.g. Getting Started, Advanced" className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Content (Markdown)</label>
+                <div className="border border-[var(--color-border)] rounded-xl overflow-hidden bg-[var(--color-bg)]">
+                  <MarkdownEditor value={content} onChange={setContent} />
+                </div>
+              </div>
+
+              <div className="pt-4 flex justify-end">
+                <button onClick={handleSaveDoc} disabled={saving} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition disabled:opacity-50">
+                  {saving ? 'Saving...' : 'Publish Doc'}
                 </button>
               </div>
             </div>
