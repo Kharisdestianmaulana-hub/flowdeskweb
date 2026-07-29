@@ -25,7 +25,7 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Filter posts
+  // Filter and sort posts
   const filteredPosts = posts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) || 
                           post.content.toLowerCase().includes(debouncedSearchQuery.toLowerCase());
@@ -37,6 +37,35 @@ export default function BlogClient({ posts, lang, dict }: { posts: any[], lang: 
     }
 
     return matchesSearch && matchesCategory;
+  }).sort((a, b) => {
+    if (debouncedSearchQuery.trim() !== '') {
+      const query = debouncedSearchQuery.toLowerCase();
+      
+      const getScore = (post: any) => {
+        let score = 0;
+        const title = post.title.toLowerCase();
+        const content = post.content.toLowerCase();
+        
+        if (title === query) score += 100;
+        else if (title.startsWith(query)) score += 50;
+        else if (title.includes(query)) score += 30;
+        
+        if (content.includes(query)) {
+           score += 5;
+           const occurrences = (content.split(query).length - 1);
+           score += Math.min(occurrences, 10); 
+        }
+        return score;
+      };
+
+      const scoreA = getScore(a);
+      const scoreB = getScore(b);
+
+      if (scoreA !== scoreB) {
+        return scoreB - scoreA;
+      }
+    }
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
   const featuredPost = filteredPosts.length > 0 ? filteredPosts[0] : null;
