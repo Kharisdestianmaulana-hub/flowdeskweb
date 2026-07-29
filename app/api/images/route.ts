@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, DeleteObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { getSession } from '@/lib/auth';
 import { queryD1 } from '@/lib/db';
 
@@ -19,12 +19,21 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const results = await queryD1(
-      'SELECT cover_image, MAX(created_at) as last_used FROM posts WHERE cover_image IS NOT NULL GROUP BY cover_image ORDER BY last_used DESC LIMIT 50'
+    const data = await s3Client.send(
+      new ListObjectsV2Command({
+        Bucket: process.env.R2_BUCKET_NAME!,
+        Prefix: 'blog/',
+      })
     );
-    
-    // The results array will contain objects with cover_image and last_used
-    return NextResponse.json(results);
+
+    const images = (data.Contents || [])
+      .sort((a, b) => (b.LastModified?.getTime() || 0) - (a.LastModified?.getTime() || 0))
+      .map(item => ({
+        cover_image: `${process.env.R2_PUBLIC_URL}/${item.Key}`,
+        last_used: item.LastModified?.toISOString()
+      }));
+
+    return NextResponse.json(images);
   } catch (error) {
     console.error('Failed to fetch images:', error);
     return NextResponse.json({ error: 'Failed to fetch images' }, { status: 500 });

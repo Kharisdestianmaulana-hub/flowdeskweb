@@ -12,7 +12,7 @@ export default function DashboardPortal() {
   
   // Session State
   const [user, setUser] = useState<{ username: string, display_name: string, role: string } | null>(null);
-  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users'>('overview');
+  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users' | 'media'>('overview');
   const [loading, setLoading] = useState(true);
 
   // Posts State
@@ -61,6 +61,12 @@ export default function DashboardPortal() {
   const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [loadingGallery, setLoadingGallery] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  // Search & Filter States
+  const [postSearchTerm, setPostSearchTerm] = useState('');
+  const [postFilterStatus, setPostFilterStatus] = useState('all');
+  const [docSearchTerm, setDocSearchTerm] = useState('');
+  const [rmSearchTerm, setRmSearchTerm] = useState('');
 
   // Users State
   const [allUsers, setAllUsers] = useState<any[]>([]);
@@ -161,6 +167,7 @@ export default function DashboardPortal() {
     if (activeMenu === 'roadmap') fetchRoadmaps();
     if (activeMenu === 'users') fetchUsers();
     if (activeMenu === 'profile') fetchProfile();
+    if (activeMenu === 'media') fetchGallery();
   }, [activeMenu, user]);
 
   const handleLogout = async () => {
@@ -495,6 +502,9 @@ export default function DashboardPortal() {
               <Map className="w-4 h-4" /> Roadmap
             </button>
           )}
+          <button onClick={() => setActiveMenu('media')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'media' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+            <ImageIcon className="w-4 h-4" /> Media
+          </button>
           <button onClick={() => setActiveMenu('profile')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'profile' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
             <UserCircle className="w-4 h-4" /> My Profile
           </button>
@@ -563,9 +573,23 @@ export default function DashboardPortal() {
                 <Plus className="w-4 h-4" /> New Post
               </button>
             </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <input type="text" placeholder="Search posts by title or slug..." value={postSearchTerm} onChange={(e) => setPostSearchTerm(e.target.value)} className="flex-1 px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition" />
+              <select value={postFilterStatus} onChange={(e) => setPostFilterStatus(e.target.value)} className="px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition">
+                <option value="all">All Status</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="scheduled">Scheduled</option>
+              </select>
+            </div>
             
             <div className="grid gap-4">
-              {posts.map((post) => (
+              {posts.filter(post => {
+                const matchesSearch = post.title.toLowerCase().includes(postSearchTerm.toLowerCase()) || post.slug.toLowerCase().includes(postSearchTerm.toLowerCase());
+                const matchesStatus = postFilterStatus === 'all' || post.status === postFilterStatus || (!post.status && postFilterStatus === 'published');
+                return matchesSearch && matchesStatus;
+              }).map((post) => (
                 <div key={post.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
                   <div className="flex items-center gap-4">
                     {post.cover_image && (
@@ -782,9 +806,12 @@ export default function DashboardPortal() {
                 <Plus className="w-4 h-4" /> New Doc
               </button>
             </div>
+            <div className="flex gap-4 mb-6">
+              <input type="text" placeholder="Search docs by title or slug..." value={docSearchTerm} onChange={(e) => setDocSearchTerm(e.target.value)} className="flex-1 px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition" />
+            </div>
             
             <div className="grid gap-4">
-              {docs.map((doc) => (
+              {docs.filter(doc => doc.title_id.toLowerCase().includes(docSearchTerm.toLowerCase()) || doc.title_en.toLowerCase().includes(docSearchTerm.toLowerCase()) || doc.slug.toLowerCase().includes(docSearchTerm.toLowerCase())).map((doc) => (
                 <div key={doc.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
                   <div className="flex items-center gap-4">
                     <div>
@@ -900,9 +927,15 @@ export default function DashboardPortal() {
                 <Plus className="w-4 h-4" /> New Roadmap
               </button>
             </div>
+            <div className="flex gap-4 mb-6">
+              <input type="text" placeholder="Search roadmap by version, title, or quarter..." value={rmSearchTerm} onChange={(e) => setRmSearchTerm(e.target.value)} className="flex-1 px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition" />
+            </div>
             
             <div className="space-y-4">
-              {roadmaps.map((rm) => (
+              {roadmaps.filter(rm => {
+                const s = rmSearchTerm.toLowerCase();
+                return rm.quarter.toLowerCase().includes(s) || rm.version.toLowerCase().includes(s) || (rm.title_id || '').toLowerCase().includes(s) || (rm.title_en || '').toLowerCase().includes(s);
+              }).map((rm) => (
                 <div key={rm.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
                   <div className="flex flex-col">
                     <h3 className="font-semibold text-[var(--color-text-primary)]">{rm.quarter} - {rm.version}</h3>
@@ -1099,6 +1132,52 @@ export default function DashboardPortal() {
                 ))}
               </div>
             </div>
+          </div>
+        )}
+
+        {activeMenu === 'media' && (
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Media Manager</h1>
+              <label className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition cursor-pointer">
+                {uploadingImage ? <span className="animate-spin text-xl leading-none">⟳</span> : <UploadCloud className="w-4 h-4" />}
+                {uploadingImage ? 'Uploading...' : 'Upload Image'}
+                <input type="file" accept="image/*" onChange={async (e) => {
+                  await handleImageUpload(e);
+                  fetchGallery();
+                }} className="hidden" />
+              </label>
+            </div>
+
+            {loadingGallery ? (
+              <div className="flex justify-center items-center py-20">
+                <span className="animate-spin text-4xl text-[var(--color-primary)]">⟳</span>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {galleryImages.map((img, i) => (
+                  <div key={i} className="group relative aspect-video bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-xl overflow-hidden shadow-sm">
+                    <Image src={img.cover_image} alt="" fill className="object-cover transition duration-300 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                      <button onClick={() => {
+                        navigator.clipboard.writeText(img.cover_image);
+                        alert('URL Copied to clipboard!');
+                      }} className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition">
+                        Copy URL
+                      </button>
+                      <button onClick={() => handleDeleteImage(img.cover_image)} className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium rounded-lg transition">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {galleryImages.length === 0 && (
+                  <div className="col-span-full py-12 text-center text-[var(--color-text-muted)]">
+                    No images found in your Media Manager.
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
