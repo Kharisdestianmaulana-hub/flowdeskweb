@@ -4,6 +4,8 @@ import "../globals.css";
 import ProgressBar from "@/components/ProgressBar";
 import TabManager from "@/components/TabManager";
 import ScrollToTop from "@/components/ScrollToTop";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
+import { getLatestRelease } from "@/lib/github";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -61,6 +63,8 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }>) {
   const { lang } = await params;
+  const latestRelease = await getLatestRelease();
+  
   return (
     <html lang={lang} className="scroll-smooth" suppressHydrationWarning>
       <body
@@ -69,6 +73,7 @@ export default async function RootLayout({
       >
         <ProgressBar />
         <TabManager currentLang={lang} />
+        <AnnouncementBanner latestRelease={latestRelease} lang={lang} />
         {children}
         <ScrollToTop />
       </body>
