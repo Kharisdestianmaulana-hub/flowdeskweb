@@ -45,10 +45,12 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <Hero 
         stars={repoInfo.stargazers_count} 
         version={latestRelease.tag_name} 
+        releaseName={latestRelease.name}
         repoUrl={repoInfo.html_url} 
         assets={latestRelease.assets} 
         dict={dict.hero}
         totalDownloads={totalDownloads}
+        currentLang={lang}
       />
       
       <SocialProof dict={dict.socialProof} />

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GithubIcon as Github } from './GithubIcon';
 import { ReleaseAsset } from '../types/github';
@@ -22,13 +23,15 @@ const INTERVAL_MS = 5000;
 interface HeroProps {
   stars: number;
   version: string;
+  releaseName?: string;
   repoUrl: string;
   assets: ReleaseAsset[];
   dict: any;
   totalDownloads?: number;
+  currentLang?: string;
 }
 
-export default function Hero({ stars, version, repoUrl, assets, dict, totalDownloads = 0 }: HeroProps) {
+export default function Hero({ stars, version, releaseName, repoUrl, assets, dict, totalDownloads = 0, currentLang = 'en' }: HeroProps) {
   const os = useOs();
   const [current, setCurrent] = useState(0);
   const [isLoaded, setIsLoaded] = useState<boolean[]>([false, false]);
@@ -80,12 +83,12 @@ export default function Hero({ stars, version, repoUrl, assets, dict, totalDownl
           {/* Left: Text */}
           <div className="flex flex-col z-10">
             <Reveal yOffset={50}>
-              {/* Version Badge */}
-              <div className="inline-flex items-center self-start px-3 py-1 mb-6 rounded-full bg-[var(--color-surface)] border border-[var(--color-border)]">
-                <span className="font-mono text-[13px] font-semibold text-[var(--color-primary)] tracking-wide">
-                  {version.startsWith('v') ? version : `v${version}`}
+              {/* Release Badge */}
+              <Link href={`/${currentLang}/download`} className="inline-flex items-center self-start px-4 py-1.5 mb-6 rounded-full bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 hover:border-[var(--color-primary)]/50 transition-colors group cursor-pointer shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.1)]">
+                <span className="text-[13px] font-medium text-[var(--color-primary)]">
+                  <span className="group-hover:underline">{releaseName || version} Is Here!!!</span> ✨
                 </span>
-              </div>
+              </Link>
             </Reveal>
 
             <Reveal delay={0.1} yOffset={50}>
