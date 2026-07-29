@@ -6,7 +6,7 @@ import { queryD1 } from '@/lib/db';
 // GET all docs (for CMS)
 export async function GET(request: NextRequest) {
   try {
-    const results = await queryD1('SELECT * FROM docs ORDER BY lang ASC, order_num ASC');
+    const results = await queryD1('SELECT * FROM docs ORDER BY order_num ASC');
     return NextResponse.json(results);
   } catch (error) {
     console.error('Failed to fetch docs:', error);
@@ -22,16 +22,16 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { lang, slug, title, content, category, order_num } = await request.json();
+    const { slug, title_id, title_en, content_id, content_en, category, order_num } = await request.json();
 
-    if (!lang || !slug || !title || !content) {
+    if (!slug || !title_id || !title_en || !content_id || !content_en) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const id = uuidv4();
     await queryD1(
-      'INSERT INTO docs (id, lang, slug, title, content, category, order_num) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [id, lang, slug, title, content, category || 'Uncategorized', order_num || 99]
+      'INSERT INTO docs (id, slug, title_id, title_en, content_id, content_en, category, order_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [id, slug, title_id, title_en, content_id, content_en, category || 'Uncategorized', order_num || 99]
     );
 
     return NextResponse.json({ success: true, id });

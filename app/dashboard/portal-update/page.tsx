@@ -34,7 +34,11 @@ export default function DashboardPortal() {
   // Docs State
   const [docs, setDocs] = useState<any[]>([]);
   const [editingDocId, setEditingDocId] = useState<string | null>(null);
-  const [docLang, setDocLang] = useState('id');
+  const [docTitleId, setDocTitleId] = useState('');
+  const [docTitleEn, setDocTitleEn] = useState('');
+  const [docContentId, setDocContentId] = useState('');
+  const [docContentEn, setDocContentEn] = useState('');
+  const [docSlug, setDocSlug] = useState('');
   const [docOrder, setDocOrder] = useState<number>(99);
   const [docCategory, setDocCategory] = useState('');
 
@@ -286,8 +290,8 @@ export default function DashboardPortal() {
   // DOCS EDITOR LOGIC
   // -------------------------------------------------------------
   const handleSaveDoc = async () => {
-    if (!title || !slug || !content) {
-      alert('Title, slug, and content are required');
+    if (!docTitleId || !docTitleEn || !docSlug || !docContentId || !docContentEn) {
+      alert('All Title, Slug, and Content fields in both languages are required');
       return;
     }
 
@@ -300,17 +304,18 @@ export default function DashboardPortal() {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          title, slug, content, lang: docLang, order_num: docOrder, category: docCategory
+          slug: docSlug, title_id: docTitleId, title_en: docTitleEn, content_id: docContentId, content_en: docContentEn, order_num: docOrder, category: docCategory
         }),
       });
 
       const data = await res.json();
       if (data.success) {
         setView('list');
-        setTitle('');
-        setSlug('');
-        setContent('');
-        setDocLang('id');
+        setDocTitleId('');
+        setDocTitleEn('');
+        setDocSlug('');
+        setDocContentId('');
+        setDocContentEn('');
         setDocOrder(99);
         setDocCategory('');
         setEditingDocId(null);
@@ -692,7 +697,7 @@ export default function DashboardPortal() {
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Documentation</h1>
               <button onClick={() => {
-                setTitle(''); setSlug(''); setContent(''); setDocLang('id'); setDocOrder(99); setDocCategory(''); setEditingDocId(null); setView('editor');
+                setDocTitleId(''); setDocTitleEn(''); setDocSlug(''); setDocContentId(''); setDocContentEn(''); setDocOrder(99); setDocCategory(''); setEditingDocId(null); setView('editor');
               }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
                 <Plus className="w-4 h-4" /> New Doc
               </button>
@@ -702,26 +707,24 @@ export default function DashboardPortal() {
               {docs.map((doc) => (
                 <div key={doc.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-[var(--color-surface-raised)] border border-[var(--color-border)] font-bold text-sm text-[var(--color-text-secondary)] uppercase">
-                      {doc.lang}
-                    </div>
                     <div>
-                      <h3 className="font-semibold text-[var(--color-text-primary)]">{doc.title}</h3>
+                      <h3 className="font-semibold text-[var(--color-text-primary)]">{doc.title_id}</h3>
                       <p className="text-xs text-[var(--color-text-muted)]">
-                        Order: {doc.order_num} &middot; Category: {doc.category} &middot; /docs/{doc.slug}
+                        EN: {doc.title_en} &middot; Order: {doc.order_num} &middot; Category: {doc.category}
                       </p>
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <a href={`/${doc.lang}/docs/${doc.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
+                    <a href={`/id/docs/${doc.slug}`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
                       <Eye className="w-4 h-4" />
                     </a>
                     <button onClick={() => {
                       setEditingDocId(doc.id);
-                      setTitle(doc.title);
-                      setSlug(doc.slug);
-                      setContent(doc.content);
-                      setDocLang(doc.lang);
+                      setDocTitleId(doc.title_id);
+                      setDocTitleEn(doc.title_en);
+                      setDocSlug(doc.slug);
+                      setDocContentId(doc.content_id);
+                      setDocContentEn(doc.content_en);
                       setDocOrder(doc.order_num);
                       setDocCategory(doc.category || '');
                       setView('editor');
@@ -751,22 +754,24 @@ export default function DashboardPortal() {
             </div>
             
             <div className="space-y-6 bg-[var(--color-surface)] p-4 sm:p-8 rounded-2xl border border-[var(--color-border)]">
-              <div>
-                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title</label>
-                <input type="text" value={title} onChange={handleTitleChange} placeholder="Getting Started..." className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="col-span-2">
-                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Slug</label>
-                  <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title (Indonesia)</label>
+                  <input type="text" value={docTitleId} onChange={(e) => {
+                    setDocTitleId(e.target.value);
+                    if (!docSlug) setDocSlug(generateSlug(e.target.value));
+                  }} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Language</label>
-                  <select value={docLang} onChange={(e) => setDocLang(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition">
-                    <option value="id">Indonesia (ID)</option>
-                    <option value="en">English (EN)</option>
-                  </select>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title (English)</label>
+                  <input type="text" value={docTitleEn} onChange={(e) => setDocTitleEn(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Slug</label>
+                  <input type="text" value={docSlug} onChange={(e) => setDocSlug(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Order</label>
@@ -780,9 +785,16 @@ export default function DashboardPortal() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Content (Markdown)</label>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Content (Indonesia)</label>
                 <div className="border border-[var(--color-border)] rounded-xl overflow-hidden bg-[var(--color-bg)]">
-                  <MarkdownEditor value={content} onChange={setContent} />
+                  <MarkdownEditor value={docContentId} onChange={setDocContentId} />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Content (English)</label>
+                <div className="border border-[var(--color-border)] rounded-xl overflow-hidden bg-[var(--color-bg)]">
+                  <MarkdownEditor value={docContentEn} onChange={setDocContentEn} />
                 </div>
               </div>
 

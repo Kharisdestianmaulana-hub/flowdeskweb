@@ -32,15 +32,15 @@ export async function PUT(
 
   try {
     const resolvedParams = await params;
-    const { lang, slug, title, content, category, order_num } = await request.json();
+    const { slug, title_id, title_en, content_id, content_en, category, order_num } = await request.json();
 
-    if (!lang || !slug || !title || !content) {
+    if (!slug || !title_id || !title_en || !content_id || !content_en) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     await queryD1(
-      'UPDATE docs SET lang = ?, slug = ?, title = ?, content = ?, category = ?, order_num = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-      [lang, slug, title, content, category || 'Uncategorized', order_num || 99, resolvedParams.id]
+      'UPDATE docs SET slug = ?, title_id = ?, title_en = ?, content_id = ?, content_en = ?, category = ?, order_num = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+      [slug, title_id, title_en, content_id, content_en, category || 'Uncategorized', order_num || 99, resolvedParams.id]
     );
 
     return NextResponse.json({ success: true });
