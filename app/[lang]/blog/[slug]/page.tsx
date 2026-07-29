@@ -53,9 +53,16 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 
   const canonicalUrl = `https://flowdesk.web.id/en/blog/${post.slug}`;
 
+  // Generate keywords from title and category
+  const defaultKeywords = ['FlowDesk', 'offline productivity', 'local-first workspace'];
+  const categoryKeywords = post.category ? post.category.split(',').map((c: string) => c.trim()) : [];
+  const titleKeywords = post.title.split(' ').filter((w: string) => w.length > 3);
+  const keywords = [...new Set([...defaultKeywords, ...categoryKeywords, ...titleKeywords])];
+
   return {
     title: `${post.title} | FlowDesk Blog`,
     description,
+    keywords,
     alternates: {
       canonical: canonicalUrl,
       languages: {
@@ -99,6 +106,25 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
   const wordCount = parsedContent.split(/\s+/).length;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
+  const descriptionMatch = parsedContent.match(/^(?!#|>|-|\*).+$/m);
+  const description = post.meta_description || (descriptionMatch ? descriptionMatch[0].slice(0, 160).trim() + '...' : 'Artikel terbaru dari blog FlowDesk.');
+
+  // JSON-LD Structured Data for Google SEO
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: description,
+    image: post.cover_image ? [`https://flowdesk.web.id/_next/image?url=${encodeURIComponent(post.cover_image)}&w=1200&q=75`] : [],
+    datePublished: new Date(post.created_at).toISOString(),
+    dateModified: new Date(post.updated_at || post.created_at).toISOString(),
+    author: [{
+      '@type': 'Person',
+      name: post.author_username || 'FlowDesk Team',
+      url: `https://flowdesk.web.id/${lang}/author/${post.author_username || 'team'}`
+    }]
+  };
+
   // Extract ToC
   const headings = parsedContent.match(/^(##|###) (.*$)/gim) || [];
   const toc = headings.map((h: string) => ({
@@ -109,6 +135,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
 
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProgressBar />
       <Navbar stars={repoInfo.stargazers_count} repoUrl={repoInfo.html_url} dict={dict.navbar} currentLang={lang} />
       
       <div className="flex-1 w-full max-w-6xl mx-auto px-6 pt-10 pb-24 sm:pt-16 sm:pb-32 flex flex-col lg:flex-row gap-12 xl:gap-24 items-start justify-center">
