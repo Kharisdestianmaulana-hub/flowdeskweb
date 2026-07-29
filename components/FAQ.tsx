@@ -3,7 +3,7 @@
 import { Plus, Minus } from 'lucide-react';
 import Reveal from './animations/Reveal';
 
-export default function FAQ({ dict }: { dict: any }) {
+export default function FAQ({ dict, questions }: { dict: any; questions: any[] }) {
 
   return (
     <section className="py-24 sm:py-32 bg-[var(--color-bg)]">
@@ -22,7 +22,7 @@ export default function FAQ({ dict }: { dict: any }) {
 
         <Reveal delay={0.2}>
           <div className="space-y-4">
-            {dict.questions.map((item: { q: string; a: string }, index: number) => (
+            {questions.map((item, index: number) => (
               <details key={index} className="group bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] overflow-hidden [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex items-center justify-between p-6 cursor-pointer select-none">
                   <h3 className="text-[16px] font-[600] text-[var(--color-text-primary)] pr-4">

@@ -225,29 +225,7 @@
   },
   "faq": {
     "title": "Pertanyaan yang Sering Diajukan",
-    "subtitle": "Segala hal yang perlu Anda ketahui tentang pendekatan lokal-pertama.",
-    "questions": [
-      {
-        "q": "Apakah FlowDesk benar-benar gratis?",
-        "a": "Ya. FlowDesk sepenuhnya gratis digunakan tanpa biaya langganan tersembunyi. Anda memiliki data Anda selamanya."
-      },
-      {
-        "q": "Apakah saya butuh internet untuk menggunakannya?",
-        "a": "Jika Anda menggunakan 'Private Workspace', Anda sama sekali tidak butuh koneksi (100% luring). Namun, untuk 'Local Workspace', Anda wajib terhubung ke jaringan Wi-Fi atau LAN yang sama."
-      },
-      {
-        "q": "Bagaimana cara kerja kolaborasi LAN?",
-        "a": "Aplikasi menggunakan siaran UDP untuk menemukan rekan di Wi-Fi lokal Anda, dan SignalR untuk sinkronisasi seketika. Selama Anda berada di router yang sama, semuanya akan terhubung otomatis."
-      },
-      {
-        "q": "Apa yang terjadi jika Host menutup aplikasi?",
-        "a": "Jika Host terputus, semua anggota yang terhubung akan dikeluarkan secara otomatis dan aman kembali ke layar Selamat Datang, memastikan tidak ada kerusakan data."
-      },
-      {
-        "q": "Apakah akan ada opsi sinkronisasi cloud nantinya?",
-        "a": "Saat ini, FlowDesk murni lokal. Namun, peta jalan (roadmap) kami untuk v2.0 mencakup backend ASP.NET Core yang dapat Anda host sendiri (self-host) bagi mereka yang menginginkan server privat."
-      }
-    ]
+    "subtitle": "Segala hal yang perlu Anda ketahui tentang pendekatan lokal-pertama."
   },
   "downloadPage": {
     "title": "Unduh FlowDesk",

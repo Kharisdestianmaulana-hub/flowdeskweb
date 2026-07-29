@@ -226,29 +226,7 @@
   },
   "faq": {
     "title": "Frequently Asked Questions",
-    "subtitle": "Everything you need to know about the local-first approach.",
-    "questions": [
-      {
-        "q": "Is FlowDesk really free?",
-        "a": "Yes. FlowDesk is completely free to use without any hidden subscription fees. You own your data forever."
-      },
-      {
-        "q": "Do I need an internet connection to use it?",
-        "a": "For 'Private Workspace', you don't need any connection at all—it runs 100% offline. However, to use 'Local Workspace' with your team, you must be connected to the same local network (Wi-Fi or LAN)."
-      },
-      {
-        "q": "How does LAN collaboration work?",
-        "a": "It uses UDP broadcasting to discover peers on your local Wi-Fi, and SignalR for real-time syncing. As long as you are on the same router, it just works."
-      },
-      {
-        "q": "What happens if the Host closes the app?",
-        "a": "If the Host disconnects, all connected members will be safely auto-kicked to the Welcome screen, ensuring no data corruption occurs."
-      },
-      {
-        "q": "Will there be a cloud sync option later?",
-        "a": "Currently, FlowDesk is strictly local. However, our roadmap for v2.0 includes an optional self-hosted ASP.NET Core backend for those who want their own private server."
-      }
-    ]
+    "subtitle": "Everything you need to know about the local-first approach."
   },
   "downloadPage": {
     "title": "Download FlowDesk",

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X, Map } from 'lucide-react';
+import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X, Map, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
@@ -12,7 +12,7 @@ export default function DashboardPortal() {
   
   // Session State
   const [user, setUser] = useState<{ username: string, display_name: string, role: string } | null>(null);
-  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users' | 'media'>('overview');
+  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users' | 'media' | 'faq'>('overview');
   const [loading, setLoading] = useState(true);
 
   // Posts State
@@ -55,6 +55,16 @@ export default function DashboardPortal() {
   const [rmItemsId, setRmItemsId] = useState('');
   const [rmItemsEn, setRmItemsEn] = useState('');
   const [rmOrder, setRmOrder] = useState<number>(99);
+
+  // FAQ State
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [editingFaqId, setEditingFaqId] = useState<string | null>(null);
+  const [faqQId, setFaqQId] = useState('');
+  const [faqAId, setFaqAId] = useState('');
+  const [faqQEn, setFaqQEn] = useState('');
+  const [faqAEn, setFaqAEn] = useState('');
+  const [faqOrder, setFaqOrder] = useState<number>(99);
+  const [faqSearchTerm, setFaqSearchTerm] = useState('');
 
   // Gallery State
   const [showGallery, setShowGallery] = useState(false);
@@ -140,6 +150,16 @@ export default function DashboardPortal() {
     } catch (e) {}
   };
 
+  const fetchFaqs = async () => {
+    try {
+      const res = await fetch('/api/faq');
+      const data = await res.json();
+      if (Array.isArray(data)) setFaqs(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const fetchProfile = async () => {
     try {
       const res = await fetch('/api/profile');
@@ -168,6 +188,7 @@ export default function DashboardPortal() {
     if (activeMenu === 'users') fetchUsers();
     if (activeMenu === 'profile') fetchProfile();
     if (activeMenu === 'media') fetchGallery();
+    if (activeMenu === 'faq') fetchFaqs();
   }, [activeMenu, user]);
 
   const handleLogout = async () => {
@@ -455,6 +476,61 @@ export default function DashboardPortal() {
     }
   };
 
+  const handleSaveFaq = async () => {
+    if (!faqQId || !faqQEn || !faqAId || !faqAEn) {
+      alert('All FAQ fields are required');
+      return;
+    }
+    setSaving(true);
+    const payload = {
+      question_id: faqQId,
+      answer_id: faqAId,
+      question_en: faqQEn,
+      answer_en: faqAEn,
+      order_num: faqOrder
+    };
+    
+    try {
+      let res;
+      if (editingFaqId) {
+        res = await fetch(`/api/faq/${editingFaqId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        res = await fetch('/api/faq', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+      
+      const data = await res.json();
+      if (data.success) {
+        fetchFaqs();
+        setView('list');
+      } else {
+        alert(data.error || 'Failed to save FAQ');
+      }
+    } catch (e) {
+      alert('An error occurred');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteFaq = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this FAQ item?')) return;
+    try {
+      const res = await fetch(`/api/faq/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) fetchFaqs();
+    } catch (e) {
+      alert('An error occurred');
+    }
+  };
+
   // PROFILE LOGIC
   // -------------------------------------------------------------
   const handleSaveProfile = async () => {
@@ -500,6 +576,11 @@ export default function DashboardPortal() {
           {user.role === 'SUPER_ADMIN' && (
             <button onClick={() => { setActiveMenu('roadmap'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'roadmap' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
               <Map className="w-4 h-4" /> Roadmap
+            </button>
+          )}
+          {user.role === 'SUPER_ADMIN' && (
+            <button onClick={() => { setActiveMenu('faq'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'faq' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <HelpCircle className="w-4 h-4" /> FAQ
             </button>
           )}
           <button onClick={() => setActiveMenu('media')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'media' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
@@ -1131,6 +1212,96 @@ export default function DashboardPortal() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'faq' && view === 'list' && (
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">FAQ Manager</h1>
+              <button onClick={() => {
+                setFaqQId(''); setFaqAId(''); setFaqQEn(''); setFaqAEn(''); setFaqOrder(99);
+                setEditingFaqId(null); setView('editor');
+              }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
+                <Plus className="w-4 h-4" /> New FAQ
+              </button>
+            </div>
+            
+            <div className="flex gap-4 mb-6">
+              <input type="text" placeholder="Search FAQ by question..." value={faqSearchTerm} onChange={(e) => setFaqSearchTerm(e.target.value)} className="flex-1 px-4 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition" />
+            </div>
+            
+            <div className="space-y-4">
+              {faqs.filter(f => {
+                const s = faqSearchTerm.toLowerCase();
+                return f.question_id.toLowerCase().includes(s) || f.question_en.toLowerCase().includes(s);
+              }).map((f) => (
+                <div key={f.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
+                  <div className="flex flex-col">
+                    <h3 className="font-semibold text-[var(--color-text-primary)]">{f.question_id}</h3>
+                    <p className="text-xs text-[var(--color-text-muted)]">
+                      EN: {f.question_en} &middot; Order: {f.order_num}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => {
+                      setEditingFaqId(f.id);
+                      setFaqQId(f.question_id); setFaqAId(f.answer_id);
+                      setFaqQEn(f.question_en); setFaqAEn(f.answer_en);
+                      setFaqOrder(f.order_num);
+                      setView('editor');
+                    }} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => handleDeleteFaq(f.id)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Delete">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {faqs.length === 0 && (
+                <p className="text-[var(--color-text-muted)] text-sm">No FAQ items yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'faq' && view === 'editor' && (
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <button onClick={() => setView('list')} className="text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition">
+                  ← Back
+                </button>
+                <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{editingFaqId ? 'Edit FAQ' : 'New FAQ'}</h1>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Indonesian */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-[var(--color-primary)]">Bahasa Indonesia</h2>
+                <input type="text" placeholder="Pertanyaan (ID)" value={faqQId} onChange={e => setFaqQId(e.target.value)} className="w-full px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition font-medium" />
+                <textarea placeholder="Jawaban (ID)" value={faqAId} onChange={e => setFaqAId(e.target.value)} rows={6} className="w-full px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition font-medium resize-none"></textarea>
+              </div>
+
+              {/* English */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold text-blue-500">English</h2>
+                <input type="text" placeholder="Question (EN)" value={faqQEn} onChange={e => setFaqQEn(e.target.value)} className="w-full px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition font-medium" />
+                <textarea placeholder="Answer (EN)" value={faqAEn} onChange={e => setFaqAEn(e.target.value)} rows={6} className="w-full px-4 py-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition font-medium resize-none"></textarea>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-[var(--color-border)] flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-semibold text-[var(--color-text-secondary)]">Order Number:</label>
+                <input type="number" value={faqOrder} onChange={e => setFaqOrder(Number(e.target.value))} className="w-24 px-3 py-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition" />
+              </div>
+              <button onClick={handleSaveFaq} disabled={saving} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl font-bold hover:brightness-110 transition disabled:opacity-50">
+                {saving ? 'Saving...' : 'Save FAQ'}
+              </button>
             </div>
           </div>
         )}

@@ -15,18 +15,28 @@ import Contributors from '@/components/Contributors';
 
 import { getRepoInfo, getLatestRelease, getRecentCommits, getContributors, getTotalDownloads } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
+import { queryD1 } from '@/lib/db';
+
+export const revalidate = 0;
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
-  const [repoInfo, latestRelease, commits, contributors, totalDownloads] = await Promise.all([
+  const [repoInfo, latestRelease, commits, contributors, totalDownloads, rawFaq] = await Promise.all([
     getRepoInfo(),
     getLatestRelease(),
     getRecentCommits(5),
     getContributors(),
     getTotalDownloads(),
+    queryD1('SELECT * FROM faq ORDER BY order_num ASC'),
   ]);
+
+  // Format FAQ based on language
+  const faqQuestions = (rawFaq || []).map((f: any) => ({
+    q: lang === 'id' ? f.question_id : f.question_en,
+    a: lang === 'id' ? f.answer_id : f.answer_en,
+  }));
 
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)] relative">
@@ -62,7 +72,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       
       <ChangelogStrip commits={commits} dict={dict.changelogStrip} currentLang={lang} />
       
-      <FAQ dict={dict.faq} />
+      <FAQ dict={dict.faq} questions={faqQuestions} />
 
       <Contributors contributors={contributors} lang={lang} />
 
