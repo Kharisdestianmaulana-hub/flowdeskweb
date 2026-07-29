@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X, Map, HelpCircle } from 'lucide-react';
+import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X, Map, HelpCircle, Menu } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
@@ -14,6 +14,7 @@ export default function DashboardPortal() {
   const [user, setUser] = useState<{ username: string, display_name: string, role: string } | null>(null);
   const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users' | 'media' | 'faq'>('overview');
   const [loading, setLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Posts State
   const [posts, setPosts] = useState<any[]>([]);
@@ -604,8 +605,64 @@ export default function DashboardPortal() {
         </div>
       </aside>
 
+      {/* MOBILE HEADER */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[var(--color-surface)] border-b border-[var(--color-border)] z-40 flex items-center justify-between px-4">
+        <div className="flex items-center gap-2 text-lg font-black text-[var(--color-text-primary)]">
+          <div className="w-6 h-6 bg-gradient-to-tr from-[var(--color-primary)] to-blue-500 rounded flex items-center justify-center text-white text-[10px]">FD</div>
+          FlowDesk
+        </div>
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* MOBILE FULL SCREEN MENU */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 z-30 bg-[var(--color-bg)] pt-16 flex flex-col">
+          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            <button onClick={() => { setActiveMenu('overview'); setView('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'overview' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <LayoutDashboard className="w-5 h-5" /> Overview
+            </button>
+            <button onClick={() => { setActiveMenu('posts'); setView('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'posts' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <FileText className="w-5 h-5" /> Posts
+            </button>
+            {user.role === 'SUPER_ADMIN' && (
+              <button onClick={() => { setActiveMenu('docs'); setView('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'docs' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+                <FileText className="w-5 h-5" /> Docs
+              </button>
+            )}
+            {user.role === 'SUPER_ADMIN' && (
+              <button onClick={() => { setActiveMenu('roadmap'); setView('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'roadmap' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+                <Map className="w-5 h-5" /> Roadmap
+              </button>
+            )}
+            {user.role === 'SUPER_ADMIN' && (
+              <button onClick={() => { setActiveMenu('faq'); setView('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'faq' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+                <HelpCircle className="w-5 h-5" /> FAQ
+              </button>
+            )}
+            <button onClick={() => { setActiveMenu('media'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'media' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <ImageIcon className="w-5 h-5" /> Media
+            </button>
+            <button onClick={() => { setActiveMenu('profile'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'profile' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <UserCircle className="w-5 h-5" /> My Profile
+            </button>
+            {user.role === 'SUPER_ADMIN' && (
+              <button onClick={() => { setActiveMenu('users'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'users' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+                <Users className="w-5 h-5" /> Users
+              </button>
+            )}
+          </div>
+          <div className="p-4 border-t border-[var(--color-border)]">
+            <button onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-xl font-medium text-base hover:text-[var(--color-text-primary)] transition">
+              <LogOut className="w-5 h-5" /> Logout
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* MAIN CONTENT */}
-      <main className="flex-1 overflow-y-auto pb-24 md:pb-0">
+      <main className="flex-1 overflow-y-auto pb-6 md:pb-0 pt-16 md:pt-0">
         
         {activeMenu === 'overview' && (
           <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
@@ -1411,28 +1468,6 @@ export default function DashboardPortal() {
           </div>
         </div>
       )}
-      {/* MOBILE BOTTOM NAV */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[var(--color-surface)] border-t border-[var(--color-border)] z-40 flex items-center justify-around p-2 pb-safe">
-        <button onClick={() => { setActiveMenu('overview'); setView('list'); }} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'overview' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
-          <LayoutDashboard className="w-5 h-5 mb-1" />
-          <span className="text-[10px] font-medium">Overview</span>
-        </button>
-        <button onClick={() => { setActiveMenu('posts'); setView('list'); }} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'posts' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
-          <FileText className="w-5 h-5 mb-1" />
-          <span className="text-[10px] font-medium">Posts</span>
-        </button>
-        <button onClick={() => setActiveMenu('profile')} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'profile' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
-          <UserCircle className="w-5 h-5 mb-1" />
-          <span className="text-[10px] font-medium">Profile</span>
-        </button>
-        {user.role === 'SUPER_ADMIN' && (
-          <button onClick={() => setActiveMenu('users')} className={`flex flex-col items-center p-2 rounded-lg ${activeMenu === 'users' ? 'text-[var(--color-primary)]' : 'text-[var(--color-text-muted)]'}`}>
-            <Users className="w-5 h-5 mb-1" />
-            <span className="text-[10px] font-medium">Users</span>
-          </button>
-        )}
-      </nav>
-
     </div>
   );
 }
