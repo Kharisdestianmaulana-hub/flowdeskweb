@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X } from 'lucide-react';
+import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X, Map } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
@@ -12,7 +12,7 @@ export default function DashboardPortal() {
   
   // Session State
   const [user, setUser] = useState<{ username: string, display_name: string, role: string } | null>(null);
-  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'profile' | 'users'>('overview');
+  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users'>('overview');
   const [loading, setLoading] = useState(true);
 
   // Posts State
@@ -41,6 +41,20 @@ export default function DashboardPortal() {
   const [docSlug, setDocSlug] = useState('');
   const [docOrder, setDocOrder] = useState<number>(99);
   const [docCategory, setDocCategory] = useState('');
+
+  // Roadmap State
+  const [roadmaps, setRoadmaps] = useState<any[]>([]);
+  const [editingRoadmapId, setEditingRoadmapId] = useState<string | null>(null);
+  const [rmQuarter, setRmQuarter] = useState('');
+  const [rmVersion, setRmVersion] = useState('');
+  const [rmStatus, setRmStatus] = useState('planned');
+  const [rmTitleId, setRmTitleId] = useState('');
+  const [rmTitleEn, setRmTitleEn] = useState('');
+  const [rmDescId, setRmDescId] = useState('');
+  const [rmDescEn, setRmDescEn] = useState('');
+  const [rmItemsId, setRmItemsId] = useState('');
+  const [rmItemsEn, setRmItemsEn] = useState('');
+  const [rmOrder, setRmOrder] = useState<number>(99);
 
   // Gallery State
   const [showGallery, setShowGallery] = useState(false);
@@ -101,6 +115,16 @@ export default function DashboardPortal() {
     }
   };
 
+  const fetchRoadmaps = async () => {
+    try {
+      const res = await fetch('/api/roadmap');
+      const data = await res.json();
+      if (Array.isArray(data)) setRoadmaps(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const fetchUsers = async () => {
     if (user?.role !== 'SUPER_ADMIN') return;
     try {
@@ -134,6 +158,7 @@ export default function DashboardPortal() {
     if (!user) return;
     if (activeMenu === 'posts') fetchPosts();
     if (activeMenu === 'docs') fetchDocs();
+    if (activeMenu === 'roadmap') fetchRoadmaps();
     if (activeMenu === 'users') fetchUsers();
     if (activeMenu === 'profile') fetchProfile();
   }, [activeMenu, user]);
@@ -373,6 +398,56 @@ export default function DashboardPortal() {
   };
 
   // -------------------------------------------------------------
+  // ROADMAP EDITOR LOGIC
+  // -------------------------------------------------------------
+  const handleSaveRoadmap = async () => {
+    if (!rmQuarter || !rmVersion || !rmStatus || !rmTitleId || !rmTitleEn) {
+      alert('Quarter, Version, Status, and Titles are required');
+      return;
+    }
+    setSaving(true);
+    try {
+      const url = editingRoadmapId ? `/api/roadmap/${editingRoadmapId}` : '/api/roadmap';
+      const method = editingRoadmapId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          quarter: rmQuarter, version: rmVersion, status: rmStatus, 
+          title_id: rmTitleId, title_en: rmTitleEn, 
+          description_id: rmDescId, description_en: rmDescEn, 
+          items_id: rmItemsId, items_en: rmItemsEn, order_num: rmOrder
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setView('list');
+        setRmQuarter(''); setRmVersion(''); setRmStatus('planned');
+        setRmTitleId(''); setRmTitleEn(''); setRmDescId(''); setRmDescEn('');
+        setRmItemsId(''); setRmItemsEn(''); setRmOrder(99);
+        setEditingRoadmapId(null);
+        fetchRoadmaps();
+      } else {
+        alert(data.error || 'Failed to save roadmap');
+      }
+    } catch (e) {
+      alert('An error occurred');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteRoadmap = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this roadmap item?')) return;
+    try {
+      const res = await fetch(`/api/roadmap/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) fetchRoadmaps();
+    } catch (e) {
+      alert('An error occurred');
+    }
+  };
+
   // PROFILE LOGIC
   // -------------------------------------------------------------
   const handleSaveProfile = async () => {
@@ -413,6 +488,11 @@ export default function DashboardPortal() {
           {user.role === 'SUPER_ADMIN' && (
             <button onClick={() => { setActiveMenu('docs'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'docs' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
               <FileText className="w-4 h-4" /> Docs
+            </button>
+          )}
+          {user.role === 'SUPER_ADMIN' && (
+            <button onClick={() => { setActiveMenu('roadmap'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'roadmap' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <Map className="w-4 h-4" /> Roadmap
             </button>
           )}
           <button onClick={() => setActiveMenu('profile')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'profile' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
@@ -801,6 +881,141 @@ export default function DashboardPortal() {
               <div className="pt-4 flex justify-end">
                 <button onClick={handleSaveDoc} disabled={saving} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition disabled:opacity-50">
                   {saving ? 'Saving...' : 'Publish Doc'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'roadmap' && view === 'list' && (
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Roadmap</h1>
+              <button onClick={() => {
+                setRmQuarter(''); setRmVersion(''); setRmStatus('planned');
+                setRmTitleId(''); setRmTitleEn(''); setRmDescId(''); setRmDescEn('');
+                setRmItemsId(''); setRmItemsEn(''); setRmOrder(99);
+                setEditingRoadmapId(null); setView('editor');
+              }} className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg font-medium text-sm hover:brightness-110 transition">
+                <Plus className="w-4 h-4" /> New Roadmap
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {roadmaps.map((rm) => (
+                <div key={rm.id} className="flex items-center justify-between p-4 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm hover:border-[var(--color-primary)] transition-colors">
+                  <div className="flex flex-col">
+                    <h3 className="font-semibold text-[var(--color-text-primary)]">{rm.quarter} - {rm.version}</h3>
+                    <p className="text-xs text-[var(--color-text-muted)]">
+                      {rm.title_id} &middot; Status: {rm.status}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <a href={`/id/roadmap`} target="_blank" rel="noreferrer" className="p-2 text-[var(--color-text-muted)] hover:text-blue-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="View">
+                      <Eye className="w-4 h-4" />
+                    </a>
+                    <button onClick={() => {
+                      setEditingRoadmapId(rm.id);
+                      setRmQuarter(rm.quarter);
+                      setRmVersion(rm.version);
+                      setRmStatus(rm.status);
+                      setRmTitleId(rm.title_id);
+                      setRmTitleEn(rm.title_en);
+                      setRmDescId(rm.description_id);
+                      setRmDescEn(rm.description_en);
+                      setRmItemsId(rm.items_id);
+                      setRmItemsEn(rm.items_en);
+                      setRmOrder(rm.order_num);
+                      setView('editor');
+                    }} className="p-2 text-[var(--color-text-muted)] hover:text-green-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Edit">
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => handleDeleteRoadmap(rm.id)} className="p-2 text-[var(--color-text-muted)] hover:text-red-500 bg-[var(--color-surface-raised)] rounded-lg transition" title="Delete">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {roadmaps.length === 0 && (
+                <p className="text-[var(--color-text-muted)] text-sm">No roadmap data yet.</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'roadmap' && view === 'editor' && (
+          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{editingRoadmapId ? 'Edit Roadmap' : 'New Roadmap'}</h1>
+              <button onClick={() => setView('list')} className="px-4 py-2 bg-[var(--color-surface-raised)] border border-[var(--color-border)] text-[var(--color-text-secondary)] rounded-lg font-medium text-sm hover:text-[var(--color-text-primary)] transition">
+                Cancel
+              </button>
+            </div>
+            
+            <div className="space-y-6 bg-[var(--color-surface)] p-4 sm:p-8 rounded-2xl border border-[var(--color-border)]">
+              
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Quarter</label>
+                  <input type="text" value={rmQuarter} onChange={(e) => setRmQuarter(e.target.value)} placeholder="e.g. Q4 2026" className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Version</label>
+                  <input type="text" value={rmVersion} onChange={(e) => setRmVersion(e.target.value)} placeholder="e.g. v2.0.0" className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Status</label>
+                  <select value={rmStatus} onChange={(e) => setRmStatus(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition">
+                    <option value="planned">Planned</option>
+                    <option value="in-progress">In-Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Order (Sorting)</label>
+                  <input type="number" value={rmOrder} onChange={(e) => setRmOrder(parseInt(e.target.value) || 99)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[var(--color-border)]">
+                {/* ID Column */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-[var(--color-primary)]">Indonesia (ID)</h3>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title</label>
+                    <input type="text" value={rmTitleId} onChange={(e) => setRmTitleId(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Description</label>
+                    <textarea value={rmDescId} onChange={(e) => setRmDescId(e.target.value)} rows={3} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Items (1 item per line)</label>
+                    <textarea value={rmItemsId} onChange={(e) => setRmItemsId(e.target.value)} rows={6} placeholder="Enter items separated by newline" className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                  </div>
+                </div>
+
+                {/* EN Column */}
+                <div className="space-y-4">
+                  <h3 className="font-bold text-lg text-[var(--color-primary)]">English (EN)</h3>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Title</label>
+                    <input type="text" value={rmTitleEn} onChange={(e) => setRmTitleEn(e.target.value)} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Description</label>
+                    <textarea value={rmDescEn} onChange={(e) => setRmDescEn(e.target.value)} rows={3} className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Items (1 item per line)</label>
+                    <textarea value={rmItemsEn} onChange={(e) => setRmItemsEn(e.target.value)} rows={6} placeholder="Enter items separated by newline" className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-primary)] focus:border-[var(--color-primary)] outline-none transition" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 flex justify-end">
+                <button onClick={handleSaveRoadmap} disabled={saving} className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg font-bold hover:brightness-110 transition disabled:opacity-50">
+                  {saving ? 'Saving...' : 'Publish Roadmap'}
                 </button>
               </div>
             </div>
