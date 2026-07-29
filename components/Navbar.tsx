@@ -58,7 +58,7 @@ export default function Navbar({ stars, repoUrl, dict, currentLang }: NavbarProp
   };
 
   return (
-    <header className={`sticky top-0 z-[100] w-full transition-all duration-300 ${isScrolled ? 'py-4 px-4 pointer-events-none' : 'py-0 px-0'}`}>
+    <header className={`sticky top-[39px] sm:top-[39px] z-[100] w-full transition-all duration-300 ${isScrolled ? 'py-4 px-4 pointer-events-none' : 'py-0 px-0'}`}>
       <nav className={`pointer-events-auto mx-auto transition-all duration-300 backdrop-blur-lg border border-[var(--color-border-subtle)] ${isScrolled ? 'max-w-5xl rounded-full bg-[rgba(20,20,25,0.7)] shadow-2xl h-[60px]' : 'max-w-none w-full rounded-none bg-[rgba(10,10,15,0.85)] border-t-0 border-l-0 border-r-0 h-16'}`}>
         <div className={`h-full flex items-center justify-between transition-all duration-300 ${isScrolled ? 'px-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'}`}>
           {/* Left: Logo */}
