@@ -42,9 +42,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)] relative">
       {/* ANNOUNCEMENT BANNER */}
-      <div className="sticky top-0 w-full bg-[#E5D5FF] dark:bg-[var(--color-primary)]/10 border-b border-[#D5C0F9] dark:border-[var(--color-primary)]/20 py-2.5 flex items-center justify-center text-[13px] font-medium text-[#4B1A9E] dark:text-[var(--color-text-primary)] z-[110]">
+      <div className="sticky top-0 w-full bg-[var(--color-primary)] py-2.5 flex items-center justify-center text-[13px] font-medium text-white z-[110]">
         <span>What's New: {latestRelease.name || latestRelease.tag_name} Is Here!!!</span>
-        <Link href={`/${lang}/download`} className="ml-2 font-semibold text-[#6B21A8] dark:text-[var(--color-primary)] hover:underline">
+        <Link href={`/${lang}/download`} className="ml-2 font-semibold text-white underline hover:text-white/80 transition-colors">
           Learn more
         </Link>
       </div>
