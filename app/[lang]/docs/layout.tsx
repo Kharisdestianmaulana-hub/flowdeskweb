@@ -5,6 +5,8 @@ import { getRepoInfo } from '@/lib/github';
 import { getDocsList } from '@/lib/docs';
 import Link from 'next/link';
 
+export const revalidate = 0;
+
 export default async function DocsLayout({ children, params }: { children: React.ReactNode, params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';

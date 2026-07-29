@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+export const revalidate = 0;
+
 export async function generateMetadata({ params }: { params: Promise<{ lang: string; slug: string }> }): Promise<import('next').Metadata> {
   const { lang, slug } = await params;
   const doc = await getDocData(lang, slug);
@@ -30,17 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   };
 }
 
-export async function generateStaticParams() {
-  const langs = ['en', 'id'];
-  const params: { lang: string; slug: string }[] = [];
-  for (const lang of langs) {
-    const docs = await getDocsList(lang);
-    docs.forEach(doc => {
-      params.push({ lang, slug: doc.slug });
-    });
-  }
-  return params;
-}
+
 
 export default async function DocPage({ params }: { params: Promise<{ lang: string, slug: string }> }) {
   const { lang, slug } = await params;
