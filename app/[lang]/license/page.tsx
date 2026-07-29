@@ -1,13 +1,16 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { getRepoInfo } from '@/lib/github';
+import { getRepoInfo, getLicenseText } from '@/lib/github';
 import { getDictionary } from '@/lib/dictionary';
+
+export const revalidate = 3600; // Cache for 1 hour
 
 export default async function LicensePage({ params }: { params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
   const repoInfo = await getRepoInfo();
+  const licenseText = await getLicenseText();
 
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)]">
@@ -20,50 +23,8 @@ export default async function LicensePage({ params }: { params: Promise<{ lang: 
           {dict.licensePage.subtitle}
         </p>
 
-        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] p-6 sm:p-8 text-[15px] text-[var(--color-text-secondary)] whitespace-pre-wrap leading-relaxed font-mono">
-{`Lisensi Hak Milik (Proprietary) FlowDesk
-Hak Cipta (c) 2026 Kharis Destian Maulana (Riray)
-Seluruh Hak Cipta Dilindungi Undang-Undang.
-
-1. KEPEMILIKAN
-Perangkat lunak ini (FlowDesk) beserta file dokumentasi yang menyertainya adalah hak milik eksklusif (proprietary property) dari Kharis Destian Maulana.
-
-2. BATASAN PENGGUNAAN & DISTRIBUSI
-Anda diizinkan untuk melihat kode sumber dari perangkat lunak ini murni untuk tujuan edukasi dan referensi. 
-Namun, Anda DILARANG KERAS untuk:
-- Menyalin, memproduksi ulang, atau mendistribusikan ulang perangkat lunak ini atau kode sumbernya, baik sebagian maupun seluruhnya.
-- Memodifikasi perangkat lunak atau membuat karya turunan (aplikasi pesaing, fork, atau clone).
-- Menggunakan perangkat lunak atau kodenya untuk tujuan komersial, baik secara langsung maupun tidak langsung.
-- Menjadi host, menjual, atau memberikan sublisensi atas perangkat lunak ini.
-
-3. KONTRIBUSI DAN CLA (Perjanjian Lisensi Kontributor)
-Segala bentuk kontribusi, modifikasi, atau kode yang dikirimkan (melalui Pull Request, patch, dll.) ke repositori ini tunduk pada Perjanjian Lisensi Kontributor (CLA). Dengan mengirimkan kontribusi apa pun, Anda setuju untuk secara mutlak menyerahkan dan mengalihkan seluruh hak cipta dan hak kekayaan intelektual atas kontribusi Anda kepada Kharis Destian Maulana. Anda melepaskan hak untuk mengklaim kepemilikan atau menuntut penghapusan atas kode yang Anda sumbangkan di masa mendatang.
-
-4. TANPA GARANSI
-PERANGKAT LUNAK INI DISEDIAKAN "SEBAGAIMANA ADANYA", TANPA JAMINAN DALAM BENTUK APA PUN, BAIK TERSURAT MAUPUN TERSIRAT, TERMASUK NAMUN TIDAK TERBATAS PADA JAMINAN KELAYAKAN UNTUK DIPERDAGANGKAN, KESESUAIAN UNTUK TUJUAN TERTENTU, DAN PELANGGARAN HAK CIPTA. DALAM KEADAAN APA PUN PENULIS ATAU PEMEGANG HAK CIPTA TIDAK BERTANGGUNG JAWAB ATAS KLAIM, KERUSAKAN, ATAU TANGGUNG JAWAB LAINNYA, BAIK DALAM TINDAKAN KONTRAK, KEALPAAN ATAU LAINNYA, YANG TIMBUL DARI, DI LUAR, ATAU SEHUBUNGAN DENGAN PERANGKAT LUNAK INI ATAU PENGGUNAAN MAUPUN URUSAN LAIN DALAM PERANGKAT LUNAK INI.
-
----
-
-FlowDesk Proprietary License
-Copyright (c) 2026 Kharis Destian Maulana (Riray)
-All Rights Reserved.
-
-1. OWNERSHIP
-This software (FlowDesk) and its associated documentation files are the proprietary property of Kharis Destian Maulana.
-
-2. USAGE & DISTRIBUTION RESTRICTIONS
-You are permitted to view the source code of this software for educational and reference purposes only. 
-However, you are STRICTLY PROHIBITED from:
-- Copying, reproducing, or redistributing this software or its source code, in whole or in part.
-- Modifying the software or creating derivative works (competing apps, forks, or clones).
-- Using the software or its code for commercial purposes, direct or indirect.
-- Hosting, selling, or sublicensing the software.
-
-3. CONTRIBUTIONS AND CLA (Contributor License Agreement)
-Any contributions, modifications, or code submitted (via Pull Requests, patches, etc.) to this repository are subject to the Contributor License Agreement. By submitting any contribution, you agree to irrevocably assign and transfer all copyrights and intellectual property rights of your contribution to Kharis Destian Maulana. You forfeit any right to claim ownership or demand removal of your contributed code in the future.
-
-4. NO WARRANTY
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.`}
+        <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[var(--radius-lg)] p-6 sm:p-8 text-[15px] text-[var(--color-text-secondary)] whitespace-pre-wrap leading-relaxed font-mono overflow-x-auto">
+          {licenseText}
         </div>
       </div>
       <Footer repoUrl={repoInfo.html_url} dict={dict.footer} currentLang={lang} />

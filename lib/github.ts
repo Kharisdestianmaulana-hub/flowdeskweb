@@ -140,6 +140,25 @@ export async function getContributors() {
   }
 }
 
+export async function getLicenseText(): Promise<string> {
+  try {
+    const res = await fetch(
+      `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/LICENSE`,
+      { next: { revalidate: 3600 } }
+    );
+    
+    if (!res.ok) {
+      console.warn('Failed to fetch license, status:', res.status);
+      return "License information is currently unavailable.";
+    }
+    
+    return await res.text();
+  } catch (error) {
+    console.error('Error fetching license:', error);
+    return "License information is currently unavailable.";
+  }
+}
+
 export async function getTotalDownloads(): Promise<number> {
   try {
     const releases = await getAllReleases();
