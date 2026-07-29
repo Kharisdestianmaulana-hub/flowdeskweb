@@ -82,15 +82,6 @@ export default function Hero({ stars, version, releaseName, repoUrl, assets, dic
 
           {/* Left: Text */}
           <div className="flex flex-col z-10">
-            <Reveal yOffset={50}>
-              {/* Release Badge */}
-              <Link href={`/${currentLang}/download`} className="inline-flex items-center self-start px-4 py-1.5 mb-6 rounded-full bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 hover:border-[var(--color-primary)]/50 transition-colors group cursor-pointer shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.1)]">
-                <span className="text-[13px] font-medium text-[var(--color-primary)]">
-                  <span className="group-hover:underline">{releaseName || version} Is Here!!!</span> ✨
-                </span>
-              </Link>
-            </Reveal>
-
             <Reveal delay={0.1} yOffset={50}>
               <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-[800] leading-[1.15] tracking-[-0.03em] mb-5 text-[var(--color-text-primary)]">
                 {dict.title}

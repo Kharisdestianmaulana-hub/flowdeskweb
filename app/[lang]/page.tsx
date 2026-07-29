@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import Link from 'next/link';
 import SocialProof from '@/components/SocialProof';
 import AboutFlowDesk from '@/components/AboutFlowDesk';
 import Features from '@/components/Features';
@@ -42,6 +43,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)] relative">
       <Navbar stars={repoInfo.stargazers_count} repoUrl={repoInfo.html_url} dict={dict.navbar} currentLang={lang} />
       
+      {/* ANNOUNCEMENT BANNER */}
+      <div className="w-full bg-[#E5D5FF] dark:bg-[var(--color-primary)]/10 border-b border-[#D5C0F9] dark:border-[var(--color-primary)]/20 py-2.5 flex items-center justify-center text-[13px] font-medium text-[#4B1A9E] dark:text-[var(--color-text-primary)] z-40 relative">
+        <span>What's New: {latestRelease.name || latestRelease.tag_name} Is Here!!!</span>
+        <Link href={`/${lang}/download`} className="ml-2 font-semibold text-[#6B21A8] dark:text-[var(--color-primary)] hover:underline">
+          Learn more
+        </Link>
+      </div>
+
       <Hero 
         stars={repoInfo.stargazers_count} 
         version={latestRelease.tag_name} 
