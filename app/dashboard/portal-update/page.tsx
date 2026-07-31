@@ -1476,6 +1476,237 @@ export default function DashboardPortal() {
           </div>
         )}
 
+
+        {/* CHANGELOGS SECTION */}
+        {activeMenu === 'changelogs' && view === 'list' && (
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">Changelogs</h1>
+              <button
+                onClick={() => {
+                  setEditingChangelogId(null);
+                  setClVersion('');
+                  setClTitle('');
+                  setClContent('');
+                  setClStatus('published');
+                  setClPublishedAt('');
+                  setView('editor');
+                }}
+                className="flex items-center gap-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-5 py-2.5 rounded-xl text-sm font-medium transition shadow-sm"
+              >
+                <Plus className="w-4 h-4" /> New Update
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              {changelogs.map(cl => (
+                <div key={cl.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl group hover:border-[var(--color-border-hover)] transition-all">
+                  <div className="mb-4 sm:mb-0">
+                    <h3 className="font-bold text-[var(--color-text-primary)] text-lg mb-1">{cl.title} <span className="text-sm font-normal text-[var(--color-primary)] ml-2">{cl.version}</span></h3>
+                    <p className="text-sm text-[var(--color-text-muted)] flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full ${cl.status === 'published' ? 'bg-green-500' : 'bg-yellow-500'}`}></span>
+                      {cl.status} • {format(new Date(cl.published_at), 'MMM dd, yyyy')}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setEditingChangelogId(cl.id);
+                        setClVersion(cl.version);
+                        setClTitle(cl.title);
+                        setClContent(cl.content);
+                        setClStatus(cl.status);
+                        setClPublishedAt(cl.published_at);
+                        setView('editor');
+                      }}
+                      className="p-2 text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded-lg transition"
+                      title="Edit"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if(confirm('Delete this update?')) {
+                          await fetch(`/api/changelogs/${cl.id}`, { method: 'DELETE' });
+                          fetchChangelogs();
+                        }
+                      }}
+                      className="p-2 text-[var(--color-text-secondary)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {changelogs.length === 0 && (
+                <p className="text-center text-[var(--color-text-muted)] py-10">No changelogs yet. Create one!</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeMenu === 'changelogs' && view === 'editor' && (
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-sm">
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-[var(--color-text-primary)]">{editingChangelogId ? 'Edit Update' : 'New Update'}</h1>
+              <button
+                onClick={() => setView('list')}
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition"
+              >
+                Back to List
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Version Tag</label>
+                  <input
+                    type="text"
+                    value={clVersion}
+                    onChange={(e) => setClVersion(e.target.value)}
+                    placeholder="e.g. v1.7.2"
+                    className="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Status</label>
+                  <select
+                    value={clStatus}
+                    onChange={(e) => setClStatus(e.target.value)}
+                    className="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition outline-none"
+                  >
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Title</label>
+                <input
+                  type="text"
+                  value={clTitle}
+                  onChange={(e) => setClTitle(e.target.value)}
+                  placeholder="e.g. Bug Fix & Performance Update"
+                  className="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition outline-none"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Publish Date (Optional)</label>
+                <input
+                  type="datetime-local"
+                  value={clPublishedAt ? new Date(clPublishedAt).toISOString().slice(0, 16) : ''}
+                  onChange={(e) => setClPublishedAt(e.target.value)}
+                  className="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Content (Markdown)</label>
+                <MarkdownEditor value={clContent} onChange={setClContent} />
+              </div>
+
+              <div className="flex justify-end pt-4 border-t border-[var(--color-border)]">
+                <button
+                  onClick={async () => {
+                    setSaving(true);
+                    const url = editingChangelogId ? `/api/changelogs/${editingChangelogId}` : '/api/changelogs';
+                    const method = editingChangelogId ? 'PUT' : 'POST';
+                    await fetch(url, {
+                      method,
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ version: clVersion, title: clTitle, content: clContent, status: clStatus, published_at: clPublishedAt })
+                    });
+                    setSaving(false);
+                    fetchChangelogs();
+                    setView('list');
+                  }}
+                  disabled={saving || !clVersion || !clTitle || !clContent}
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-8 py-3 rounded-xl font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {saving ? 'Saving...' : 'Save Update'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* SETTINGS SECTION */}
+        {activeMenu === 'settings' && (
+          <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-sm">
+            <h1 className="text-3xl font-bold text-[var(--color-text-primary)] mb-8">Site Settings</h1>
+            
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-4 pb-2 border-b border-[var(--color-border)]">Announcement Banner</h3>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="checkbox" 
+                      id="bannerActive"
+                      checked={bannerActive === 'true'} 
+                      onChange={(e) => setBannerActive(e.target.checked ? 'true' : 'false')}
+                      className="w-5 h-5 rounded text-[var(--color-primary)] focus:ring-[var(--color-primary)] bg-[var(--color-bg)] border-[var(--color-border)]"
+                    />
+                    <label htmlFor="bannerActive" className="text-sm font-semibold text-[var(--color-text-primary)]">
+                      Show Announcement Banner
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Banner Text</label>
+                    <input
+                      type="text"
+                      value={bannerText}
+                      onChange={(e) => setBannerText(e.target.value)}
+                      placeholder="e.g. Update is Here!!!"
+                      className="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition outline-none"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Banner Link URL</label>
+                    <input
+                      type="text"
+                      value={bannerLink}
+                      onChange={(e) => setBannerLink(e.target.value)}
+                      placeholder="e.g. /en/changelog/v2.0"
+                      className="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-4 border-t border-[var(--color-border)]">
+                <button
+                  onClick={async () => {
+                    setSaving(true);
+                    await fetch('/api/settings', {
+                      method: 'PUT',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify([
+                        { key: 'banner_active', value: bannerActive },
+                        { key: 'banner_text', value: bannerText },
+                        { key: 'banner_link', value: bannerLink }
+                      ])
+                    });
+                    setSaving(false);
+                    alert('Settings saved!');
+                  }}
+                  disabled={saving}
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-8 py-3 rounded-xl font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {saving ? 'Saving...' : 'Save Settings'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </main>
 
       {/* GALLERY MODAL */}
