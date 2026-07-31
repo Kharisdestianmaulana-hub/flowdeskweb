@@ -9,9 +9,10 @@ interface ChangelogClientProps {
   releases: Release[];
   commits: Commit[];
   dict: any;
+  lang?: string;
 }
 
-export default function ChangelogClient({ releases, commits, dict }: ChangelogClientProps) {
+export default function ChangelogClient({ releases, commits, dict, lang }: ChangelogClientProps) {
   const [activeTab, setActiveTab] = useState<'releases' | 'commits'>('releases');
 
   const timeAgo = (dateString: string): string => {
@@ -114,14 +115,12 @@ export default function ChangelogClient({ releases, commits, dict }: ChangelogCl
                       {truncateBody(release.body)}
                     </p>
                     {release.body && release.body.length > 300 && (
-                      <a 
+                      <Link 
                         href={release.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="mt-6 inline-block text-[14px] font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors"
                       >
                         {dict.readMore} →
-                      </a>
+                      </Link>
                     )}
                   </div>
                 </div>

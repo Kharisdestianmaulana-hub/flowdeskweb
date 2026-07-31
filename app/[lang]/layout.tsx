@@ -5,7 +5,7 @@ import ProgressBar from "@/components/ProgressBar";
 import TabManager from "@/components/TabManager";
 import ScrollToTop from "@/components/ScrollToTop";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
-import { getLatestRelease } from "@/lib/github";
+import { queryD1 } from '@/lib/db';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -63,17 +63,27 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }>) {
   const { lang } = await params;
-  const latestRelease = await getLatestRelease();
+  
+  let settings = [];
+  try {
+    settings = await queryD1("SELECT * FROM settings");
+  } catch (e) {
+    console.error("Failed to load settings:", e);
+  }
+
+  const bannerActive = settings.find((s:any) => s.key === 'banner_active')?.value === 'true';
+  const bannerText = settings.find((s:any) => s.key === 'banner_text')?.value || 'Update is Here!!!';
+  const bannerLink = settings.find((s:any) => s.key === 'banner_link')?.value || '/en/changelog';
   
   return (
     <html lang={lang} className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} ${outfit.variable} font-sans antialiased overflow-x-hidden selection:bg-[var(--color-primary)] selection:text-white`}
+        className={`${inter.variable} ${jetbrainsMono.variable} ${outfit.variable} font-sans antialiased bg-[var(--color-bg)] text-[var(--color-text-primary)] min-h-screen flex flex-col selection:bg-[var(--color-primary)] selection:text-white`}
         suppressHydrationWarning
       >
         <ProgressBar />
         <TabManager currentLang={lang} />
-        <AnnouncementBanner latestRelease={latestRelease} lang={lang} />
+        {bannerActive && <AnnouncementBanner text={bannerText} linkUrl={bannerLink} />}
         {children}
         <ScrollToTop />
       </body>

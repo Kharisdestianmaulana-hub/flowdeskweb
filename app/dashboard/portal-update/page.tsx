@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X, Map, HelpCircle, Menu } from 'lucide-react';
+import { LogOut, UploadCloud, Plus, Trash2, Eye, Pencil, LayoutDashboard, FileText, UserCircle, Users, ImageIcon, X, Map, HelpCircle, Menu, Settings, Bell } from 'lucide-react';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
@@ -12,7 +12,7 @@ export default function DashboardPortal() {
   
   // Session State
   const [user, setUser] = useState<{ username: string, display_name: string, role: string } | null>(null);
-  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users' | 'media' | 'faq'>('overview');
+  const [activeMenu, setActiveMenu] = useState<'overview' | 'posts' | 'docs' | 'roadmap' | 'profile' | 'users' | 'media' | 'faq' | 'changelogs' | 'settings'>('overview');
   const [loading, setLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -66,6 +66,23 @@ export default function DashboardPortal() {
   const [faqAEn, setFaqAEn] = useState('');
   const [faqOrder, setFaqOrder] = useState<number>(99);
   const [faqSearchTerm, setFaqSearchTerm] = useState('');
+
+
+
+  // Changelog State
+  const [changelogs, setChangelogs] = useState<any[]>([]);
+  const [editingChangelogId, setEditingChangelogId] = useState<string | null>(null);
+  const [clVersion, setClVersion] = useState('');
+  const [clTitle, setClTitle] = useState('');
+  const [clContent, setClContent] = useState('');
+  const [clStatus, setClStatus] = useState('published');
+  const [clPublishedAt, setClPublishedAt] = useState('');
+  
+  // Settings State
+  const [settings, setSettings] = useState<any[]>([]);
+  const [bannerActive, setBannerActive] = useState('true');
+  const [bannerText, setBannerText] = useState('Update is Here!!!');
+  const [bannerLink, setBannerLink] = useState('/en/changelog');
 
   // Gallery State
   const [showGallery, setShowGallery] = useState(false);
@@ -190,6 +207,8 @@ export default function DashboardPortal() {
     if (activeMenu === 'profile') fetchProfile();
     if (activeMenu === 'media') fetchGallery();
     if (activeMenu === 'faq') fetchFaqs();
+    if (activeMenu === 'changelogs') fetchChangelogs();
+    if (activeMenu === 'settings') fetchSettings();
   }, [activeMenu, user]);
 
   const handleLogout = async () => {
@@ -234,6 +253,35 @@ export default function DashboardPortal() {
       alert('Failed to upload image');
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+
+  const fetchChangelogs = async () => {
+    try {
+      const res = await fetch('/api/changelogs');
+      const data = await res.json();
+      if (Array.isArray(data)) setChangelogs(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setSettings(data);
+        const active = data.find((d:any) => d.key === 'banner_active')?.value || 'true';
+        const text = data.find((d:any) => d.key === 'banner_text')?.value || 'Update is Here!!!';
+        const link = data.find((d:any) => d.key === 'banner_link')?.value || '/en/changelog';
+        setBannerActive(active);
+        setBannerText(text);
+        setBannerLink(link);
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -587,6 +635,17 @@ export default function DashboardPortal() {
           <button onClick={() => setActiveMenu('media')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'media' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
             <ImageIcon className="w-4 h-4" /> Media
           </button>
+
+          <div className="pt-4 mt-4 border-t border-[var(--color-border)]">
+            <h3 className="px-3 text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">System</h3>
+            <button onClick={() => { setActiveMenu('changelogs'); setView('list'); }} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'changelogs' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <Bell className="w-4 h-4" /> Changelogs
+            </button>
+            <button onClick={() => setActiveMenu('settings')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'settings' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+              <Settings className="w-4 h-4" /> Site Settings
+            </button>
+          </div>
+
           <button onClick={() => setActiveMenu('profile')} className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${activeMenu === 'profile' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
             <UserCircle className="w-4 h-4" /> My Profile
           </button>
@@ -644,6 +703,14 @@ export default function DashboardPortal() {
             <button onClick={() => { setActiveMenu('media'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'media' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
               <ImageIcon className="w-5 h-5" /> Media
             </button>
+
+              <button onClick={() => { setActiveMenu('changelogs'); setView('list'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'changelogs' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+                <Bell className="w-5 h-5" /> Changelogs
+              </button>
+              <button onClick={() => { setActiveMenu('settings'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'settings' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
+                <Settings className="w-5 h-5" /> Site Settings
+              </button>
+
             <button onClick={() => { setActiveMenu('profile'); setIsMobileMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium transition ${activeMenu === 'profile' ? 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]' : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)] hover:text-[var(--color-text-primary)]'}`}>
               <UserCircle className="w-5 h-5" /> My Profile
             </button>

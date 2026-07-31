@@ -1,18 +1,33 @@
-import { getRepoInfo, getAllReleases, getRecentCommits } from '@/lib/github';
+import { queryD1 } from '@/lib/db';
 import ChangelogClient from '@/components/ChangelogClient';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getDictionary } from '@/lib/dictionary';
+import { getRepoInfo } from '@/lib/github';
 
 export default async function ChangelogPage({ params }: { params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as 'en' | 'id';
   const dict = await getDictionary(lang);
-  const [releases, commits, repoInfo] = await Promise.all([
-    getAllReleases(),
-    getRecentCommits(50),
-    getRepoInfo()
-  ]);
+  
+  let releases = [];
+  try {
+    const results = await queryD1("SELECT * FROM changelogs WHERE status = 'published' ORDER BY published_at DESC");
+    
+    // Map D1 data to match the expected format for ChangelogClient (or we can adapt ChangelogClient)
+    releases = results.map((row: any) => ({
+      id: row.id,
+      tag_name: row.version,
+      name: row.title,
+      body: row.content,
+      published_at: row.published_at,
+      html_url: `/${lang}/changelog/${row.version}`
+    }));
+  } catch(e) {
+    console.error("Failed to fetch changelogs from DB:", e);
+  }
+
+  const repoInfo = await getRepoInfo();
 
   return (
     <main className="min-h-screen flex flex-col bg-[var(--color-bg)]">
@@ -28,7 +43,7 @@ export default async function ChangelogPage({ params }: { params: Promise<{ lang
           </p>
         </div>
 
-        <ChangelogClient releases={releases} commits={commits} dict={dict.changelogPage} />
+        <ChangelogClient releases={releases} commits={[]} dict={dict.changelogPage} lang={lang} />
       </div>
 
       <Footer repoUrl={repoInfo.html_url} dict={dict.footer} currentLang={lang} />

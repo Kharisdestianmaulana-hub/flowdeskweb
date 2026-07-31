@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 interface AnnouncementBannerProps {
-  latestRelease: any;
-  lang: string;
+  text: string;
+  linkUrl: string;
 }
 
-export default function AnnouncementBanner({ latestRelease, lang }: AnnouncementBannerProps) {
+export default function AnnouncementBanner({ text, linkUrl }: AnnouncementBannerProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -29,8 +29,8 @@ export default function AnnouncementBanner({ latestRelease, lang }: Announcement
   return (
     <div className="sticky top-0 w-full bg-[var(--color-primary)] py-2 px-4 pr-12 flex items-center justify-center text-[12px] sm:text-[13px] font-medium text-white z-[110] relative">
       <div className="text-center">
-        <span>What's New: {latestRelease?.tag_name || 'Update'} Is Here!!!</span>
-        <Link href={`/${lang}/download`} className="ml-1 sm:ml-2 font-semibold text-white underline hover:text-white/80 transition-colors whitespace-nowrap">
+        <span>{text}</span>
+        <Link href={linkUrl} className="ml-1 sm:ml-2 font-semibold text-white underline hover:text-white/80 transition-colors whitespace-nowrap">
           Learn more
         </Link>
       </div>
