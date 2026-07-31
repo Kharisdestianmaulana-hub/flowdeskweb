@@ -77,6 +77,7 @@ export default function DashboardPortal() {
   const [clContent, setClContent] = useState('');
   const [clStatus, setClStatus] = useState('published');
   const [clPublishedAt, setClPublishedAt] = useState('');
+  const [githubTags, setGithubTags] = useState<string[]>([]);
   
   // Settings State
   const [settings, setSettings] = useState<any[]>([]);
@@ -262,6 +263,10 @@ export default function DashboardPortal() {
       const res = await fetch('/api/changelogs');
       const data = await res.json();
       if (Array.isArray(data)) setChangelogs(data);
+      
+      const tagRes = await fetch('/api/github/tags');
+      const tagData = await tagRes.json();
+      if (Array.isArray(tagData)) setGithubTags(tagData);
     } catch (e) {
       console.error(e);
     }
@@ -1565,10 +1570,16 @@ export default function DashboardPortal() {
                   <input
                     type="text"
                     value={clVersion}
+                    list="githubTags"
                     onChange={(e) => setClVersion(e.target.value)}
                     placeholder="e.g. v1.7.2"
                     className="w-full bg-[var(--color-bg)] border border-[var(--color-border)] rounded-xl px-4 py-3 text-[var(--color-text-primary)] focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)] transition outline-none"
                   />
+                  <datalist id="githubTags">
+                    {githubTags.map(tag => (
+                      <option key={tag} value={tag} />
+                    ))}
+                  </datalist>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-[var(--color-text-secondary)] mb-2">Status</label>
