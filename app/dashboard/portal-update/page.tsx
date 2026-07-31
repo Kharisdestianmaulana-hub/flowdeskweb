@@ -8,6 +8,31 @@ import { format } from 'date-fns';
 import MarkdownEditor from '@/components/MarkdownEditor';
 
 export default function DashboardPortal() {
+  // Custom Modal State
+  const [modalConfig, setModalConfig] = useState<{ isOpen: boolean, type: 'alert' | 'confirm', message: string, onConfirm?: () => void, onCancel?: () => void }>({ isOpen: false, type: 'alert', message: '' });
+
+  const customAlert = (message: string) => {
+    setModalConfig({ isOpen: true, type: 'alert', message });
+  };
+
+  const customConfirm = (message: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      setModalConfig({
+        isOpen: true,
+        type: 'confirm',
+        message,
+        onConfirm: () => {
+          setModalConfig(prev => ({ ...prev, isOpen: false }));
+          resolve(true);
+        },
+        onCancel: () => {
+          setModalConfig(prev => ({ ...prev, isOpen: false }));
+          resolve(false);
+        }
+      });
+    });
+  };
+
   const router = useRouter();
   
   // Session State
@@ -247,11 +272,11 @@ export default function DashboardPortal() {
       if (data.url) {
         setCoverImage(data.url);
       } else {
-        alert(data.error || 'Failed to upload image');
+        customAlert(data.error || 'Failed to upload image');
       }
     } catch (e) {
       console.error(e);
-      alert('Failed to upload image');
+      customAlert('Failed to upload image');
     } finally {
       setUploadingImage(false);
     }
@@ -311,7 +336,7 @@ export default function DashboardPortal() {
   };
 
   const handleDeleteImage = async (url: string) => {
-    if (!confirm('Are you sure you want to delete this image? It will be removed from Cloudflare R2 forever and any posts using it will lose their cover image.')) return;
+    if (!(await customConfirm('Are you sure you want to delete this image? It will be removed from Cloudflare R2 forever and any posts using it will lose their cover image.'))) return;
     try {
       const res = await fetch('/api/images', {
         method: 'DELETE',
@@ -326,16 +351,16 @@ export default function DashboardPortal() {
           setCoverImage('');
         }
       } else {
-        alert(data.error || 'Failed to delete image');
+        customAlert(data.error || 'Failed to delete image');
       }
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     }
   };
 
   const handleSavePost = async () => {
     if (!title || !slug || !content) {
-      alert('Title, slug, and content are required');
+      customAlert('Title, slug, and content are required');
       return;
     }
 
@@ -369,27 +394,27 @@ export default function DashboardPortal() {
         setEditingSlug(null);
         fetchPosts();
       } else {
-        alert(data.error || 'Failed to save post');
+        customAlert(data.error || 'Failed to save post');
       }
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeletePost = async (postSlug: string) => {
-    if (!confirm('Are you sure you want to delete this post?')) return;
+    if (!(await customConfirm('Are you sure you want to delete this post?'))) return;
     try {
       const res = await fetch(`/api/posts/${postSlug}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         fetchPosts();
       } else {
-        alert(data.error || 'Failed to delete');
+        customAlert(data.error || 'Failed to delete');
       }
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     }
   };
 
@@ -398,7 +423,7 @@ export default function DashboardPortal() {
   // -------------------------------------------------------------
   const handleSaveDoc = async () => {
     if (!docTitleId || !docTitleEn || !docSlug || !docContentId || !docContentEn) {
-      alert('All Title, Slug, and Content fields in both languages are required');
+      customAlert('All Title, Slug, and Content fields in both languages are required');
       return;
     }
 
@@ -428,27 +453,27 @@ export default function DashboardPortal() {
         setEditingDocId(null);
         fetchDocs();
       } else {
-        alert(data.error || 'Failed to save doc');
+        customAlert(data.error || 'Failed to save doc');
       }
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeleteDoc = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this doc?')) return;
+    if (!(await customConfirm('Are you sure you want to delete this doc?'))) return;
     try {
       const res = await fetch(`/api/docs/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
         fetchDocs();
       } else {
-        alert(data.error || 'Failed to delete');
+        customAlert(data.error || 'Failed to delete');
       }
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     }
   };
 
@@ -456,7 +481,7 @@ export default function DashboardPortal() {
   // USER MANAGEMENT LOGIC
   // -------------------------------------------------------------
   const handleCreateUser = async () => {
-    if (!newUsername || !newPassword || !newDisplayName) return alert("Fill all fields");
+    if (!newUsername || !newPassword || !newDisplayName) return customAlert("Fill all fields");
     try {
       const res = await fetch('/api/users', {
         method: 'POST',
@@ -469,12 +494,12 @@ export default function DashboardPortal() {
         setNewPassword('');
         setNewDisplayName('');
         fetchUsers();
-      } else alert(data.error);
-    } catch (e) { alert("Error"); }
+      } else customAlert(data.error);
+    } catch (e) { customAlert("Error"); }
   };
 
   const handleDeleteUser = async (id: string) => {
-    if (!confirm('Delete user?')) return;
+    if (!(await customConfirm('Delete user?'))) return;
     await fetch(`/api/users?id=${id}`, { method: 'DELETE' });
     fetchUsers();
   };
@@ -484,7 +509,7 @@ export default function DashboardPortal() {
   // -------------------------------------------------------------
   const handleSaveRoadmap = async () => {
     if (!rmQuarter || !rmVersion || !rmStatus || !rmTitleId || !rmTitleEn) {
-      alert('Quarter, Version, Status, and Titles are required');
+      customAlert('Quarter, Version, Status, and Titles are required');
       return;
     }
     setSaving(true);
@@ -510,29 +535,29 @@ export default function DashboardPortal() {
         setEditingRoadmapId(null);
         fetchRoadmaps();
       } else {
-        alert(data.error || 'Failed to save roadmap');
+        customAlert(data.error || 'Failed to save roadmap');
       }
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeleteRoadmap = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this roadmap item?')) return;
+    if (!(await customConfirm('Are you sure you want to delete this roadmap item?'))) return;
     try {
       const res = await fetch(`/api/roadmap/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) fetchRoadmaps();
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     }
   };
 
   const handleSaveFaq = async () => {
     if (!faqQId || !faqQEn || !faqAId || !faqAEn) {
-      alert('All FAQ fields are required');
+      customAlert('All FAQ fields are required');
       return;
     }
     setSaving(true);
@@ -565,23 +590,23 @@ export default function DashboardPortal() {
         fetchFaqs();
         setView('list');
       } else {
-        alert(data.error || 'Failed to save FAQ');
+        customAlert(data.error || 'Failed to save FAQ');
       }
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     } finally {
       setSaving(false);
     }
   };
 
   const handleDeleteFaq = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this FAQ item?')) return;
+    if (!(await customConfirm('Are you sure you want to delete this FAQ item?'))) return;
     try {
       const res = await fetch(`/api/faq/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) fetchFaqs();
     } catch (e) {
-      alert('An error occurred');
+      customAlert('An error occurred');
     }
   };
 
@@ -594,8 +619,8 @@ export default function DashboardPortal() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bio, social_links: JSON.stringify(socialLinks), display_name: profileDisplayName })
       });
-      if (res.ok) alert("Profile updated!");
-    } catch (e) { alert("Error"); }
+      if (res.ok) customAlert("Profile updated!");
+    } catch (e) { customAlert("Error"); }
   };
 
   if (loading || !user) {
@@ -1461,7 +1486,7 @@ export default function DashboardPortal() {
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
                       <button onClick={() => {
                         navigator.clipboard.writeText(img.cover_image);
-                        alert('URL Copied to clipboard!');
+                        customAlert('URL Copied to clipboard!');
                       }} className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition">
                         Copy URL
                       </button>
@@ -1531,7 +1556,7 @@ export default function DashboardPortal() {
                     </button>
                     <button
                       onClick={async () => {
-                        if(confirm('Delete this update?')) {
+                        if(await customConfirm('Delete this update?')) {
                           await fetch(`/api/changelogs/${cl.id}`, { method: 'DELETE' });
                           fetchChangelogs();
                         }
@@ -1706,7 +1731,7 @@ export default function DashboardPortal() {
                       ])
                     });
                     setSaving(false);
-                    alert('Settings saved!');
+                    customAlert('Settings saved!');
                   }}
                   disabled={saving}
                   className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white px-8 py-3 rounded-xl font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
@@ -1777,6 +1802,46 @@ export default function DashboardPortal() {
           </div>
         </div>
       )}
-    </div>
+    
+      {/* CUSTOM MODAL */}
+      {modalConfig.isOpen && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => modalConfig.type === 'alert' && setModalConfig(prev => ({ ...prev, isOpen: false }))}></div>
+          <div className="relative bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-2xl p-6 sm:p-8 max-w-md w-full text-center">
+            <h3 className="text-xl font-bold text-[var(--color-text-primary)] mb-4">
+              {modalConfig.type === 'confirm' ? 'Confirmation' : 'Notification'}
+            </h3>
+            <p className="text-[var(--color-text-secondary)] mb-8">
+              {modalConfig.message}
+            </p>
+            <div className="flex items-center justify-center gap-4">
+              {modalConfig.type === 'confirm' ? (
+                <>
+                  <button
+                    onClick={() => modalConfig.onCancel && modalConfig.onCancel()}
+                    className="px-6 py-2.5 bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--color-text-primary)] font-semibold rounded-xl hover:bg-[var(--color-surface-raised)] transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => modalConfig.onConfirm && modalConfig.onConfirm()}
+                    className="px-6 py-2.5 bg-[var(--color-primary)] text-white font-semibold rounded-xl hover:bg-[var(--color-primary-hover)] transition shadow-sm"
+                  >
+                    Confirm
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+                  className="px-8 py-2.5 bg-[var(--color-primary)] text-white font-semibold rounded-xl hover:bg-[var(--color-primary-hover)] transition shadow-sm"
+                >
+                  OK
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+</div>
   );
 }
